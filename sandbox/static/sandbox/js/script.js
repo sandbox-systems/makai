@@ -1,3 +1,4 @@
+//ACE Editor
 var editor = ace.edit("editor");
 editor.setOptions({
   // editor options
@@ -39,7 +40,7 @@ editor.setOptions({
   scrollSpeed: 2, // number: the scroll speed index
   dragDelay: 0, // number: the drag delay before drag starts. it's 150ms for mac by default
   dragEnabled: true, // boolean: enable dragging
-  focusTimout: 0, // number: the focus delay before focus starts.
+  focusTimeout: 0, // number: the focus delay before focus starts.
   tooltipFollowsMouse: true, // boolean: true if the gutter tooltip should follow mouse
 
   // session options
@@ -58,4 +59,48 @@ editor.setOptions({
   enableBasicAutocompletion: true,
   enableLiveAutocompletion: true,
   enableSnippets: true
+});
+
+//Tree View
+function getTree() {
+  var data = [
+    {
+      text: "Folder 1",
+      color: "#000000",
+      backColor: "#FFFFFF",
+      nodes: [
+        {
+          text: "File 1",
+          icon: "glyphicon glyphicon-file",
+          color: "#000000",
+          backColor: "#FFFFFF"
+        },
+        {
+          text: "File 2",
+          icon: "glyphicon glyphicon-file",
+          color: "#000000",
+          backColor: "#FFFFFF"
+        },
+        {
+          text: "File 3",
+          icon: "glyphicon glyphicon-file",
+          color: "#000000",
+          backColor: "#FFFFFF"
+        },
+      ],
+    }
+  ];
+
+  return data;
+}
+
+$('#treeview').treeview({
+  data: getTree(),
+  levels: 1,
+  expandIcon: "glyphicon glyphicon-chevron-down",
+  collapseIcon: "glyphicon glyphicon-chevron-up"
+});
+
+$(document).on('click', '.node-treeview', function() {
+  $('#treeview').treeview('toggleNodeExpanded', [parseInt(this.dataset.nodeid), { silent: false } ]);
 });

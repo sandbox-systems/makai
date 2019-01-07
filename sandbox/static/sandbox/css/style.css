@@ -18,12 +18,12 @@ body {
     background: green;
 }
 
-#filemanager {
+#treeview {
     width: 15%;
     height: 100%;
     display: inline-block;
     float: left;
-    background: yellow;
+    background: #F0F0F0;
 }
 
 #tabbar {
