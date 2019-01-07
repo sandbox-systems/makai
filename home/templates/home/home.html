@@ -1,22 +1,12 @@
+<title>Home</title>
+
+{% extends 'home/nav.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
-</head>
-<body>
-    <a href="{% url 'home:Landing' %}">Landing</a>
-    <a href="{% url 'account:Settings' %}">Settings</a>
-    <br>
+{% block content %}
+    Home <br>
     <a href="{% url 'sandbox:Sandbox' %}">Sandbox</a>
     <a href="{% url 'castle:Projects' %}">Castle</a>
     <a href="{% url 'luau:Luau' %}">Luau</a>
     <a href="{% url 'notifications:Notifications' %}">Notifications</a>
-    <br>
-    {% block content %}
-    {% endblock %}
-</body>
-</html>
+{% endblock %}
