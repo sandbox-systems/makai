@@ -1,14 +1,47 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<link rel="stylesheet" href="css/animate.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+    html {
+        background-image: url("{% static 'home/images/blur.jpg' %}");
+        background-size: cover;
+    }
+
+    /* Float cancel and signup buttons and add an equal width */
+</style>
+<link rel="icon" href="{% static 'home/images/logo.png' %}">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Makai</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <script src="{% static 'account/js/Login.js' %}"></script>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
     <link rel="stylesheet" href="{% static 'account/css/style.css' %}">
 </head>
 <body>
-    <a href="{% url 'home:Landing' %}">Landing</a>
-    <a href="{% url 'home:Home' %}">Home (Log in)</a>
+<div class="cont">
+    <div class="demo">
+        <div class="login">
+            <!--<div class="login__check"></div>-->
+            <img src="{% static 'home/images/whitelogo.png' %}" width="90%">
+            <div class="login__form">
+                <div class="login__row">
+                    <!--Google-->
+                </div>
+                <div class="login__row">
+                    <!--Github-->
+                </div>
+                <div class="login__row">
+                    <!--Email-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

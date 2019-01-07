@@ -1,13 +1,247 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Pricing</title>
-    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+	<title>Sandbox</title>
+		<link rel="stylesheet" href="css/animate.css">
+		<link rel="icon" href="images/purplelogo.png">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 </head>
+<style>
+	html{
+		overflow-x: hidden;
+	}
+.card {
+	//position: relative;
+	padding: 1%;
+  width: 25%;
+	float: left;
+  text-align: center;
+}
+.title {
+  color: grey;
+  font-size: 15px;
+}
+	h1{
+		border-bottom: solid 1px gray;
+	}
+	span{
+		justify-content: center;
+	}
+	#gogetter{
+		width: 25%;
+	}
+</style>
 <body>
-    <a href="{% url 'home:Landing' %}">Landing</a>
-</body>
+	<header id="header">
+				<a href="index.html" class="title"><img src="images/white-logo.png" alt="Avatar" style="width: 20%"></a>
+				<nav>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="Team.html" class="active">Pricing</a></li>
+						<li><a href="Login.html">Start Coding!</a></li>
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Wrapper -->
+	<section id="main" class="wrapper">
+		<div class="content">
+			<div class="card">
+			  <span class="fa-stack fa-4x">
+					<i class="far fa-circle fa-stack-1x"></i>
+					<strong class="fa-stack-1x circle-text">1</strong>
+				</span>
+			  <h2>Performance</h2>
+			  <p class="title">Processing Speed</p>
+			  <div style="margin: 24px 0;">
+				  <select id="performselect" onchange="updatePerformance()">
+				  	<option value="ripple">Ripple</option>
+				  	<option value="wave">Wave</option>
+					<option value="tsunami">Tsunami</option>
+				  </select>
+			  </div>
+			</div>
+			<div class="card">
+			  <span class="fa-stack fa-4x">
+					<i class="far fa-circle fa-stack-4x"></i>
+					<strong class="fa-stack-1x circle-text">2</strong>
+				</span>
+			  <h2>Collab</h2>
+			  <p class="title">Working Together</p>
+			  <div style="margin: 24px 0;">
+				  <select id="collabselect" onchange="collabupdate()">
+				  	<option value="version1">Limited Editing, ∞ Viewing</option>
+					<option value="version2">∞ Editing</option>
+				  </select>
+			  </div>
+			</div>
+			<div class="card">
+			  <span class="fa-stack fa-4x">
+					<i class="far fa-circle fa-stack-4x"></i>
+					<strong class="fa-stack-1x circle-text">3</strong>
+				</span>
+			  <h2>Storage</h2>
+			  <p class="title">Code Savior</p>
+			  <div style="margin: 24px 0;">
+				  <select id="storageselect" onchange="storageupdate()">
+				  	<option value="version1">∞ Public Repos</option>
+					<option value="version2">∞ Public and 5 Private Repos</option>
+				  </select>
+			  </div>
+			</div>
+			<div class="card">
+			  <span class="fa-stack fa-4x">
+					<i class="far fa-circle fa-stack-4x"></i>
+					<strong class="fa-stack-1x circle-text">4</strong>
+				</span>
+			  <h2>Languages</h2>
+			  <p class="title">A Multitude of Skills</p>
+			  <div style="margin: 24px 0;">
+				  <input id="lang" type="text" oninput="languageupdate()">
+			  </div>
+			</div>
+			<h1 id="pricedisplay" style="text-align: center;">0.00<p class="title">Dollars Per Month</p></h1>
+			<div>
+			<!-- <button onclick="rounder()">Round Up for Charity</button> -->
+			<button style="display:block;position:relative;margin:0 auto;">Ready To Code!</button>
+		</div>
+		</div>
+	</section>
+	<section class="animated fadeIn wrapper" id="payment" style="display: none;">
+		<div class="content">
+		<!-- <form style="margin-left: 2%;">
+			<fieldset>
+				Name</br>
+				<input type="text" style="width: 98%;">
+				Address</br>
+				<input type="text" style="width: 80%; float: left;">
+				<input type="text" placeholder="Zip Code" style="width: 16%; float: left;margin-left: 2%;">
+			</fieldset>
+			<fieldset>
+				Credit Card Number</br>
+				<input type="text" style="width: 90%; float: left;">
+				<input type="text" placeholder="CVV" style="width: 6%; float: left;margin-left: 2%;">
+	Expiration</br>
+	<input type="text" placeholder="month" style="width: 48%; float: left;">
+	<input type="text" placeholder="year" style="width: 48%; float: left;margin-left:2%;">
+			</fieldset>
+		</form> -->
+		</div>
+	</section>
+	</body>
+<script>
+	var performance = 0;
+	var purpleboard = 0;
+	var collab = 0;
+	var chat = 0;
+	var storage = 0;
+	var language = 0;
+	var value=0;
+	function rounder(){
+		document.getElementById("pricedisplay").innerHTML=Math.ceil(value);
+	}
+	function calculate(){
+		value = performance + purpleboard + collab + chat + storage + language;
+		document.getElementById("pricedisplay").innerHTML=value;
+	}
+	function remove(){
+		document.getElementById("adder").style.display="block";
+		document.getElementById("remover").style.display="none";
+		purpleboard=0;
+		calculate();
+	}
+	function updatePerformance(){
+		var e = document.getElementById("performselect");
+		var value = e.options[e.selectedIndex].value;
+		var text = e.options[e.selectedIndex].text;
+		if(value === "ripple"){
+			performance=0;
+		}
+		if(value === "wave"){
+			performance=2.99;
+		}
+		if(value === "tsunami"){
+			performance=4.99;
+		}
+		calculate();
+	}
+	// function pbupdate(){
+	// 	var e = document.getElementById("pbselect");
+	// 	var value = e.options[e.selectedIndex].value;
+	// 	var text = e.options[e.selectedIndex].text;
+	// 	if(value === "version1"){
+	// 		purpleboard=0;
+	// 	}
+	// 	if(value === "version2"){
+	// 		purpleboard=0.99;
+	// 	}
+	// 	calculate();
+	// }
+	function collabupdate(){
+		var e = document.getElementById("collabselect");
+		var value = e.options[e.selectedIndex].value;
+		var text = e.options[e.selectedIndex].text;
+		if(value === "version1"){
+			collab=0;
+		}
+		if(value === "version2"){
+			collab=2.99;
+		}
+		calculate();
+	}
+	// function chatupdate(){
+	// 	var e = document.getElementById("chatselect");
+	// 	var value = e.options[e.selectedIndex].value;
+	// 	var text = e.options[e.selectedIndex].text;
+	// 	if(value === "version1"){
+	// 		chat=0;
+	// 	}
+	// 	if(value === "version2"){
+	// 		chat=0.99;
+	// 	}
+	// 	if(value === "version3"){
+	// 		chat=1.99;
+	// 	}
+	// 	calculate();
+	// }
+	function storageupdate(){
+		var e = document.getElementById("storageselect");
+		var value = e.options[e.selectedIndex].value;
+		var text = e.options[e.selectedIndex].text;
+		if(value === "version1"){
+			storage=0;
+		}
+		if(value === "version2"){
+			storage=0.10;
+		}
+		calculate();
+	}
+	function languageupdate(){
+		var count = 0.1;
+		var temp = document.getElementById("lang").value;
+		for(var i =0; i <temp.length-1;i++){
+			if(temp.substring(i,i+1) === ","){
+				count = count + 0.1;
+				console.log(count);
+			}
+		}
+		if(temp.length === 0){
+			count=0;
+		}
+		language=count;
+		calculate();
+		count = 0.1;
+	}
+	// function showpayment(){
+ 	//document.getElementById("checkoutBtn").className = "animated fadeOut";
+	// 	document.getElementById("checkoutBtn").style.display = "none";
+	// 	document.getElementById("payment").style.display="block";
+	// 	document.getElementById("pricedisplay").className="animated fadeIn";
+	// 	document.getElementById("gogetter").style.display="block";
+	// }
+</script>
 </html>
