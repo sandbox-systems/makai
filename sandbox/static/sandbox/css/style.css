@@ -1,3 +1,50 @@
 body {
     background: cornflowerblue;
 }
+
+#navbar {
+    width: 50%;
+    height: 40px;
+    position: relative;
+    display: inline-block;
+    background: black;
+}
+
+#toolbar {
+    width: 50%;
+    height: 40px;
+    position: relative;
+    float: right;
+    background: green;
+}
+
+#filemanager {
+    width: 15%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    background: yellow;
+}
+
+#tabbar {
+    width: 85%;
+    height: 60px;
+    position: relative;
+    float: right;
+    background: red;
+}
+
+#editor {
+    width: 85%;
+    height: calc(70% - 51px);
+    position: relative;
+    float: right;
+}
+
+#terminal {
+    width: 85%;
+    height: calc(30% - 9px);
+    position: relative;
+    float: right;
+    background: blue;
+}
