@@ -8,12 +8,13 @@
 <html>
 
 <head>
-    <title>Sandbox</title>
+    <title>Makai</title>
     <link rel="stylesheet" href="{% static 'home/css/animate.css' %}">
-    <link rel="icon" href="{% static 'home/images/purplelogo.png' %}">
+    <link rel="icon" href="{% static 'home/images/logo.png' %}">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
     <link rel="stylesheet" href="{% static 'home/css/main.css' %}"/>
     <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
@@ -168,8 +169,8 @@
 
 <!-- Header -->
 <header id="header">
-    <a href="{% url 'home:Landing' %}" class="title"><img src="{% static 'home/images/white-logo.png' %}" alt="Avatar"
-                                                          style="width: 20%"></a>
+    <a href="{% url 'home:Landing' %}" class="title"><img src="{% static 'home/images/whitelogo.png' %}" alt="Avatar"
+                                                          style="width: 10%"></a>
     <nav>
         <ul>
             <li><a href="{% url 'home:Landing' %}">Home</a></li>
@@ -186,7 +187,7 @@
 <!-- Main -->
 <section id="main" class="wrapper">
     <div class="content row">
-        <div class="inner column animated bounceIn" onmouseover="change('sreec')" onmouseout="changeBack('sreec')"
+        <div class="inner column" onmouseover="change('sreec')" onmouseout="changeBack('sreec')"
              id="sreec">
             <!--<span class="image fit"><img src="images/pic04.jpg" alt="" /></span>-->
             <img src="{% static 'home/images/sree.jpg' %}" onclick="modalOpen('sreeModal')" alt="" width="30%"
@@ -194,14 +195,14 @@
             <h2>Sree Grandhe</h2>
             <h3>Co-Founder and Co-CEO</h3>
         </div>
-        <div id="aadhic" class="inner column animated bounceIn" onmouseover="change('aadhic')"
+        <div id="aadhic" class="inner column " onmouseover="change('aadhic')"
              onmouseout="changeBack('aadhic')">
             <img src="{% static 'home/images/image2.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('aadhiModal')"/>
             <h2>Aadhithya Kannan</h2>
             <h3>Co-Founder and Co-CEO</h3>
         </div>
-        <div id="shivac" class="inner column animated bounceIn" onmouseover="change('shivac')"
+        <div id="shivac" class="inner column " onmouseover="change('shivac')"
              onmouseout="changeBack('shivac')">
             <img src="{% static 'home/images/Shiva.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('shivaModal')"/>
@@ -210,21 +211,21 @@
         </div>
     </div>
     <div class="content row">
-        <div id="walterc" class="inner column animated bounceIn" onmouseover="change('walterc')"
+        <div id="walterc" class="inner column " onmouseover="change('walterc')"
              onmouseout="changeBack('walterc')">
             <img src="{% static 'home/images/Arya.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('walterModal')"/>
             <h2>Walter Naranjo II</h2>
             <h3>Chief Business Officer (CBO)</h3>
         </div>
-        <div id="krishnac" class="inner column animated bounceIn" onmouseover="change('krishnac')"
+        <div id="krishnac" class="inner column " onmouseover="change('krishnac')"
              onmouseout="changeBack('krishnac')">
             <img src="{% static 'home/images/Krishna.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('krishnaModal')"/>
             <h2>Krishna Ganesh</h2>
             <h3>Chief Marketing Officer (CMO)</h3>
         </div>
-        <div id="aryac" class="inner column animated bounceIn" onmouseover="change('aryac')"
+        <div id="aryac" class="inner column " onmouseover="change('aryac')"
              onmouseout="changeBack('aryac')">
             <img src="{% static 'home/images/Arya.jpg' %}" alt="" width="30%" class="frontprofilepic" id="aryaButton"
                  onclick="modalOpen('aryaModal')"/>
@@ -233,21 +234,21 @@
         </div>
     </div>
     <div class="content row">
-        <div id="govindc" class="inner column animated bounceIn" onmouseover="change('govindc')"
+        <div id="govindc" class="inner column " onmouseover="change('govindc')"
              onmouseout="changeBack('govindc')">
             <img src="{% static 'home/images/govindpic.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  id="govindButton" onclick="modalOpen('govindModal')"/>
             <h2>Govind Joshi</h2>
             <h3>Development Project Manager</h3>
         </div>
-        <div id="riyac" class="inner column animated bounceIn" onmouseover="change('riyac')"
+        <div id="riyac" class="inner column " onmouseover="change('riyac')"
              onmouseout="changeBack('riyac')">
             <img src="{% static 'home/images/riyapic.png' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('riyaModal')"/>
             <h2>Riya Chaudhary</h2>
             <h3>Marketing Coordinator</h3>
         </div>
-        <div id="klerc" class="inner column animated bounceIn" onmouseover="change('klerc')"
+        <div id="klerc" class="inner column " onmouseover="change('klerc')"
              onmouseout="changeBack('klerc')">
             <img src="{% static 'home/images/klerpic.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('aryaModal')"/>
@@ -432,7 +433,7 @@
 <script>
     function change(element) {
         var temp = document.getElementById(element);
-        temp.className = "inner column animated tada";
+        temp.className = "inner column";
     }
 
     function changeBack(element) {
