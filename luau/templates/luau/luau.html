@@ -5,5 +5,23 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'luau/css/style.css' %}">
-    Luau
+    <script type="text/babel">
+        class App extends React.Component {
+            constructor() {
+                super();
+                this.val = "hi";
+            }
+            render() {
+                return (
+                    <div>
+                        <h1>TEST {this.val}</h1>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<App/>, document.getElementById('app'));
+    </script>
+
+    <div id="app"></div>
 {% endblock %}
