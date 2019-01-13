@@ -13,10 +13,10 @@
     <link rel="icon" href="{% static 'home/images/logo.png' %}">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
     <link rel="stylesheet" href="{% static 'home/css/main.css' %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
     <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 </head>
@@ -24,7 +24,7 @@
     html,
     body {
         overflow-x: hidden;
-        font-family: "Lato";
+        font-family: "Raleway";
     }
 
     body {
@@ -38,7 +38,6 @@
         /* Stay in place */
         z-index: 1;
         /* Sit on top */
-        padding-top: 100px;
         /* Location of the box */
         left: 0;
         top: 0;
@@ -57,12 +56,10 @@
     /* Modal Content */
     .modal-content {
         position: relative;
-        background-image: url("{% static 'home/images/pic03.jpg' %}");
-        background-size: cover;
-        margin: auto;
+        background: linear-gradient(to right, #5e42a6, #b74e91);
+        margin: 2% auto;
         padding: 0;
-        border: 1px solid #888;
-        width: 80%;
+        width: 60%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         -webkit-animation-name: animatetop;
         -webkit-animation-duration: 0.4s;
@@ -71,7 +68,6 @@
         animation-duration: 0.4s;
         border-radius: 25px;
         color: white;
-        border: 1px solid white;
     }
 
     /* Add Animation */
@@ -116,7 +112,7 @@
 
     .modal-header {
         padding: 2px 16px;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.1);
         color: white;
         border-top-left-radius: 25px;
         border-top-right-radius: 25px;
@@ -129,10 +125,38 @@
 
     .modal-footer {
         padding: 2px 16px;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.1);
         color: white;
         border-bottom-left-radius: 25px;
         border-bottom-right-radius: 25px;
+    }
+
+    .modal p {
+        display: inline-block;
+        width: 40%;
+        margin: 0 8%;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .modal h2, h3 {
+        margin: 0;
+    }
+
+    .modal img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        display: inline-block;
+        margin: 100px 6%;
+        vertical-align: middle;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    @media screen and (max-width: 1200px) {
+        .modal img {
+            margin: 10px 10%;
+        }
     }
 
     .column {
@@ -159,9 +183,14 @@
 
     .frontprofilepic {
         position: relative;
-        left: 35%;
-        border-radius: 50000px;
-        border: 5px solid rebeccapurple;
+        display: block;
+        margin: 0 auto;
+        border-radius: 50%;
+        border: 1px solid rebeccapurple;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 </style>
 
@@ -187,23 +216,20 @@
 <!-- Main -->
 <section id="main" class="wrapper">
     <div class="content row">
-        <div class="inner column" onmouseover="change('sreec')" onmouseout="changeBack('sreec')"
-             id="sreec">
+        <div class="inner column animated bounceIn" id="sreec">
             <!--<span class="image fit"><img src="images/pic04.jpg" alt="" /></span>-->
             <img src="{% static 'home/images/sree.jpg' %}" onclick="modalOpen('sreeModal')" alt="" width="30%"
                  class="frontprofilepic"/>
             <h2>Sree Grandhe</h2>
             <h3>Co-Founder and Co-CEO</h3>
         </div>
-        <div id="aadhic" class="inner column " onmouseover="change('aadhic')"
-             onmouseout="changeBack('aadhic')">
+        <div id="aadhic" class="inner column animated bounceIn">
             <img src="{% static 'home/images/image2.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('aadhiModal')"/>
             <h2>Aadhithya Kannan</h2>
             <h3>Co-Founder and Co-CEO</h3>
         </div>
-        <div id="shivac" class="inner column " onmouseover="change('shivac')"
-             onmouseout="changeBack('shivac')">
+        <div id="shivac" class="inner column animated bounceIn">
             <img src="{% static 'home/images/Shiva.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('shivaModal')"/>
             <h2>Shivashriganesh Mahato</h2>
@@ -211,22 +237,19 @@
         </div>
     </div>
     <div class="content row">
-        <div id="walterc" class="inner column " onmouseover="change('walterc')"
-             onmouseout="changeBack('walterc')">
-            <img src="{% static 'home/images/Arya.jpg' %}" alt="" width="30%" class="frontprofilepic"
+        <div id="walterc" class="inner column animated bounceIn">
+            <img src="{% static 'home/images/Walter.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('walterModal')"/>
             <h2>Walter Naranjo II</h2>
             <h3>Chief Business Officer (CBO)</h3>
         </div>
-        <div id="krishnac" class="inner column " onmouseover="change('krishnac')"
-             onmouseout="changeBack('krishnac')">
+        <div id="krishnac" class="inner column animated bounceIn">
             <img src="{% static 'home/images/Krishna.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('krishnaModal')"/>
             <h2>Krishna Ganesh</h2>
             <h3>Chief Marketing Officer (CMO)</h3>
         </div>
-        <div id="aryac" class="inner column " onmouseover="change('aryac')"
-             onmouseout="changeBack('aryac')">
+        <div id="aryac" class="inner column animated bounceIn">
             <img src="{% static 'home/images/Arya.jpg' %}" alt="" width="30%" class="frontprofilepic" id="aryaButton"
                  onclick="modalOpen('aryaModal')"/>
             <h2>Arya Saksena</h2>
@@ -234,28 +257,23 @@
         </div>
     </div>
     <div class="content row">
-        <div id="govindc" class="inner column " onmouseover="change('govindc')"
-             onmouseout="changeBack('govindc')">
+        <div id="govindc" class="inner column animated bounceIn">
             <img src="{% static 'home/images/govindpic.jpg' %}" alt="" width="30%" class="frontprofilepic"
                  id="govindButton" onclick="modalOpen('govindModal')"/>
             <h2>Govind Joshi</h2>
             <h3>Development Project Manager</h3>
         </div>
-        <div id="riyac" class="inner column " onmouseover="change('riyac')"
-             onmouseout="changeBack('riyac')">
+        <div id="riyac" class="inner column animated bounceIn">
             <img src="{% static 'home/images/riyapic.png' %}" alt="" width="30%" class="frontprofilepic"
                  onclick="modalOpen('riyaModal')"/>
             <h2>Riya Chaudhary</h2>
             <h3>Marketing Coordinator</h3>
         </div>
-        <div id="klerc" class="inner column " onmouseover="change('klerc')"
-             onmouseout="changeBack('klerc')">
-            <img src="{% static 'home/images/klerpic.jpg' %}" alt="" width="30%" class="frontprofilepic"
-                 onclick="modalOpen('aryaModal')"/>
+        <div id="klerc" class="inner column animated bounceIn">
+            <img src="{% static 'home/images/klerpic1.jpg' %}" alt="" width="30%" class="frontprofilepic"
+                 onclick="modalOpen('klerModal')"/>
             <h2>Kler Teran</h2>
             <h3>Outreach Ambassador</h3>
-        </div>
-        <div>
         </div>
     </div>
 </section>
@@ -289,7 +307,7 @@
             <h2>Walter Naranjo II</h2>
         </div>
         <div class="modal-body">
-            <img src="{% static 'home/images/image2.jpg' %}" alt="" width="10%" height="50%"
+            <img src="{% static 'home/images/Walter.jpg' %}" alt="" width="10%" height="50%"
                  style="position: relative;border-radius: 1000px;border: 5px solid white;"/>
             <p>Walter Naranjo is skilled in Sales, Public Speaking, Management, Linguistic Translation, and Leadership.
                 A strong business development professional, and talented musician, both fused in harmony to demonstrate
@@ -311,7 +329,11 @@
         <div class="modal-body">
             <img src="{% static 'home/images/Arya.jpg' %}" alt="" width="10%" height="50%"
                  style="position: relative;border-radius: 1000px;border: 5px solid white;"/>
-            <p></p>
+            <p>Arya Saksena is an experienced entrepreneur and leader who has background in various forms of
+                engineering. She is known for her logistical approaches to problems and often goes about them in a fun
+                way. Arya wishes to study Chemical Engineering later on and is currently focusing on building her
+                connections and spreading her message of equality through her branch of GirlUp - A UN estabilished
+                organization. Arya has various leadership experiences from various background.</p>
         </div>
         <div class="modal-footer">
             <h3>Outreach Ambassador and Hippie</h3>
@@ -401,6 +423,23 @@
         </div>
         <div class="modal-footer">
             <h3>CTO and Master Wizard</h3>
+        </div>
+    </div>
+</div>
+<div id="klerModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" onclick="modalClose('klerModal')">&times;</span>
+            <h2>Kler Teran</h2>
+        </div>
+        <div class="modal-body">
+            <img src="{% static 'home/images/klerpic1.jpg' %}" alt="" width="10%" height="50%"
+                 style="position: relative;border-radius: 1000px;border: 5px solid white;"/>
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <h3>Outreach Ambassador and Pancake Fanatic</h3>
         </div>
     </div>
 </div>
