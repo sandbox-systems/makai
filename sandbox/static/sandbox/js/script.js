@@ -82,11 +82,24 @@ function getTree() {
           backColor: "#FFFFFF"
         },
         {
-          text: "File 3",
-          icon: "glyphicon glyphicon-file",
+          text: "Folder 2",
           color: "#000000",
-          backColor: "#FFFFFF"
-        },
+          backColor: "#FFFFFF",
+          nodes: [
+            {
+              text: "File 1",
+              icon: "glyphicon glyphicon-file",
+              color: "#000000",
+              backColor: "#FFFFFF"
+            },
+            {
+              text: "File 2",
+              icon: "glyphicon glyphicon-file",
+              color: "#000000",
+              backColor: "#FFFFFF"
+            }
+          ]
+        }
       ],
     }
   ];

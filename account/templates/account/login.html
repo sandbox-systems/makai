@@ -2,46 +2,91 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
-<link rel="stylesheet" href="css/animate.css">
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<style>
-    html {
-        background-image: url("{% static 'home/images/blur.jpg' %}");
-        background-size: cover;
-    }
-
-    /* Float cancel and signup buttons and add an equal width */
-</style>
-<link rel="icon" href="{% static 'home/images/logo.png' %}">
 <head>
     <meta charset="UTF-8">
     <title>Makai</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <link rel="stylesheet" href="css/animate.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>
+        html {
+            background-image: url("{% static 'home/images/blur.jpg' %}");
+            background-size: cover;
+        }
+
+        /* Float cancel and signup buttons and add an equal width */
+    </style>
+    <link rel="icon" href="{% static 'home/images/logo.png' %}">
     <script src="{% static 'account/js/Login.js' %}"></script>
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
     <link rel="stylesheet" href="{% static 'account/css/style.css' %}">
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        let config = {
+            apiKey: "{{ config.apiKey }}",
+            authDomain: "{{ config.authDomain }}",
+            databaseURL: "{{ config.databaseURL }}",
+            projectId: "{{ config.projectId }}",
+            storageBucket: "{{ config.storageBucket }}",
+            messagingSenderId: "{{ config.messagingSenderId }}"
+        };
+        firebase.initializeApp(config);
+
+        let db = firebase.firestore();
+        db.settings({
+            timestampsInSnapshots: true
+        });
+    </script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css"/>
+    <script>
+        let uiConfig = {
+            signInSuccessUrl: '',
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.GithubAuthProvider.PROVIDER_ID
+            ],
+            // tosUrl and privacyPolicyUrl accept either url string or a callback
+            // function.
+            // Terms of service url/callback.
+            tosUrl: '<your-tos-url>',
+            // Privacy policy url/callback.
+            privacyPolicyUrl: function () {
+                window.location.assign('<your-privacy-policy-url>');
+            }
+        };
+        let ui = new firebaseui.auth.AuthUI(firebase.auth());
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+        firebase.auth().onAuthStateChanged(user => {
+            $('#uidInput').val(user.uid);
+            $('#uidForm').submit();
+        });
+    </script>
 </head>
 <body>
-<div class="cont">
-    <div class="demo">
-        <div class="login">
-            <!--<div class="login__check"></div>-->
-            <img src="{% static 'home/images/logo.png' %}" width="60%" style="margin: 0 auto;display:block;position:relative;">
-            <div class="login__form">
-                <div class="login__row">
-                    <!--Google-->
-                </div>
-                <div class="login__row">
-                    <!--Github-->
-                </div>
-                <div class="login__row">
-                    <!--Email-->
+    <form id="uidForm" method="post" action="../account/callback" style="display: none">
+        {% csrf_token %}
+        <input id="uidInput" type="text" name="uid">
+    </form>
+    <div class="cont">
+        <div class="demo">
+            <div class="login">
+                <!--<div class="login__check"></div>-->
+                <img src="{% static 'home/images/whitelogo.png' %}" width="90%">
+                <div class="login__form">
+                    <div class="login__row">
+                        <div id="firebaseui-auth-container"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>
+
