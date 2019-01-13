@@ -1,5 +1,6 @@
 let db, authUser;
 let user, rooms, friends, room;
+let userPool = {};
 
 /**
  * Initialize firebase and firestore
@@ -157,16 +158,24 @@ function listenForChange(ref, callback) {
  * Initialize variables and listeners interacting with luau
  */
 async function initLuau(updateView) {
+    updateView("authUser", authUser);
     rooms = db.collection("rooms");
     friends = db.collection("friends");
     room = db.collection("room");
-    listenForChange(rooms.doc(authUser.uid), async doc => {
-        // Update React view
-        updateView("rooms", await getAllRooms(doc.rooms));
-    });
     listenForChange(friends.doc(authUser.uid), async doc => {
         // Update React views
         updateView("friends", await getAllFriends(doc.friends));
+    });
+    listenForChange(rooms.doc(authUser.uid), async doc => {
+        // Update React view
+        updateView("rooms", await getAllRooms(doc.rooms));
+        // Listen for changes to each room document
+        for (const roomID of doc.rooms) {
+            listenForChange(room.doc(roomID), async doc => {
+                // Update React view
+                updateView("rooms", doc, roomID)
+            })
+        }
     });
 }
 
@@ -360,12 +369,16 @@ async function editChat(roomID, chatID, newMsg) {
  * @returns Array Promised array of room data
  */
 async function getAllRooms(roomIDs) {
-    let fetchedRooms = [];
+    let fetchedRooms = {};
 
     for (const id of roomIDs) {
         let doc = await getDataFromRef(room.doc(id));
-        doc['id'] = id;
-        fetchedRooms.push(doc);
+        fetchedRooms[id] = doc;
+        for (const mid of doc.members) {
+            if (!userPool[mid]) {
+                userPool[mid] = await getUser(mid);
+            }
+        }
     }
 
     return fetchedRooms;
@@ -382,6 +395,7 @@ async function getAllFriends(friendIDs) {
     for (const id of friendIDs) {
         let doc = await getUser(id);
         doc['id'] = id;
+        userPool[id] = doc;
         fetchedFriends.push(doc);
     }
 

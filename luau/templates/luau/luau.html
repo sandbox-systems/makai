@@ -5,274 +5,298 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'luau/css/style.css' %}">
-    <script type="text/babel" src="{% static 'luau/css/style.css' %}"></script>
+    <script type="text/babel" src="{% static 'luau/js/script.js' %}"></script>
+    <script type="text/babel">
+        async function init() {
+            initFirebase({
+                apiKey: "{{ config.apiKey }}",
+                authDomain: "{{ config.authDomain }}",
+                databaseURL: "{{ config.databaseURL }}",
+                projectId: "{{ config.projectId }}",
+                storageBucket: "{{ config.storageBucket }}",
+                messagingSenderId: "{{ config.messagingSenderId }}"
+            });
+            let authenticated = await initUser();
 
-    <div class="container-fluid">
-        <div class="row">
-            <div id="groupsBG" class="fixed-top w-25 fullH"></div>
-            <div id="groups" class="col-3 fullH container-fluid noPadding">
-                <div id="selfInfo">
-                    <img id="selfInfoImg" ng-src="user.profilepic">
-                    <br><br>
-                    <strong>user.name</strong>
-                    <br>
-                    @user.uname
-                </div>
-                <div id="searchBox" class="input-group">
-                    <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
-                           aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
-                    <div class="input-group-append">
-                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"
-                                data-target="#createGroupModal">
-                            <span class="fas fa-plus"></span></button>
-                    </div>
-                </div>
-                <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
-                    <button class="btn roomBtn"
-                            ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === rooms.indexOf(room) ? -1 : rooms.indexOf(room))"
-                            ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
-                        <span class="row">
-                            <span class="col-3">
-                                <img class="groupInfoImg" ng-if="room.members.length === 1"
-                                     ng-src="room.members[0].profilepic">
-                                <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">
-                            </span>&nbsp;
-                            <span class="col-5">
-                                <span class="groupText">
-                                    <strong> room.name </strong>
-                                    <br>
-                                    <span class="groupTextSub">
-                                         formatGroupTextSub(room.chats)
-                                    </span>
-                                </span>
-                            </span>
-                            <span class="col-3" ng-if="room.unread > 0">
-                                <span class="unreadCount badge badge-pill badge-danger float-right">room.unread</span>
-                            </span>
-                        </span>
-                    </button>
-                </div>
-            </div>
-            <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat"
-                 class="col-9 fullH container-fluid">
-                <div id="chatLog">
-                    <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
-                        <span ng-if="chat.type === 'message'">
-                            <span class="row" ng-if="chat.from.uname === user.uname">
-                                <div class="col-xl-5"></div>
-                                <div class="col-xl-7">
-                                    <div ng-mouseleave="setChildEditMenuDisplay($event, 'hidden')">
-                                        <div class="chatBubble ownChatBubble"
-                                             ng-mouseover="setChildEditMenuDisplay($event, 'visible')">
-                                            chat.message
-                                        </div>
-                                        <div class="btn-group-vertical ownChatEditMenu ownChatEditMenuFadeOut">
-                                            <button class="btn btn-light ownChatEditMenuBtn">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-light ownChatEditMenuBtn"
-                                                    ng-click="setChatToDeleteIndex($index)"
-                                                    data-toggle="modal" data-target="#deleteChatModal">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-100">
-                                    <span class="ownTimestamp">getLocalTimeNow(chat.timestamp)</span>
-                                </div>
-                            </span>
-                            <span class="row" ng-if="chat.from.uname !== user.uname">
-                                <div class="col-xl-1">
-                                    <img class="chatProfilePic" ng-src="chat.from.profilepic"/>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div>
-                                        <div class="chatBubble otherChatBubble">
-                                            chat.message
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-5"></div>
-                                <div class="w-100">
-                                    <span class="otherTimestamp">getLocalTimeNow(chat.timestamp)</span>
-                                </div>
-                            </span>
-                        </span>
-                        <span ng-if="chat.type !== 'message'">
-                            <span class="row" ng-if="chat.from.uname === user.uname">
-                                <div class="col-xl-5"></div>
-                                <div class="col-xl-7">
-                                    <div ng-mouseleave="setChildEditMenuDisplay($event, 'hidden')">
-                                        <div class="chatBubble ownChatBubble"
-                                             ng-mouseover="setChildEditMenuDisplay($event, 'visible')">
-                                            <img class="chatImg" ng-if="chat.type.includes('image')" ng-src="chat.url">
-                                            <div ng-if="!chat.type.includes('image')">
-                                                <button class="ownChatFile btn" type="submit"
-                                                        ng-click="chat.download()">
-                                                    <span class="ownChatFileIcon"><span class="fas"
-                                                                                        ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;
-                                                    chat.name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <span class="ownChatFileDownload"><span
-                                                            class="fas fa-download"></span></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="btn-group-vertical ownChatEditMenu">
-                                            <button class="btn btn-light ownChatEditMenuBtn">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-light ownChatEditMenuBtn">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-100">
-                                    <span class="ownTimestamp">getLocalTimeNow(chat.timestamp)</span>
-                                </div>
-                            </span>
-                            <span class="row" ng-if="chat.from.uname !== user.uname">
-                                <div class="col-xl-1">
-                                    <img class="chatProfilePic" ng-src="chat.from.profilepic"/>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div>
-                                        <div class="chatBubble otherChatBubble">
-                                            <img class="chatImg" ng-if="chat.type.includes('image')" ng-src="chat.url">
-                                            <div ng-if="!chat.type.includes('image')">
-                                                <button class="otherChatFile btn" type="submit"
-                                                        ng-click="chat.download()">
-                                                    <span class="otherChatFileIcon"><span class="fas"
-                                                                                          ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;
-                                                    chat.name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <span class="otherChatFileDownload"><span
-                                                            class="fas fa-download"></span></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-5"></div>
-                                <div class="w-100">
-                                    <span class="otherTimestamp">getLocalTimeNow(chat.timestamp)</span>
-                                </div>
-                            </span>
-                        </span>
-                    </div>
-                </div>
-                <div id="chatInput" class="row container-fluid offset-3 fixed-bottom noPadding">
-                    <div id="attachBtnOverlay" class="col-1 text-center">
-                    <span id="attachBtn" data-toggle="modal" data-target="#attachModal">
-                        <span class="fas fa-paperclip"></span>
-                    </span>
-                    </div>
-                    <div class="col-8">
-                        <div id="chatInputBoxContainer">
-                        <textarea ng-model="chatInputText" type="text" class="form-control" id="chatInputBox"
-                                  placeholder="Write something..." rows="1"
-                                  ng-change="chatClient.updateTypingStatus()"></textarea>
-                            <div id="chatInputBorder"></div>
-                        </div>
-                        <input type="button" id="chatInputSubmitBtn" style="display: none"
-                               ng-click="chatRoom.sendChat(chatInputText)" onclick="$('#chatInputBox').val('')">
-                    </div>
-                </div>
-                <div id="groupInfo" class="navbar text-dark offset-3 w-75 fixed-top">
-                    <span id="groupSignature" class="float-left">
-                        <span class="navbar-brand">
-                            <span ng-if="chatRoom.getSelectedRoom().members.length === 1">
-                                <img class="groupImg" ng-src="chatRoom.getSelectedRoom().members[0].profilepic">
-                            </span>
-                            <span ng-if="chatRoom.getSelectedRoom().members.length > 1"
-                                  class="rounded-circle nicePurpleBG text-light p-2">
-                                <span class="fas fa-users"></span></span>
-                            &nbsp;<span id="groupName" data-toggle="modal" data-target="#renameGroupModal">chatRoom.getSelectedRoom().name</span>
-                            <sup id="editGroupData">
-                                <span class="fas fa-pencil-alt"></span>
-                            </sup>
-                        </span>
-                    </span>
-                    <span id="moreGroupInfoBtnContainer" class="float-right">
-                    <span id="onlineMembersContainer">
-                        <span ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
-                            <span ng-if="member.isOnline">
-                                <img class="onlineMember bordered-circle-green groupInfoImg" data-toggle="popover"
-                                     data-html="true"
-                                     data-content="<strong>member.name</strong><br/>@member.uname"
-                                     data-placement="top"
-                                     ng-src="member.profilepic"/>
-                                <img ng-if="member.isTyping" class="onlineMemberTyping" src="img/typing.png"/>
-                                &nbsp;
-                            </span>
-                        </span>
-                    </span>
-                    <span id="moreGroupInfoBtn" class="groupInfoItem hamburger hamburger--elastic">
-                        <span class="hamburger-box">
-                            <span class="hamburger-inner"></span>
-                        </span>
-                    </span>
-                </span>
-                </div>
-            </div>
-            <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-9 fullH">
-                <img src="img/Wallpaper.jpg">
-                <div id="noRoomSelectedTxt">
-                    Select a group to start chatting
-                </div>
-            </div>
-        </div>
-        <div id="overlay" class="fixed-top w-100 h-100 bg-dark"></div>
-        <div id="moreGroupInfo" class="fixed-top off-screen w-25 h-100"
-                       style="z-index: 1030; position: fixed"
-                       overlay-color="#d1ecff50"
-                       blur-amount="50px">
-            <div id="closePanelContainer"></div>
-            <div id="moreGroupInfoContainer">
-                <span id="leaveGroupBtn" data-toggle="modal" data-target="#leaveGroupModal" title="Leave Group">
-                    <span class="fas fa-door-open"></span>&nbsp;Leave group
-                </span>
-                <hr class="divider"/>
-                <div class="moreGroupInfoUser"
-                     ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
-                    <img class="groupInfoImg" ng-src="member.profilepic"/>
-                    &nbsp;member.name<br>
-                    <span class="removeGroupMember" data-toggle="modal" data-target="#removeFromGroupModal"
-                          title="Kick from group" ng-click="setModalMember(member)">
-                        <span class="fas fa-door-open"></span>
-                    </span>&nbsp;
-                    <span ng-if="!chatClient.hasFriend(member)" class="addFriendBtn" title="Add friend"
-                          ng-click="chatClient.sendFriendRequest(member)">
-                        <span class="fas fa-user-plus"></span>
-                    </span>&nbsp;
-                    <span ng-if="chatClient.hasFriend(member)" class="removeFriendBtn" data-toggle="modal"
-                          data-target="#removeFriendModal"
-                          title="Remove friend" ng-click="setModalMember(member)">
-                        <span class="fas fa-user-minus"></span>
-                    </span>
-                    <br><br>
-                </div>
-                <hr class="divider"/>
-                <div class="moreGroupInfoFriend" ng-repeat="friend in chatClient.getFriends() track by $index">
-                    <span ng-if="!chatRoom.hasMember(friend)">
-                        <img class="groupInfoImg" ng-src="friend.profilepic"/>
-                        &nbsp;friend.name<br>
-                        <span class="addGroupMember" title="Add to group" ng-click="chatRoom.addFriendAsMember(friend)">
-                            <span class="fas fa-plus"></span>
-                        </span>&nbsp;
-                        <span class="removeFriendBtn" data-toggle="modal" data-target="#removeFriendModal"
-                              title="Remove friend" ng-click="chatClient.unfriend(friend)">
-                            <span class="fas fa-user-minus"></span>
-                        </span>
-                        <br><br>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+            if (!authenticated) {
+                // User not signed in
+            }
 
-    <div id="rooms"></div>
+            await initLuau(updateView);
+        }
+
+        init();
+
+        ReactDOM.render(<Luau/>, $('#luau').get(0));
+    </script>
+
+    <div id="luau" class="container-fluid"></div>
 {% endblock %}
+
+{#<div class="row">#}
+{#    <div id="groupsBG" class="fixed-top w-25 fullH"></div>#}
+{#    <div id="groups" class="col-3 fullH container-fluid noPadding">#}
+{#        <div id="selfInfo">#}
+{#            <img id="selfInfoImg" ng-src="user.profilepic">#}
+{#            <br><br>#}
+{#            <strong>user.name</strong>#}
+{#            <br>#}
+{#            @user.uname#}
+{#        </div>#}
+{#        <div id="searchBox" class="input-group">#}
+{#            <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."#}
+{#                   aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">#}
+{#            <div class="input-group-append">#}
+{#                <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"#}
+{#                        data-target="#createGroupModal">#}
+{#                    <span class="fas fa-plus"></span></button>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">#}
+{#            <button class="btn roomBtn"#}
+{#                    ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === rooms.indexOf(room) ? -1 : rooms.indexOf(room))"#}
+{#                    ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">#}
+{#                            <span class="row">#}
+{#                                <span class="col-3">#}
+{#                                    <img class="groupInfoImg" ng-if="room.members.length === 1"#}
+{#                                         ng-src="room.members[0].profilepic">#}
+{#                                    <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">#}
+{#                                </span>&nbsp;#}
+{#                                <span class="col-5">#}
+{#                                    <span class="groupText">#}
+{#                                        <strong> room.name </strong>#}
+{#                                        <br>#}
+{#                                        <span class="groupTextSub">#}
+{#                                             formatGroupTextSub(room.chats)#}
+{#                                        </span>#}
+{#                                    </span>#}
+{#                                </span>#}
+{#                                <span class="col-3" ng-if="room.unread > 0">#}
+{#                                    <span class="unreadCount badge badge-pill badge-danger float-right">room.unread</span>#}
+{#                                </span>#}
+{#                            </span>#}
+{#            </button>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat"#}
+{#         class="col-9 fullH container-fluid">#}
+{#        <div id="chatLog">#}
+{#            <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">#}
+{#                            <span ng-if="chat.type === 'message'">#}
+{#                                <span class="row" ng-if="chat.from.uname === user.uname">#}
+{#                                    <div class="col-xl-5"></div>#}
+{#                                    <div class="col-xl-7">#}
+{#                                        <div ng-mouseleave="setChildEditMenuDisplay($event, 'hidden')">#}
+{#                                            <div class="chatBubble ownChatBubble"#}
+{#                                                 ng-mouseover="setChildEditMenuDisplay($event, 'visible')">#}
+{#                                                chat.message#}
+{#                                            </div>#}
+{#                                            <div class="btn-group-vertical ownChatEditMenu ownChatEditMenuFadeOut">#}
+{#                                                <button class="btn btn-light ownChatEditMenuBtn">#}
+{#                                                    <i class="fas fa-edit"></i>#}
+{#                                                </button>#}
+{#                                                <button class="btn btn-light ownChatEditMenuBtn"#}
+{#                                                        ng-click="setChatToDeleteIndex($index)"#}
+{#                                                        data-toggle="modal" data-target="#deleteChatModal">#}
+{#                                                    <i class="fas fa-trash"></i>#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="w-100">#}
+{#                                        <span class="ownTimestamp">getLocalTimeNow(chat.timestamp)</span>#}
+{#                                    </div>#}
+{#                                </span>#}
+{#                                <span class="row" ng-if="chat.from.uname !== user.uname">#}
+{#                                    <div class="col-xl-1">#}
+{#                                        <img class="chatProfilePic" ng-src="chat.from.profilepic"/>#}
+{#                                    </div>#}
+{#                                    <div class="col-xl-6">#}
+{#                                        <div>#}
+{#                                            <div class="chatBubble otherChatBubble">#}
+{#                                                chat.message#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="col-xl-5"></div>#}
+{#                                    <div class="w-100">#}
+{#                                        <span class="otherTimestamp">getLocalTimeNow(chat.timestamp)</span>#}
+{#                                    </div>#}
+{#                                </span>#}
+{#                            </span>#}
+{#                <span ng-if="chat.type !== 'message'">#}
+{#                                <span class="row" ng-if="chat.from.uname === user.uname">#}
+{#                                    <div class="col-xl-5"></div>#}
+{#                                    <div class="col-xl-7">#}
+{#                                        <div ng-mouseleave="setChildEditMenuDisplay($event, 'hidden')">#}
+{#                                            <div class="chatBubble ownChatBubble"#}
+{#                                                 ng-mouseover="setChildEditMenuDisplay($event, 'visible')">#}
+{#                                                <img class="chatImg" ng-if="chat.type.includes('image')"#}
+{#                                                     ng-src="chat.url">#}
+{#                                                <div ng-if="!chat.type.includes('image')">#}
+{#                                                    <button class="ownChatFile btn" type="submit"#}
+{#                                                            ng-click="chat.download()">#}
+{#                                                        <span class="ownChatFileIcon"><span class="fas"#}
+{#                                                                                            ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;#}
+{#                                                        chat.name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#}
+{#                                                        <span class="ownChatFileDownload"><span#}
+{#                                                                class="fas fa-download"></span></span>#}
+{#                                                    </button>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="btn-group-vertical ownChatEditMenu">#}
+{#                                                <button class="btn btn-light ownChatEditMenuBtn">#}
+{#                                                    <i class="fas fa-edit"></i>#}
+{#                                                </button>#}
+{#                                                <button class="btn btn-light ownChatEditMenuBtn">#}
+{#                                                    <i class="fas fa-trash"></i>#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="w-100">#}
+{#                                        <span class="ownTimestamp">getLocalTimeNow(chat.timestamp)</span>#}
+{#                                    </div>#}
+{#                                </span>#}
+{#                                <span class="row" ng-if="chat.from.uname !== user.uname">#}
+{#                                    <div class="col-xl-1">#}
+{#                                        <img class="chatProfilePic" ng-src="chat.from.profilepic"/>#}
+{#                                    </div>#}
+{#                                    <div class="col-xl-6">#}
+{#                                        <div>#}
+{#                                            <div class="chatBubble otherChatBubble">#}
+{#                                                <img class="chatImg" ng-if="chat.type.includes('image')"#}
+{#                                                     ng-src="chat.url">#}
+{#                                                <div ng-if="!chat.type.includes('image')">#}
+{#                                                    <button class="otherChatFile btn" type="submit"#}
+{#                                                            ng-click="chat.download()">#}
+{#                                                        <span class="otherChatFileIcon"><span class="fas"#}
+{#                                                                                              ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;#}
+{#                                                        chat.name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#}
+{#                                                        <span class="otherChatFileDownload"><span#}
+{#                                                                class="fas fa-download"></span></span>#}
+{#                                                    </button>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="col-xl-5"></div>#}
+{#                                    <div class="w-100">#}
+{#                                        <span class="otherTimestamp">getLocalTimeNow(chat.timestamp)</span>#}
+{#                                    </div>#}
+{#                                </span>#}
+{#                            </span>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div id="chatInput" class="row container-fluid offset-3 fixed-bottom noPadding">#}
+{#            <div id="attachBtnOverlay" class="col-1 text-center">#}
+{#                        <span id="attachBtn" data-toggle="modal" data-target="#attachModal">#}
+{#                            <span class="fas fa-paperclip"></span>#}
+{#                        </span>#}
+{#            </div>#}
+{#            <div class="col-8">#}
+{#                <div id="chatInputBoxContainer">#}
+{#                            <textarea ng-model="chatInputText" type="text" class="form-control" id="chatInputBox"#}
+{#                                      placeholder="Write something..." rows="1"#}
+{#                                      ng-change="chatClient.updateTypingStatus()"></textarea>#}
+{#                    <div id="chatInputBorder"></div>#}
+{#                </div>#}
+{#                <input type="button" id="chatInputSubmitBtn" style="display: none"#}
+{#                       ng-click="chatRoom.sendChat(chatInputText)" onclick="$('#chatInputBox').val('')">#}
+{#            </div>#}
+{#        </div>#}
+{#        <div id="groupInfo" class="navbar text-dark offset-3 w-75 fixed-top">#}
+{#                        <span id="groupSignature" class="float-left">#}
+{#                            <span class="navbar-brand">#}
+{#                                <span ng-if="chatRoom.getSelectedRoom().members.length === 1">#}
+{#                                    <img class="groupImg" ng-src="chatRoom.getSelectedRoom().members[0].profilepic">#}
+{#                                </span>#}
+{#                                <span ng-if="chatRoom.getSelectedRoom().members.length > 1"#}
+{#                                      class="rounded-circle nicePurpleBG text-light p-2">#}
+{#                                    <span class="fas fa-users"></span></span>#}
+{#                                &nbsp;<span id="groupName" data-toggle="modal" data-target="#renameGroupModal">chatRoom.getSelectedRoom().name</span>#}
+{#                                <sup id="editGroupData">#}
+{#                                    <span class="fas fa-pencil-alt"></span>#}
+{#                                </sup>#}
+{#                            </span>#}
+{#                        </span>#}
+{#            <span id="moreGroupInfoBtnContainer" class="float-right">#}
+{#                        <span id="onlineMembersContainer">#}
+{#                            <span ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">#}
+{#                                <span ng-if="member.isOnline">#}
+{#                                    <img class="onlineMember bordered-circle-green groupInfoImg" data-toggle="popover"#}
+{#                                         data-html="true"#}
+{#                                         data-content="<strong>member.name</strong><br/>@member.uname"#}
+{#                                         data-placement="top"#}
+{#                                         ng-src="member.profilepic"/>#}
+{#                                    <img ng-if="member.isTyping" class="onlineMemberTyping" src="img/typing.png"/>#}
+{#                                    &nbsp;#}
+{#                                </span>#}
+{#                            </span>#}
+{#                        </span>#}
+{#                        <span id="moreGroupInfoBtn" class="groupInfoItem hamburger hamburger--elastic">#}
+{#                            <span class="hamburger-box">#}
+{#                                <span class="hamburger-inner"></span>#}
+{#                            </span>#}
+{#                        </span>#}
+{#                    </span>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-9 fullH">#}
+{#        <img src="img/Wallpaper.jpg">#}
+{#        <div id="noRoomSelectedTxt">#}
+{#            Select a group to start chatting#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#<div id="overlay" class="fixed-top w-100 h-100 bg-dark"></div>#}
+{#<div id="moreGroupInfo" class="fixed-top off-screen w-25 h-100"#}
+{#     style="z-index: 1030; position: fixed"#}
+{#     overlay-color="#d1ecff50"#}
+{#     blur-amount="50px">#}
+{#    <div id="closePanelContainer"></div>#}
+{#    <div id="moreGroupInfoContainer">#}
+{#                    <span id="leaveGroupBtn" data-toggle="modal" data-target="#leaveGroupModal" title="Leave Group">#}
+{#                        <span class="fas fa-door-open"></span>&nbsp;Leave group#}
+{#                    </span>#}
+{#        <hr class="divider"/>#}
+{#        <div class="moreGroupInfoUser"#}
+{#             ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">#}
+{#            <img class="groupInfoImg" ng-src="member.profilepic"/>#}
+{#            &nbsp;member.name<br>#}
+{#            <span class="removeGroupMember" data-toggle="modal" data-target="#removeFromGroupModal"#}
+{#                  title="Kick from group" ng-click="setModalMember(member)">#}
+{#                            <span class="fas fa-door-open"></span>#}
+{#                        </span>&nbsp;#}
+{#            <span ng-if="!chatClient.hasFriend(member)" class="addFriendBtn" title="Add friend"#}
+{#                  ng-click="chatClient.sendFriendRequest(member)">#}
+{#                            <span class="fas fa-user-plus"></span>#}
+{#                        </span>&nbsp;#}
+{#            <span ng-if="chatClient.hasFriend(member)" class="removeFriendBtn" data-toggle="modal"#}
+{#                  data-target="#removeFriendModal"#}
+{#                  title="Remove friend" ng-click="setModalMember(member)">#}
+{#                            <span class="fas fa-user-minus"></span>#}
+{#                        </span>#}
+{#            <br><br>#}
+{#        </div>#}
+{#        <hr class="divider"/>#}
+{#        <div class="moreGroupInfoFriend" ng-repeat="friend in chatClient.getFriends() track by $index">#}
+{#                        <span ng-if="!chatRoom.hasMember(friend)">#}
+{#                            <img class="groupInfoImg" ng-src="friend.profilepic"/>#}
+{#                            &nbsp;friend.name<br>#}
+{#                            <span class="addGroupMember" title="Add to group"#}
+{#                                  ng-click="chatRoom.addFriendAsMember(friend)">#}
+{#                                <span class="fas fa-plus"></span>#}
+{#                            </span>&nbsp;#}
+{#                            <span class="removeFriendBtn" data-toggle="modal" data-target="#removeFriendModal"#}
+{#                                  title="Remove friend" ng-click="chatClient.unfriend(friend)">#}
+{#                                <span class="fas fa-user-minus"></span>#}
+{#                            </span>#}
+{#                            <br><br>#}
+{#                        </span>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
 
 {#<div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="leaveGroupModalLabel"#}
 {#         aria-hidden="true">#}
