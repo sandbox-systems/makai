@@ -14,10 +14,22 @@
     <script src="{% static 'sandbox/js/resources/treeview/src/js/bootstrap-treeview.js' %}"></script>
 
     <div id="content">
-        <div id="navbar"></div>
+        <div id="breadcrumbs">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Repository</li>
+              </ol>
+            </nav>
+        </div>
         <div id="toolbar"></div>
         <div id="treeview"></div>
-        <div id="tabbar"></div>
+        <div id="tabbar">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab" class="active show">Tab 1</a></li>
+                <li><a href="#tab2" data-toggle="tab">Tab 2</a></li>
+                <li><a href="#tab3" data-toggle="tab">Tab 3</a></li>
+            </ul>
+        </div>
         <div id="editor"></div>
         <div id="terminal"></div>
     </div>

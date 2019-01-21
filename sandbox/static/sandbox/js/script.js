@@ -117,3 +117,32 @@ $('#treeview').treeview({
 $(document).on('click', '.node-treeview', function() {
   $('#treeview').treeview('toggleNodeExpanded', [parseInt(this.dataset.nodeid), { silent: false } ]);
 });
+
+$('#treeview').on('nodeSelected', function(event, data) {
+    setBreadcrumb(data);
+});
+
+function setBreadcrumb(data){
+    var crumbArray = [];
+    while(!$(data).is($("#treeview"))){
+        console.log(data);
+        crumbArray.push(data.text);
+        data = $("#treeview").treeview("getParent", data.nodeId)
+    }
+    crumbArray.push("Repository");
+    crumbArray.reverse();
+    console.log(crumbArray);
+
+    $("#breadcrumbs .breadcrumb").empty();
+    var i = 0;
+    for(i; i < crumbArray.length - 1; i++){
+        $("#breadcrumbs .breadcrumb").append('<li class="breadcrumb-item">'+crumbArray[i]+'</li>');
+    }
+    $("#breadcrumbs .breadcrumb").append('<li class="breadcrumb-item active">'+crumbArray[i]+'</li>');
+}
+
+//Tab Bar
+$('#tabbar a').click(function (e) {
+   e.preventDefault()
+   $(this).tab('show')
+});
