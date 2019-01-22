@@ -6,7 +6,7 @@ html, body {
     min-height: 100% !important;
     height: 100%;
     overflow: hidden;
-    font-family: Lato;
+    font-family: "Raleway";
 }
 
 .fullH {
@@ -34,16 +34,34 @@ html, body {
 }
 
 #selfInfo {
-    color: white;
-    margin: 40px;
+    color: ghostwhite;
+    background: rebeccapurple;
+    padding:1%;
+    padding-top:5%;
 }
 
-#selfInfoImg, .chatProfilePic, .groupInfoImg {
+.groupInfoImg{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom:5%;
+}
+
+#selfInfoImg,.chatProfilePic{
     width: 64px;
     height: 64px;
     object-fit: cover;
     border-radius: 50%;
+    margin-bottom:5%;
 }
+
+@media all and (max-width: 1200px){
+    .chatProfilePic{
+        display: none;
+    }
+}
+
 @media all and (max-width: 750px) {
     #selfInfo {
         margin: 2%;
@@ -63,8 +81,8 @@ html, body {
 }
 #searchBox {
     width: 80%;
-    margin-left: 10%;
-    margin-bottom: 20px;
+    margin: 2%;
+    display: inline-flex;
 }
 
 #searchBoxInput {
@@ -122,8 +140,8 @@ html, body {
 }
 
 .roomBtn {
-    background: #f8f9fa30;
-    color: white;
+    background: ghostwhite;
+    color: #767b67;
     width: 100%;
     border-radius: 0;
     border-bottom: 1px solid #f8f9fa30;
@@ -163,7 +181,7 @@ html, body {
 }
 
 #groupsBG {
-    background: url(../../home/images/Wallpaper.jpg) no-repeat;
+    background: ghostwhite;
     background-size: 100% 100%;
 
     -webkit-filter: blur(5px);
@@ -210,7 +228,7 @@ html, body {
 
 #chat {
     overflow-y: scroll;
-    background: #c6c0c0;
+    background: ghostwhite;
 }
 
 #chat::-webkit-scrollbar {
@@ -271,7 +289,7 @@ html, body {
 #groupInfo {
     display: inline-block;
     white-space: nowrap;
-    background: #ccc9c3;
+    background: rebeccapurple;
     width: 100%;
     height: 80px;
     border-bottom: 2px solid #421C52;
@@ -301,6 +319,7 @@ html, body {
 
 #groupName {
     cursor: pointer;
+    color: ghostwhite;
 }
 
 #groupName:hover + #editGroupData {
@@ -308,15 +327,25 @@ html, body {
 }
 
 #chatInput {
-    background: #cdcac5;
+    background: ghostwhite;
     width: 100%;
-    border-top: 1px solid #421C52;
     padding-bottom: 10px !important;
 }
 
+#chatInputSubmitBtn{
+    color:mediumpurple;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    -webkit-transition: color 0.25s ease-out;
+    -moz-transition: color 0.25s ease-out;
+    -o-transition: color 0.25s ease-out;
+    transition: color 0.25s ease-out;
+}
+
 #chatLog {
-    margin-bottom: 90px;
-    margin-top: 100px;
+    margin-bottom: 20%;
+    margin-top: 10%;
 }
 
 .noPadding {
@@ -324,7 +353,7 @@ html, body {
 }
 
 .otherChatBubble {
-    background: #dad7d1;
+    background: lavender;
     color: black;
     float: left;
 }
@@ -339,7 +368,7 @@ html, body {
 }
 
 .ownChatBubble {
-    background: #8848aa;
+    background: mediumpurple;
     color: white;
     float: right;
     max-width: calc(100% - 37px);
@@ -427,7 +456,7 @@ html, body {
     outline: none;
     box-shadow: none !important;
     border-style: none;
-    margin-top: 15px;
+    //margin-top: 15px;
     border-radius: 0;
     resize: none;
     max-height: 255px;
@@ -459,7 +488,8 @@ html, body {
 }
 
 #attachBtn {
-    color: black;
+    cursor: pointer;
+    color: mediumpurple;
     font-size: 30px;
     -webkit-transition: color 0.25s ease-out;
     -moz-transition: color 0.25s ease-out;
@@ -471,10 +501,9 @@ html, body {
     padding-top: 12px !important;
 }
 
-#attachBtn:hover {
-    cursor: pointer;
-    color: #007bff;
-}
+/*#attachBtn:hover {*/
+    /*color: #007bff;*/
+/*}*/
 
 #dropFileOverlay {
     position: fixed;
@@ -545,9 +574,10 @@ html, body {
 
 #moreGroupInfoBtn {
     position: absolute;
-    top: 10px !important;
-    right: 0;
+    top: 25% !important;
+    right: 2%;
     z-index: 2050;
+    color: ghostwhite;
 }
 
 #moreGroupInfoBtn .hamburger-inner,
@@ -571,7 +601,8 @@ html, body {
 }
 
 #moreGroupInfo {
-    background: #ffffff99;
+    background: ghostwhite;
+    color: rebeccapurple;
     -webkit-transition: margin-left 0.5s ease-out;
     -moz-transition: margin-left 0.5s ease-out;
     -o-transition: margin-left 0.5s ease-out;
@@ -613,12 +644,13 @@ html, body {
 }
 
 #leaveGroupBtn, .removeGroupMember, .addFriendBtn, .removeFriendBtn, .addGroupMember {
-    color: black;
+    color: rebeccapurple;
     font-size: 30px;
     -webkit-transition: color 0.25s ease-out;
     -moz-transition: color 0.25s ease-out;
     -o-transition: color 0.25s ease-out;
     transition: color 0.25s ease-out;
+    margin: 2%;
 }
 
 #leaveGroupBtn:hover, .removeGroupMember:hover, .removeFriendBtn:hover {
@@ -642,16 +674,19 @@ html, body {
 
 .onlineMember {
     height: 60px;
+    width: 60px;
     cursor: pointer;
 }
 
 .moreGroupInfoUser {
-    font-size: 25px;
+    padding: 2%;
+    font-size: 20px;
     word-wrap: break-word;
 }
 
 .moreGroupInfoFriend {
-    font-size: 25px;
+    padding: 2%;
+    font-size: 20px;
     word-wrap: break-word;
 }
 

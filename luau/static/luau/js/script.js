@@ -87,7 +87,7 @@ class ChatMsg extends React.Component {
                     <div className="col-xl-1">
                         <img className="chatProfilePic" src={userPool[this.props.from].profilepic}/>
                     </div>
-                    <div className="col-xl-6">
+                    <div className="col-xl-4">
                         <div>
                             <div className="chatBubble otherChatBubble">
                                 {this.props.msg}
@@ -228,16 +228,16 @@ class Luau extends React.Component {
                             <strong>{this.state.authUser.displayName}</strong>
                             <br/>
                             {this.state.authUser.email}
-                        </div>
-                        <div id="searchBox" className="input-group">
-                            <input id="searchBoxInput" type="text" className="form-control" placeholder="Search..."
-                                   aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery"/>
-                            <div className="input-group-append">
-                                <button id="searchBoxBtn" className="btn btn-outline-light" type="button"
-                                        data-toggle="modal"
-                                        data-target="#createGroupModal">
-                                    <span className="fas fa-plus"/>
-                                </button>
+                            <div id="searchBox" className="input-group">
+                                <input id="searchBoxInput" type="text" className="form-control" placeholder="Search..."
+                                       aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery"/>
+                                <div className="input-group-append">
+                                    <button id="searchBoxBtn" className="btn btn-outline-light" type="button"
+                                            data-toggle="modal"
+                                            data-target="#createGroupModal">
+                                        <span className="fas fa-plus"/>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         {Object.keys(this.state.rooms).map(key => {
@@ -260,7 +260,7 @@ class Luau extends React.Component {
                                 <span className="fas fa-paperclip"/>
                             </span>
                             </div>
-                            <div className="col-8">
+                            <div className="col-7">
                                 <div id="chatInputBoxContainer">
                                     <textarea className="form-control" id="chatInputBox"
                                               placeholder="Write something..."
@@ -268,10 +268,10 @@ class Luau extends React.Component {
                                     {/* ng-model="chatInputText" ng-change="chatClient.updateTypingStatus()"*/}
                                     <div id="chatInputBorder"/>
                                 </div>
-                                <input type="button" id="chatInputSubmitBtn"/>
-                                {/* onClick="$('#chatInputBox').val('')"*/}
-                                {/*ng-click="chatRoom.sendChat(chatInputText)" */}
                             </div>
+                            <button id="chatInputSubmitBtn" class="col-1"><i class="fas fa-paper-plane fa-2x"></i></button>
+                            {/* onClick="$('#chatInputBox').val('')"*/}
+                            {/*ng-click="chatRoom.sendChat(chatInputText)" */}
                         </div>
                         <div id="groupInfo" className="navbar text-dark offset-3 w-75 fixed-top">
                             <span id="groupSignature" className="float-left">
@@ -312,11 +312,7 @@ class Luau extends React.Component {
                                         );
                                     })}
                                 </span>
-                                <span id="moreGroupInfoBtn" className="groupInfoItem hamburger hamburger--elastic">
-                                    <span className="hamburger-box">
-                                        CLICK
-                                        <span className="hamburger-inner"/>
-                                    </span>
+                                <span id="moreGroupInfoBtn" className="groupInfoItem fas fa-bars fa-2x">
                                 </span>
                             </span>
                         </div>
@@ -328,7 +324,7 @@ class Luau extends React.Component {
                         </div>
                     </div>
                     {/* style="z-index: 1030; position: fixed"*/}
-                    <div id="moreGroupInfo" className="fixed-top off-screen w-25 h-100"> {/* off-screen */}
+                    <div id="moreGroupInfo" className="fixed-top w-25 h-100 float-right"> {/* off-screen */}
                         <div id="closePanelContainer"/>
                         <div id="moreGroupInfoContainer">
                             <span id="leaveGroupBtn" data-toggle="modal" data-target="#leaveGroupModal"
