@@ -35,4 +35,8 @@ class GithubHost(Host):
         # If token is not saved in session, let Host set up syncing link as instance variable
         Host.__init__(self, 'github_token',
                       None if token_exists else 'https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=' +
-                                                github_config['client_id'])
+                                                github_config['client_id'], github_config['client_id'],
+                      github_config['client_secret'])
+
+    def fetch_token(self, code):
+        Host.fetch_token(self, code, "https://github.com/login/oauth/access_token")

@@ -25,13 +25,18 @@ def sync(request):
     return render(request, 'account/sync.html', {'accounts': accounts.items()})
 
 
-def sync_callback(request):
-    # Ensure request is GET and contains code
-    if request.method == 'GET' and 'code' in request.GET:
+def sync_callback(request, host):
+    # host should be passed in by callback urls defined in OAuth app settings
+    # Ensure host is valid, request is GET, and contains code
+    if host in vcs_hosts and request.method == 'GET' and 'code' in request.GET:
         code = request.GET['code']
 
         # Ensure code has a value
         if code:
+            init_tokens(request)
+            init_vcs()
+
+            print(accounts[host].fetch_token(code))
             return render(request, 'account/syncCallback.html')
     # If there was an error anywhere in the process
     return render(request, 'account/syncCallbackErrored.html')
