@@ -20,7 +20,8 @@ class Host:
             return True
         return False
 
+    # This just returns the response object
     def fetch_token(self, code, endpoint):
         r = post(endpoint, data={'client_id': self.client_id, 'client_secret': self.client_secret, 'code': code,
                                  'grant_type': 'authorization_code'})
-        return r.content
+        return r

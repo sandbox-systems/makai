@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-from firebase.credentials import config
+from firebase.web_credentials import config
 from vcs.vcs import *
+from firebase.firebase import update_doc
 
 
 def login(request):
@@ -22,6 +23,7 @@ def settings(request):
 def sync(request):
     init_tokens(request)
     init_vcs()
+    # request.session.flush()
     return render(request, 'account/sync.html', {'accounts': accounts.items()})
 
 
@@ -36,8 +38,22 @@ def sync_callback(request, host):
             init_tokens(request)
             init_vcs()
 
-            print(accounts[host].fetch_token(code))
-            return render(request, 'account/syncCallback.html')
+            token = accounts[host].fetch_token(code)
+
+            # Ensure there was no error fetching the token from the code (fetch_token should return False it there was)
+            if token is not False:
+                request.session[host + '_token'] = token
+
+                # Create an updated mapping of host_token to the fetched token
+                doc_update = dict()
+                doc_update[(host + '_token').decode('utf-8')] = token.decode('utf-8')
+
+                # Update the firebase document reference with the new token
+                update_doc('priv_user', request.session.get('uid'), doc_update)
+
+                # TODO Handle error updating doc?
+
+                return render(request, 'account/syncCallback.html')
     # If there was an error anywhere in the process
     return render(request, 'account/syncCallbackErrored.html')
 

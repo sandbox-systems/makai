@@ -28,6 +28,7 @@ from pybitbucket.auth import *
 # bitbucket = Client()
 
 from git import *
+from urlparse import parse_qs
 
 
 class GithubHost(Host):
@@ -39,4 +40,9 @@ class GithubHost(Host):
                       github_config['client_secret'])
 
     def fetch_token(self, code):
-        Host.fetch_token(self, code, "https://github.com/login/oauth/access_token")
+        # POST response content must be parsed as query string
+        response = parse_qs(Host.fetch_token(self, code, "https://github.com/login/oauth/access_token").content)
+        if 'error_description' in response:
+            return False
+        # When parsed, the access_token is mapped to an array only containing the token for some reason
+        return response['access_token'][0]

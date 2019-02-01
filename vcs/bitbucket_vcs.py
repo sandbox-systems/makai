@@ -16,4 +16,8 @@ class BitbucketHost(Host):
                       bitbucket_config['client_secret'])
 
     def fetch_token(self, code):
-        return Host.fetch_token(self, code, "https://bitbucket.org/site/oauth2/access_token")
+        # POST response can be parsed as JSON directly
+        response = Host.fetch_token(self, code, "https://bitbucket.org/site/oauth2/access_token").json()
+        if 'error_description' in response:
+            return False
+        return response['access_token']

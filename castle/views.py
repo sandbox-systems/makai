@@ -6,7 +6,6 @@ from vcs.vcs import *
 
 
 def projects(request):
-    print(request.session.get('uid'))
     if not init_tokens(request):
         return redirect('account:Sync')
     return render(request, 'castle/projects.html')
