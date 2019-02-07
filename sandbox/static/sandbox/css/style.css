@@ -31,7 +31,13 @@ body {
     height: 40px;
     position: relative;
     float: right;
-    background: green;
+}
+
+#toolbar .toolbarbtn {
+    height: 100%;
+    width: 20%;
+    margin: 0;
+    font-size: 12pt;
 }
 
 #treeview {

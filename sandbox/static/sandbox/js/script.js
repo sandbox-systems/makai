@@ -67,36 +67,36 @@ function getTree() {
     {
       text: "Folder 1",
       color: "#000000",
-      backColor: "#FFFFFF",
+      backColor: "#C4C4C4",
       nodes: [
         {
           text: "File 1",
           icon: "glyphicon glyphicon-file",
           color: "#000000",
-          backColor: "#FFFFFF"
+          backColor: "#C4C4C4"
         },
         {
           text: "File 2",
           icon: "glyphicon glyphicon-file",
           color: "#000000",
-          backColor: "#FFFFFF"
+          backColor: "#C4C4C4"
         },
         {
           text: "Folder 2",
           color: "#000000",
-          backColor: "#FFFFFF",
+          backColor: "#C4C4C4",
           nodes: [
             {
               text: "File 1",
               icon: "glyphicon glyphicon-file",
               color: "#000000",
-              backColor: "#FFFFFF"
+              backColor: "#C4C4C4"
             },
             {
               text: "File 2",
               icon: "glyphicon glyphicon-file",
               color: "#000000",
-              backColor: "#FFFFFF"
+              backColor: "#C4C4C4"
             }
           ]
         }
@@ -114,14 +114,31 @@ $('#treeview').treeview({
   collapseIcon: "glyphicon glyphicon-chevron-up"
 });
 
-$(document).on('click', '.node-treeview', function() {
-  $('#treeview').treeview('toggleNodeExpanded', [parseInt(this.dataset.nodeid), { silent: false } ]);
-});
-
 $('#treeview').on('nodeSelected', function(event, data) {
     setBreadcrumb(data);
 });
 
+var clicks = 0;
+var timer = null;
+$("#treeview").on("click", function(event){
+    clicks++;
+    console.log(clicks);
+    if(clicks === 1) {
+        timer = setTimeout(function() {
+            $('#treeview').treeview('toggleNodeExpanded', [parseInt(event.target.dataset.nodeid), { silent: false } ]);
+            clicks = 0;
+        }, 200);
+    }else{
+        if($(event.target).find("span.expand-icon").length == 0)
+            addTab(event.target.innerText);
+        clicks = 0;
+    }
+}).on("dblclick", function(event){
+    event.preventDefault();
+});
+
+
+//Breadcrumbs
 function setBreadcrumb(data){
     var crumbArray = [];
     while(!$(data).is($("#treeview"))){
@@ -142,7 +159,21 @@ function setBreadcrumb(data){
 }
 
 //Tab Bar
+var tabnum = 0;
+
 $('#tabbar a').click(function (e) {
-   e.preventDefault()
-   $(this).tab('show')
+    console.log(this);
+   e.preventDefault();
+   $(this).tab('show');
+});
+
+function addTab(name){
+    $('<li><a href="#tab'+(++tabnum)+'" data-toggle="tab">'+name+'<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
+}
+
+$("#tabbar").on('click', 'span', function(event){
+    var tabContentId = $(this).parent().attr("href");
+    $(this).parent().parent().remove();
+    $('#myTab a:last').tab('show');
+    $(tabContentId).remove();
 });
