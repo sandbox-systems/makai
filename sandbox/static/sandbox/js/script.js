@@ -174,6 +174,10 @@ function addTab(name){
 $("#tabbar").on('click', 'span', function(event){
     var tabContentId = $(this).parent().attr("href");
     $(this).parent().parent().remove();
-    $('#myTab a:last').tab('show');
     $(tabContentId).remove();
+});
+
+//Toolbar
+$("#runButton").click(function(){
+    document.getElementById("terminalFrame").contentWindow.postMessage({filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0], code: editor.getValue()}, "http://127.0.0.1:7681");
 });

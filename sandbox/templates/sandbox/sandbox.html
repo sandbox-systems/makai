@@ -24,7 +24,7 @@
             </nav>
         </div>
         <div id="toolbar" class="blue-gradient">
-            <button class="btn blue-gradient toolbarbtn"><span class="glyphicon glyphicon-play"></span>&nbsp;&nbsp;run</button><!--
+            <button id="runButton" class="btn blue-gradient toolbarbtn"><span class="glyphicon glyphicon-play"></span>&nbsp;&nbsp;run</button><!--
             --><button class="btn peach-gradient toolbarbtn"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;debug</button><!--
             --><button class="btn aqua-gradient toolbarbtn"><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;vcs</button><!--
             --><button class="btn purple-gradient toolbarbtn"><span class="glyphicon glyphicon-tint"></span>&nbsp;&nbsp;theme</button><!--
@@ -39,7 +39,9 @@
             </ul>
         </div>
         <div id="editor"></div>
-        <div id="terminal"></div>
+        <div id="terminal">
+            <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
+        </div>
     </div>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
