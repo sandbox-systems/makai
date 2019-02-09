@@ -1,10 +1,6 @@
+from git import *
 from pybitbucket.bitbucket import *
 from pybitbucket.auth import *
-
-# print("sdxoivundxcoin")
-# bitbucket = Client()
-
-from git import *
 
 
 class BitbucketHost(Host):
@@ -21,3 +17,10 @@ class BitbucketHost(Host):
         if 'error_description' in response:
             return False
         return response['access_token']
+
+    def get_repos(self):
+        response = self.make_request('get', 'https://api.bitbucket.org/2.0/repositories',
+                                     params={'role': 'member', 'page': '2'}).json()
+        for value in response[u'values']:
+            print(value[u'full_name'])
+        return response

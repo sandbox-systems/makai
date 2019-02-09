@@ -1,5 +1,5 @@
 from credentials import *
-from requests import post
+from requests import post, get, put
 
 
 class Host:
@@ -25,3 +25,22 @@ class Host:
         r = post(endpoint, data={'client_id': self.client_id, 'client_secret': self.client_secret, 'code': code,
                                  'grant_type': 'authorization_code'})
         return r
+
+    def make_request(self, method, endpoint, data=None, params=None):
+        if data:
+            data['access_token'] = self.token
+        if params:
+            params['access_token'] = self.token
+
+        if method == 'get':
+            r = get(endpoint, params=params)
+        elif method == 'put':
+            r = put(endpoint, data=data)
+        elif method == 'post':
+            r = post(endpoint, data=data)
+        else:
+            raise Exception('Invalid request method ' + method)
+        return r
+
+    def get_repos(self):
+        return []

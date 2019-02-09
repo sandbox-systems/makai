@@ -23,9 +23,16 @@ def init_tokens(request):
     return token_exists
 
 
-def init_vcs():
+def init_vcs(exclude_unsynced=False):
     for host, token in tokens.items():
-        if host == 'github':
-            accounts[host] = GithubHost(token is not False)
-        elif host == 'bitbucket':
-            accounts[host] = BitbucketHost(token is not False)
+        if not exclude_unsynced or token is not False:
+            if host == 'github':
+                accounts[host] = GithubHost(token is not False)
+            elif host == 'bitbucket':
+                accounts[host] = BitbucketHost(token is not False)
+
+
+def auth_vcs(request):
+    for host, account in accounts.iteritems():
+        if isinstance(account, Host):
+            account.authenticate(request)
