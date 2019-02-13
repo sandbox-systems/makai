@@ -1,3 +1,611 @@
-body {
-    background: mediumpurple;
+html {
+    background-color: rgba(255, 255, 255, 0.25);
+    overflow-y: scroll;
+    overflow-x: visible;
+}
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+.dropdown .dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: mediumpurple;
+}
+
+.dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.labelhelper {
+    display: flow-root;
+    margin-top: 10%;
+}
+
+.outline {
+    border-radius: 500%;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20%;
+    cursor: pointer;
+}
+
+.outline:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.9);
+}
+
+#fileList li {
+    margin: 5%;
+    display:inline-block;
+    vertical-align: top;
+    text-align: center;
+    width: 7rem;
+    color: white;
+}
+
+li > a {
+    color: white;
+    text-decoration: none;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: auto;
+    padding: 0;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    border-radius: 15px;
+    margin-bottom: 5%;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 5px 16px;
+    color: black;
+    border-bottom: solid 2px #dadada;
+}
+
+.modal-body {
+    padding: 2px 16px;
+}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.switch {
+    position: relative;
+    top: 0%;
+    width: 100%;
+    height: 2rem;
+    float: right;
+    padding: 2px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 80%;
+    width: 40%;
+    left: 4px;
+    bottom: 10%;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: mediumpurple;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px mediumpurple;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(145%);
+    -ms-transform: translateX(145%);
+    transform: translateX(145%);
+}
+
+fieldset {
+    border: solid 0px;
+    padding: 2%;
+}
+
+button {
+    outline: none;
+    border: none;
+    color: black;
+}
+
+.prevBtn {
+    position: relative;
+    width: 4.5vw;
+    padding: 10px;
+    height: 2%;
+    color: white;
+    font-size: 90%;
+    border-radius: 3rem;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+.goBtn {
+    position: relative;
+    width: 30%;
+    padding: 2px;
+    height: 2%;
+    color: white;
+    font-size: 90%;
+    border-radius: 3rem;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+.profile {
+    position: relative;
+    width: 4.5vw;
+    padding: 2px;
+    height: 2%;
+    color: white;
+    font-size: 90%;
+    border-radius: 3rem;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+.prevBtn:active {
+    border: solid mediumpurple 2px;
+}
+
+.inputname {
+    background-color: rgba(0, 0, 0, 0);
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 2px solid gray;
+    outline: none;
+    width: 95%;
+}
+.inputname:focus{
+    border-bottom: 2px solid mediumpurple;
+}
+select {
+    outline: none;
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0.05);
+/ / border-radius: 10 px;
+    color: black;
+}
+
+option {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 0px;
+    outline: none;
+}
+
+.topnav {
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+}
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav a.okeh {
+    background-color: mediumslateblue;
+    color: white;
+}
+
+.topnav a.active {
+    background-color: dimgray;
+    color: white;
+}
+
+.FMsidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    color: white;
+}
+
+.FMsidenav a {
+    //padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    //color: #818181;
+    //display: block;
+    transition: 0.3s;
+}
+
+.FMsidenav a:hover {
+    color: mediumpurple;
+}
+
+.FMsidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+}
+
+.sticky + ul {
+    padding-top: 60px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+.infoname {
+    width: 90%;
+    border: 0px;
+    background-color: rgba(0,0,0,0);
+    color: black;
+    border-bottom: solid 2px black;
+}
+#editor{
+    position:  absolute;
+    height: 92%;
+    display:  inline-block;
+    width: 65%;
+    top: 3%;
+    /* right: auto; */
+    left: 22%;
+}
+#preloader {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999999;
+}
+
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #9370DB;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #BA55D3;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #FF00FF;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+#cssmenu-container {
+    height: 220px;
+    background-color: #CEE3F8;
+}
+
+/* Menu container */
+#cssmenu {
+    bottom:0;
+    display: inline-block; /* The menu will have width as needed, not 100% */
+    position: fixed;
+    font-family: Lato;
+    font-size: 14px;
+    line-height: 1em;
+    border-radius: 2px; /* Little curvature in the borders */
+    overflow-x: scroll;
+    overflow-y: hidden;/* Hide everything that overflows, like shadows */
+}
+
+/* Icons */
+#cssmenu i {
+    transform: scale(1.4);
+}
+
+/* Menu */
+#cssmenu ul {
+    display: flex; /* A key part of our menu, displays items side by side, and allows reversing them */
+    flex-direction: row-reverse; /* Reverse the items */
+    /* Reset styles, overwrite browser defaults */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#cssmenu ul li {
+    margin: 0;
+}
+#cssmenu ul li a {
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding: 12px 30px 12px 45px; /* Adjusting padding to get the proper space */
+    margin-left: -20px; /* Pull the items to the left, so the rounded right side will get over them */
+    color: white;
+    background-color: mediumpurple;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 0 100px 100px 0; /* Get the right side rounded */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Apply the shadow */
+}
+#cssmenu ul li:hover a {
+    background-color: rebeccapurple;
+}
+
+/* Remove the shadow for first item, last in the right side when it gets reversed */
+#cssmenu ul li:first-child a {
+    box-shadow: none;
+}
+
+/* Active item is a bit different */
+#cssmenu ul li.active a {
+    color: mediumpurple;
+    background-color: #EEF5FF;
+}
+
+/* Remove the shadow for the active's next item, to match the design more accurately */
+#cssmenu ul li.active + li a {
+    box-shadow: none;
+}
+
+.ownerNameHidden {
+    display: none;
+}
+img{
+  height: 40px;
+  width: 40px;
+}
+
+.fmSelectedFriend {
+    border-radius: 15px;
+    border: solid 2px rebeccapurple;
+    padding: 2%;
+    background: rgba(147,112,219,0.5);
+    color: rebeccapurple;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+    margin: 2%;
+    font-size: 0.85rem;
+    padding: 1%;
+}
+.chip {
+    padding: 0 25px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+}
+
+.chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+#repoShareFriendFilter{
+  border: none;
+  border-bottom: solid 2px gray;
+  float:none;
+  display: inline-block;
+  width: 90%;
+  transition: border-bottom 0.2s;
+  -webkit-transition: border-bottom 0.2s;
+}
+#repoShareFriendFilter:focus{
+    border-bottom: solid 2px mediumpurple;
 }
