@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400" rel="stylesheet">
 
     <div class="demo-wrapper">
-        <div class="dashboard clearfix">
+        <div class="dashboard clearfix" style="padding-bottom:0">
             <ul class="tiles">
                 <div class="col1 clearfix">
                     <a  href="{% url 'sandbox:Sandbox' %}">
@@ -20,13 +20,16 @@
                 </div>
                 <div class="col2 clearfix">
                     <a href="{% url 'castle:Projects' %}">
-                        <li class="tile tile-big tile-1 slideTextUp">
-                            <div><p><i class="fa fa-archive fa-2x"></i><font size="+9">Castle</font></p></div>
+                        <li class="tile tile-big tile-6 slideTextUp">
+                            <div><p><i class="fa fa-archive fa"></i><font size="+9"> Castle</font></p></div>
                             <div><p><font size="+4">Let's Explore</font></p></div>
                         </li>
                     </a>
-
                 </div>
+            </ul>
+        </div>
+        <div class="dashboard clearfix" style="padding-top:0">
+            <ul class="tiles">
                 <a href="{% url 'luau:Luau' %}">
                     <div class="col3 clearfix slideTextUp">
                         <li class="tile tile-big tile-6 slideTextUp">

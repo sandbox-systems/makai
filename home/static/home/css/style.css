@@ -356,9 +356,7 @@ body {
     height: 100%;
     line-height: 1.5;
     font-family: 'Raleway', sans-serif;
-/ / font-weight: 300;
     font-size: 16px;
-/ / background-size: 100 % 100 %
 }
 
 ul {
@@ -566,7 +564,7 @@ header a {
     margin-right: 0.5%;
     font-size: 1.3em;
     text-align: center;
-    height: 85vh;
+    height: 50vh;
     font-weight: 300;
     border-radius: 10px;
     overflow: hidden;
@@ -657,29 +655,18 @@ header a {
 }
 
 /*styling the individual tiles*/
-/*second*/
-.tile-1 {
-    background-color: mediumpurple;
-    color: ghostwhite;
-    transition: background 0.4s;
-    transition-timing-function: ease-in-out;
-}
-
-.tile-1:hover{
-    background-color: ghostwhite;
-    color: mediumpurple;
-}
 
 /*first*/
 .tile-6 {
-    background-color: mediumpurple;
+    background-color: rebeccapurple;
     color: ghostwhite;
     transition: background 0.4s;
     transition-timing-function: ease-in-out;
 }
-.tile-6:hover{
+
+.tile-6:hover {
     background-color: ghostwhite;
-    color: mediumpurple;
+    color: rebeccapurple;
 }
 
 .tile-5 p,
@@ -915,29 +902,29 @@ header a {
     }
 }
 
-@media screen and (min-width: 64em) {
-    .col1,
-    .col2,
-    .col3, .col4 {
-        position: relative;
-        float: left;
-        margin-right: 0.5%;
-        margin-left: 0.5%;
-        width: 22%;
-    }
+/*@media screen and (min-width: 64em) {*/
+/*.col1,*/
+/*.col2,*/
+/*.col3, .col4 {*/
+/*position: relative;*/
+/*float: left;*/
+/*margin-right: 0.5%;*/
+/*margin-left: 0.5%;*/
+/*width: 22%;*/
+/*}*/
 
-    .col4 {
-        margin-right: 0;
-    }
+/*.col4 {*/
+/*margin-right: 0;*/
+/*}*/
 
-    .col1 {
-        margin-left: 3.5em;
-    }
+/*.col1 {*/
+/*//margin-left: 3.5em;*/
+/*}*/
 
-    .page-title {
-        font-size: 3.5em;
-    }
-}
+/*.page-title {*/
+/*font-size: 3.5em;*/
+/*}*/
+/*}*/
 
 
 /* prefixed animation keyframes */
