@@ -312,8 +312,7 @@ class Luau extends React.Component {
                                         );
                                     })}
                                 </span>
-                                <span id="moreGroupInfoBtn" className="groupInfoItem fas fa-bars fa-2x">
-                                </span>
+                                <span id="moreGroupInfoBtn" className="groupInfoItem fas fa-bars fa-2x"></span>
                             </span>
                         </div>
                     </div>
