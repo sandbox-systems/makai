@@ -54,8 +54,7 @@
             </a></td>
         </tr>
         <tr>
-            <td><a onClick="openNav()" style="cursor: pointer"><img src="" alt="Avatar"
-                                                                    class="userpic"><title>Menu</title></a>
+            <td><a style="cursor: pointer" title="Coming Soon"><i style="color:white" class="fas fa-sign-out-alt fa-2x"></i><title>Logout</title></a>
             </td>
         </tr>
     </table>
@@ -105,15 +104,11 @@
 </div>
 <script>
     function openSearch() {
-        $(".demo-wrapper").foggy();
-        $("#taskbar").foggy();
         document.getElementById("myOverlay").className = "overlay animated fadeIn";
         document.getElementById("myOverlay").style.display = "block";
     }
 
     function closeSearch() {
-        $(".demo-wrapper").foggy(false);
-        $("#taskbar").foggy(false);
         document.getElementById("myOverlay").className = "overlay animated fadeOut";
         document.getElementById("myOverlay").style.display = "none";
         document.getElementById("so").style.display = "none";
