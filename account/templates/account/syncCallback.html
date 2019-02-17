@@ -1,13 +1,33 @@
-<!DOCTYPE html>
 <html lang="en">
+
+{% extends 'home/nav.html' %}
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <title>Syncing...</title>
+    <style>
+        body{
+            background-color: rebeccapurple;
+        }
+
+        .swal2-show{
+            animation: swal2-show 5s !important;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script>
+        window.onload = function(){
+            Swal.fire({
+               type: 'success',
+               title: 'Success!',
+               text: 'Your Account was Successfully Synced'
+            }).then(function(){
+                window.location.href = 'account/username/sync';
+            });
+        }
+    </script>
 </head>
-<body>
-    Please wait...loading circle animation
-    <br>Wait a few s
-    <br>Circle turns into check mark
-    <br>Automatically redirect to here: <a href="{% url 'account:Sync' %}">Back to sync screen</a>
-</body>
 </html>

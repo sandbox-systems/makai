@@ -1,15 +1,124 @@
-<title>Sync</title>
-
 {% extends 'home/nav.html' %}
 {% load static %}
 
 {% block content %}
-    Syncing stuff<br>
-    {% for host, account in accounts %}
-        {% if account.sync_link is not None %}
-            <a href="{{ account.sync_link }}">{{ host }}</a>
-        {% endif %}
-        <br>
-    {% endfor %}
+<head>
+    <title>Sync</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body
+        {
+            background-color: rebeccapurple;
+            text-align: center;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
 
+        h1
+        {
+            margin: auto;
+            width: 100%;
+            padding: 2%;
+            font-size: 5vw;
+            color: black;
+        }
+
+        .parent
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-
+        {
+            padding-left: 5%;
+            padding-right: 5%;
+            width: 50%;
+            height: 100%;
+        }
+
+        .card
+        {
+            background-color: rgba(255, 255, 255, 0.75);
+        }
+
+        .img-container
+        {
+            height: 15vw;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .card-img-top
+        {
+            position: relative;
+            width: 90%;
+
+        }
+
+        .btn-primary
+        {
+            background-color: rebeccapurple !important;
+        }
+
+    </style>
+</head>
+    <h1>Sync Accounts</h1>
+    <div class="container parent">
+        <div class="row">
+            {% for host, account in accounts %}
+                {% if account.sync_link is not None %}
+                    <div class="col-">
+                        <div class="card">
+                        <table class="img-container">
+                        <tr>
+                        <td>
+                                {% if host == "github" %}
+                                    <img src="{% static 'account/img/GitHub_Logo.png' %}" class="card-img-top" alt="Github-Mark">
+                                {% else %}
+                                    <img src="{% static 'account/img/Bitbucket@2x-blue.png' %}" class="card-img-top" alt="Bitbucket-Blue">
+                                {% endif %}
+                        </td>
+                        </tr>
+                        </table>
+                            <div class="card-body">
+                                <a class="btn btn-primary text-white" href="{{ account.sync_link }}">Sync</a>
+                            </div>
+                        </div>
+                    </div>
+                {%  elif account.sync_link is None %}
+                    <div class="col-">
+                        <div class="card">
+                        <table class="img-container">
+                        <tr>
+                        <td>
+                                {% if host == "github" %}
+                                    <img src="{% static 'account/img/GitHub_Logo.png' %}" class="card-img-top" alt="Github-Mark">
+                                {% else %}
+                                    <img src="{% static 'account/img/Bitbucket@2x-blue.png' %}" class="card-img-top" alt="Bitbucket-Blue">
+                                {% endif %}
+                        </td>
+                        </tr>
+                        </table>
+                           <div class="card-body">
+                               Account Details
+                                {# TODO Information about the account #}
+                                {# Use Bootstrap Kitchen Sink #}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock %}
+

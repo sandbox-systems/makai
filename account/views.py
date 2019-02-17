@@ -52,7 +52,7 @@ def sync_callback(request, host):
                 update_doc('priv_user', request.session.get('uid'), doc_update)
 
                 # TODO Handle error updating doc?
-
+                print("Hello")
                 return render(request, 'account/syncCallback.html')
     # If there was an error anywhere in the process
     return render(request, 'account/syncCallbackErrored.html')

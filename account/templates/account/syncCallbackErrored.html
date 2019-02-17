@@ -1,12 +1,34 @@
-<!DOCTYPE html>
 <html lang="en">
+
+{% extends 'home/nav.html' %}
+{% load static %}
+
+{% block content %}
+
 <head>
     <meta charset="UTF-8">
     <title>Sync Failed</title>
+    <style>
+        body{
+            background-color: rebeccapurple;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script>
+        window.onload = function(){
+            Swal.fire({
+               type: 'error',
+               title: 'Sync Error',
+               text: 'Something went wrong!',
+               confirmButtonText: 'Try Again'
+            }).then(function(){
+                window.location.href = 'account/username/sync';
+            });
+        }
+    </script>
 </head>
-<body>
-    Uh oh.
-    <br>
-    <a href="{% url 'account:Sync' %}">Try again</a>
-</body>
+
+{% endblock %}
 </html>
