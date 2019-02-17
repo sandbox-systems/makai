@@ -5,11 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
-
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foggy/1.1.1/jquery.foggy.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
@@ -18,18 +21,138 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        <link rel="icon" href="{% static 'home/images/makai_logo-02.png' %}">
 </head>
 <body>
-    <a href="{% url 'home:Landing' %}">Landing</a>
-    <a href="{% url 'account:Settings' %}">Settings</a>
-    <br>
-    <a href="{% url 'home:Home' %}">Home</a>
-    <a href="{% url 'sandbox:Sandbox' %}">Sandbox</a>
-    <a href="{% url 'castle:Projects' %}">Castle</a>
-    <a href="{% url 'luau:Luau' %}">Luau</a>
-    <a href="{% url 'notifications:Notifications' %}">Notifications</a>
-    <br>
-    {% block content %}
-    {% endblock %}
+<style>
+
+</style>
+<div class="icon-bar" id="taskbar">
+    <table style="height: 100%;">
+        <tr>
+            <td><a href="{% url 'home:Home' %}"><img src="{% static 'home/images/makai_logo-02.png' %}" style="width:90%;"><title>Home</title></a>
+            </td>
+        </tr>
+        <tr>
+            <td><a onClick="openSearch()" style="cursor: pointer;color:white;"><i class="fas fa-search fa-2x"><title>
+                Quicksand</title></i></a></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'sandbox:Sandbox' %}"><i class="fas fa-terminal fa-2x"><title>Playground</title></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'castle:Projects' %}"><i class="fas fa-archive fa-2x"><title>Treasury</title></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'luau:Luau' %}"><i class="fas fa-comments fa-2x"><title>Luau</title></i></a></td>
+        </tr>
+        <tr>
+            <td id="notificationsBtn"><a id="notificationsSidebarBtn" href="{% url 'notifications:Notifications' %}"><i
+                    id="notificationsIcon" class="fas fa-bell fa-2x"><title>Notifications</title></i>
+            </a></td>
+        </tr>
+        <tr>
+            <td><a style="cursor: pointer" title="Coming Soon"><i style="color:white" class="fas fa-sign-out-alt fa-2x"></i><title>Logout</title></a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="myOverlay" class="overlay animated fadeIn">
+    <span class="closebtn" onclick="closeSearch()" title="Close Overlay">×</span>
+    <div class="overlay-content" id="oc">
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+            <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-search-22" viewBox="0 0 40 40">
+                <path d="M24.382 25.485c-1.704 1.413-3.898 2.263-6.292 2.263-5.42 0-9.814-4.36-9.814-9.736 0-5.377 4.394-9.736 9.814-9.736s9.815 4.36 9.815 9.736c0 2.126-.687 4.093-1.853 5.694l5.672 5.627-1.73 1.718-5.612-5.565zM20 40c11.046 0 20-8.954 20-20S31.046 0 20 0 0 8.954 0 20s8.954 20 20 20zm-1.91-14.686c4.065 0 7.36-3.27 7.36-7.302 0-4.033-3.295-7.302-7.36-7.302s-7.36 3.27-7.36 7.302c0 4.033 3.295 7.302 7.36 7.302z"
+                      fill-rule="evenodd"/>
+            </symbol>
+            <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-clear-5" viewBox="0 0 20 20">
+                <path d="M10 20c5.523 0 10-4.477 10-10S15.523 0 10 0 0 4.477 0 10s4.477 10 10 10zm1.35-10.123l3.567 3.568-1.225 1.226-3.57-3.568-3.567 3.57-1.226-1.227 3.568-3.568-3.57-3.57 1.227-1.224 3.568 3.568 3.57-3.567 1.224 1.225-3.568 3.57zM10 18.272c4.568 0 8.272-3.704 8.272-8.272S14.568 1.728 10 1.728 1.728 5.432 1.728 10 5.432 18.272 10 18.272z"
+                      fill-rule="evenodd"/>
+            </symbol>
+        </svg>
+        <div class="animated bounceInRight">
+            <form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
+                <div id="outputs" role="search" class="sbx-custom__wrapper">
+                    <input type="search" name="search" placeholder="@username or @username filename or chatname"
+                           id="sbxx" autocomplete="off"
+                           required="required" class="sbx-custom__input">
+                    <button type="submit" title="Submit your search query." class="sbx-custom__submit">
+                        <svg role="img" aria-label="Search">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-search-22"></use>
+                        </svg>
+                    </button>
+                    <button type="reset" title="Clear the search query." class="sbx-custom__reset"
+                            style="display: none;">
+                        <svg role="img" aria-label="Reset">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-clear-5"></use>
+                        </svg>
+                    </button>
+                    <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so"
+                         style="cursor: pointer;display: none">
+                        <i class="fab fa-stack-overflow" style="margin-right: 3%;"></i> Search on Stack Overflow...
+                    </div>
+                    <div onclick="searchGoogle()" class="searchoptions animated bounceIn" id="go"
+                         style="cursor: pointer;display: none;"><i class="fab fa-google" style="margin-right: 3%;"></i>
+                        Search on Google...
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function openSearch() {
+        document.getElementById("myOverlay").className = "overlay animated fadeIn";
+        document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function closeSearch() {
+        document.getElementById("myOverlay").className = "overlay animated fadeOut";
+        document.getElementById("myOverlay").style.display = "none";
+        document.getElementById("so").style.display = "none";
+        document.getElementById("go").style.display = "none";
+        $('#sbxx').val("");
+        $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
+    }
+
+    $('#myOverlay').click(function (event) {
+        var container = $('#myOverlay');
+        if (container.is(event.target)) {
+            closeSearch();
+        }
+    });
+    document.querySelector('.searchbox [type="reset"]').addEventListener('click', function () {
+        this.parentNode.querySelector('input').focus();
+    });
+
+    function searchGoogle() {
+        var x = document.getElementById("sbxx").value;
+        window.open("https://www.google.com/search?q=" + x, '_blank');
+    }
+
+    function searchSO() {
+        var x = document.getElementById("sbxx").value;
+        window.open("https://www.stackoverflow.com/search?q=" + x, '_blank');
+    }
+
+    document.getElementById("sbxx").oninput = function () {
+        document.getElementById("so").className = "searchoptions animated bounceIn";
+        document.getElementById("go").className = "searchoptions animated bounceIn";
+        document.getElementById("so").style.display = "block";
+        document.getElementById("go").style.display = "block";
+        if (document.getElementById("sbxx").value == "") {
+            document.getElementById("so").className = "searchoptions animated bounceOut";
+            document.getElementById("go").className = "searchoptions animated bounceOut";
+        }
+        document.getElementById("oc").style.top = "20%";
+    };
+
+</script>
+{#    <a href="{% url 'home:Landing' %}">Landing</a>#}
+{#    <a href="{% url 'account:Settings' %}">Settings</a>#}
+{% block content %}
+{% endblock %}
 </body>
 </html>

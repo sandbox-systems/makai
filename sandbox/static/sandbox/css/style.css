@@ -1,32 +1,95 @@
 body {
-    background: cornflowerblue;
+    background: ghostwhite;
+    font-family: "Raleway";
 }
+#content{
+    width: calc(100% - 70px);
+    margin-left: 70px;
+}
+/*#breadcrumbs {*/
+    /*width: 50%;*/
+    /*height: 40px;*/
+    /*position: relative;*/
+    /*display: inline-block;*/
+/*}*/
 
+/*#breadcrumbs .breadcrumb {*/
+    /*border-radius: 0px;*/
+    /*margin-bottom: 0px;*/
+    /*height: 40px;*/
+    /*background: ghostwhite;*/
+/*}*/
+
+/*#breadcrumbs .breadcrumb > li + li:before {*/
+    /*color: #ccc;*/
+    /*content: ">";*/
+    /*padding: 0 10px;*/
+/*}*/
+
+/*#breadcrumbs .breadcrumb .active{*/
+    /*color: #3A8BCC;*/
+/*}*/
 #breadcrumbs {
-    width: 50%;
-    height: 40px;
+    width:50%;
+    height:40px;
+    //bottom:0;
+    display: inline-block; /* The menu will have width as needed, not 100% */
     position: relative;
+    font-family: Raleway;
+    font-size: 14px;
+    //line-height: 1em;
+    border-radius: 2px; /* Little curvature in the borders */
+    //overflow-x: scroll;
+    overflow-y: scroll;/* Hide everything that overflows, like shadows */
+}
+
+/* Icons */
+#breadcrumbs i {
+    transform: scale(1.4);
+}
+
+/* Menu */
+#breadcrumbs ul {
+    display: flex; /* A key part of our menu, displays items side by side, and allows reversing them */
+    //flex-direction: row-reverse; /* Reverse the items */
+    /* Reset styles, overwrite browser defaults */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#breadcrumbs ul li {
+    margin: 0;
+}
+#breadcrumbs ul li {
     display: inline-block;
+    font-family: Raleway;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding: 12px 30px; /* Adjusting padding to get the proper space */
+    margin-left: -20px; /* Pull the items to the left, so the rounded right side will get over them */
+    color: white;
+    background-color: mediumpurple;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 0 100px 100px 0; /* Get the right side rounded */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Apply the shadow */
+}
+#breadcrumbs ul li:hover {
+    background-color: rebeccapurple;
 }
 
-#breadcrumbs .breadcrumb {
-    border-radius: 0px;
-    margin-bottom: 0px;
-    height: 40px;
-    background: #E3E3E3;
+.breadcrumb>li+li:before, .breadcrumb-item+.breadcrumb-item::before{
+    content:"";
 }
 
-#breadcrumbs .breadcrumb > li + li:before {
-    color: #ccc;
-    content: ">";
-    padding: 0 10px;
+/* Active item is a bit different */
+#breadcrumbs ul li.active  {
+    color: mediumpurple;
+    background-color: #EEF5FF;
 }
 
-#breadcrumbs .breadcrumb .active{
-    color: #3A8BCC;
-}
-
-#toolbar {
+#toolbar, .toolbar {
     width: 50%;
     height: 40px;
     position: relative;
@@ -40,20 +103,25 @@ body {
     font-size: 12pt;
 }
 
+.toolbarbtn:hover{
+    background:ghostwhite;
+    color:rebeccapurple;
+}
+
 #treeview {
     width: 15%;
     height: 100%;
     display: inline-block;
     float: left;
-    background: #F0F0F0;
+    background: #f5f5f5;
 }
 
 #tabbar {
-    width: 85%;
+    width: 100%;
     height: 60px;
     position: relative;
     float: right;
-    background: #F0F0F0;
+    background: rebeccapurple;
 }
 
 #tabbar > ul {
@@ -75,16 +143,37 @@ body {
 }
 
 #editor {
-    width: 85%;
+    width: 100%;
     height: calc(70% - 51px);
     position: relative;
     float: right;
 }
 
 #terminal {
-    width: 85%;
+    width: 100%;
     height: calc(30% - 9px);
     position: relative;
     float: right;
-    background: blue;
+    top: 0 !important;
+}
+
+#terminalFrame {
+    width: 100%;
+    height: 100%;
+    border: 0px;
+}
+
+#editorcol{
+    float:left;
+    width:85%;
+    left: 0 !important;
+}
+
+#bottomtoolbar{
+    position: fixed;
+    background: rebeccapurple;
+    bottom: 0;
+    width: calc(100% - 70px);
+    float:right;
+    text-align: center;
 }

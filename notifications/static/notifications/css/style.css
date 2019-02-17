@@ -1,3 +1,169 @@
 body {
-    background: rosybrown;
+    background: white;
+}
+
+#notificationsOverlay {
+    background: ghostwhite;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 70px;
+
+}
+
+#notificationsFiller {
+    height: 100vh;
+}
+
+#notificationsContainer {
+    background: #f2f3f4;
+    position: fixed;
+    left: 25%;
+    right: 25%;
+    top: 5%;
+    bottom: 5%;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    overflow-x: hidden;
+// overflow-y: scroll;
+}
+
+#notificationsContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+#notificationsContainer::-webkit-scrollbar-thumb {
+    background: white;
+}
+
+#notificationsContainer::-webkit-scrollbar-track {
+    background: #312450FF;
+}
+
+#notificationsHeader {
+    background: rebeccapurple;
+    height: 100px;
+}
+
+#notificationsTitle {
+    color: white;
+    position: absolute;
+    left: 0;
+    right: 60px;
+    height: 100px;
+    font-size: 25px;
+}
+
+#notificationsTitle > span, #notificationsTrash > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+#notificationsTrash {
+    color: white;
+    position: absolute;
+    left: calc(100% - 60px);
+    right: 0;
+    height: 100px;
+}
+
+#notifications {
+    margin: 0;
+    list-style: none;
+    padding: 10px;
+}
+
+.notification {
+    display: flex;
+    width: 100%;
+    min-height: 80px;
+    margin-bottom: 5px;
+}
+
+.notifIcon {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 90px;
+    color: white;
+    font-size: 45px;
+}
+
+.notifContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    word-wrap: break-word;
+    background: white;
+    padding-right: 10px;
+    padding-left: 10px;
+    width: calc(100% - 120px);
+    font-size: 22px;
+}
+
+.notifDelete {
+    text-align: center;
+    background: white;
+    padding-top: 4px;
+    width: 30px;
+}
+
+.notifDelete > span:hover {
+    cursor: pointer;
+    color: #dc3545;
+}
+
+#notificationsTrashBtn {
+    background: transparent;
+    border: none;
+    color: white;
+}
+
+#notificationsTrashBtn > i, .thumb-up, .thumb-down, .notifDelete > span {
+    -webkit-transition: color 0.25s linear;
+    -moz-transition: color 0.25s linear;
+    -o-transition: color 0.25s linear;
+    -ms-transition: color 0.25s linear;
+    transition: color 0.25s linear;
+}
+
+#notificationsTrashBtn > i:hover {
+    cursor: pointer;
+    color: #dc3545;
+}
+
+.thumb-up:hover {
+    cursor: pointer;
+    color: #28a745;
+}
+
+.thumb-down:hover {
+    cursor: pointer;
+    color: #dc3545;
+}
+
+.friendResponseNotif {
+    background: #7ed6df;
+}
+
+.chatroomNotif {
+    background: #ffbe76;
+}
+
+.repoNotif {
+    background: #badc58;
+}
+
+.folderNotif {
+    background: #f6e58d;
+}
+
+.fileNotif {
+    background: #ff7979;
 }
