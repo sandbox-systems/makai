@@ -4,18 +4,23 @@
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" charset="utf-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+   <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" charset="utf-8">
     <link rel="stylesheet" href="{% static 'home/css/mdb.min.css' %}" charset="utf-8">
     <link rel="stylesheet" href="{% static 'sandbox/css/style.css' %}" charset="utf-8">
     <link rel="stylesheet" href="{% static 'sandbox/css/bootstrap-treeview.css' %}" charset="utf-8">
-    <script src="{% static 'home/js/jquery.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'home/js/bootstrap.min.js' %}" type="text/javascript"></script>
+   <script src="{% static 'home/js/bootstrap.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'home/js/mdb.min.js' %}"></script>
     <script src="{% static 'sandbox/js/resources/ace/src/ace.js' %}" type="text/javascript"></script>
     <script src="{% static 'sandbox/js/resources/ace/src/ext-language_tools.js' %}"></script>
     <script src="{% static 'sandbox/js/resources/treeview/src/js/bootstrap-treeview.js' %}"></script>
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
 
     <div id="content">
         <div id="breadcrumbs">
@@ -57,12 +62,11 @@
                     <li><a href="javascript:temper('twilight')">Twilight</a></li>
                     <li><a href="javascript:temper('vibrant_ink')">Vibrant Ink</a></li>
                 </ul>
-
-
         </button><!--
             --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button>
         </div>
-        <div id="treeview"></div>
+        <div id="treeview" class="ui-widget-content"></div>
+        <div id="editorcol">
         <div id="tabbar">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab1" data-toggle="tab" class="active show">Tab 1<span class="close">&nbsp;&nbsp;×</span></a></li>
@@ -74,12 +78,14 @@
         <div id="terminal">
             <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
         </div>
+        </div>
+{#    <div id="bottomtoolbar" class="toolbar">#}
+{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-left fa-2x"></span></button>#}
+{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-up fa-2x"></span></button>#}
+{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-right fa-2x"></span></button>#}
+{#    </div>#}
     </div>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
     <script>
-    function temper(theme) {
-            // var editor = ace.edit('editor');
-            editor.setTheme("ace/theme/" + theme);
-        }
     </script>
 {% endblock %}

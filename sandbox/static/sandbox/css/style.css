@@ -89,7 +89,7 @@ body {
     background-color: #EEF5FF;
 }
 
-#toolbar {
+#toolbar, .toolbar {
     width: 50%;
     height: 40px;
     position: relative;
@@ -117,7 +117,7 @@ body {
 }
 
 #tabbar {
-    width: 85%;
+    width: 100%;
     height: 60px;
     position: relative;
     float: right;
@@ -143,21 +143,37 @@ body {
 }
 
 #editor {
-    width: 85%;
+    width: 100%;
     height: calc(70% - 51px);
     position: relative;
     float: right;
 }
 
 #terminal {
-    width: 85%;
+    width: 100%;
     height: calc(30% - 9px);
     position: relative;
     float: right;
+    top: 0 !important;
 }
 
 #terminalFrame {
     width: 100%;
     height: 100%;
     border: 0px;
+}
+
+#editorcol{
+    float:left;
+    width:85%;
+    left: 0 !important;
+}
+
+#bottomtoolbar{
+    position: fixed;
+    background: rebeccapurple;
+    bottom: 0;
+    width: calc(100% - 70px);
+    float:right;
+    text-align: center;
 }
