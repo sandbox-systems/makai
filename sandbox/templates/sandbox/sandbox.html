@@ -1,36 +1,72 @@
-<title>Sandbox</title>
+<title>Makai</title>
 
 {% extends 'home/nav.html' %}
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" charset="utf-8">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+   <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" charset="utf-8">
     <link rel="stylesheet" href="{% static 'home/css/mdb.min.css' %}" charset="utf-8">
     <link rel="stylesheet" href="{% static 'sandbox/css/style.css' %}" charset="utf-8">
     <link rel="stylesheet" href="{% static 'sandbox/css/bootstrap-treeview.css' %}" charset="utf-8">
-    <script src="{% static 'home/js/jquery.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'home/js/bootstrap.min.js' %}" type="text/javascript"></script>
+   <script src="{% static 'home/js/bootstrap.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'home/js/mdb.min.js' %}"></script>
     <script src="{% static 'sandbox/js/resources/ace/src/ace.js' %}" type="text/javascript"></script>
     <script src="{% static 'sandbox/js/resources/ace/src/ext-language_tools.js' %}"></script>
     <script src="{% static 'sandbox/js/resources/treeview/src/js/bootstrap-treeview.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
 
     <div id="content">
         <div id="breadcrumbs">
             <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
+              <ul class="breadcrumb">
                 <li class="breadcrumb-item active" aria-current="page">Repository</li>
-              </ol>
+              </ul>
             </nav>
         </div>
-        <div id="toolbar" class="blue-gradient">
-            <button id="runButton" class="btn blue-gradient toolbarbtn"><span class="glyphicon glyphicon-play"></span>&nbsp;&nbsp;run</button><!--
-            --><button class="btn peach-gradient toolbarbtn"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;debug</button><!--
-            --><button class="btn aqua-gradient toolbarbtn"><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;vcs</button><!--
-            --><button class="btn purple-gradient toolbarbtn"><span class="glyphicon glyphicon-tint"></span>&nbsp;&nbsp;theme</button><!--
-            --><button class="btn morpheus-den-gradient toolbarbtn"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;notes</button>
+        <div id="toolbar" style="background:rebeccapurple">
+            <button id="runButton" class="btn toolbarbtn"><span class="glyphicon glyphicon-play"></span></button><!--
+            --><button class="btn toolbarbtn"><span class="fas fa-bug" style="font-size:1.75rem"></span></button><!--
+            --><button class="btn toolbarbtn"><span class="fab fa-git" style="font-size:1.75rem"></span></button><!--
+            --><button class="btn dropdown toolbarbtn">
+        <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-tint"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript:temper('chrome')">Chrome</a></li>
+                    <li><a href="javascript:temper('clouds')">Clouds</a></li>
+                    <li><a href="javascript:temper('clouds_midnight')">Clouds Midnight</a></li>
+                    <li><a href="javascript:temper('cobalt')">Cobalt</a></li>
+                    <li><a href="javascript:temper('crimson_editor')">Crimson Editor</a></li>
+                    <li><a href="javascript:temper('dawn')">Dawn</a></li>
+                    <li><a href="javascript:temper('eclipse')">Eclipse</a></li>
+                    <li><a href="javascript:temper('idle_fingers')">Idle Fingers</a></li>
+                    <li><a href="javascript:temper('kr_theme')">KR Theme</a></li>
+                    <li><a href="javascript:temper('merbivore')">Merbivore</a></li>
+                    <li><a href="javascript:temper('merbivore_soft')">Merbivore Soft</a></li>
+                    <li><a href="javascript:temper('mono_industrial')">Mono Industrial</a></li>
+                    <li><a href="javascript:temper('monokai')">Monokai</a></li>
+                    <li><a href="javascript:temper('pastel_on_dark')">Pastel On Dark</a></li>
+                    <li><a href="javascript:temper('solarized_dark')">Solarized Dark</a></li>
+                    <li><a href="javascript:temper('solarized_light')">Solarized Light</a></li>
+                    <li><a href="javascript:temper('text_mate')">Text Mate</a></li>
+                    <li><a href="javascript:temper('tomorrow')">Tomorrow</a></li>
+                    <li><a href="javascript:temper('tomorrow_night')">Tomorrow Night</a></li>
+                    <li><a href="javascript:temper('tomorrow_night_blue')">Tomorrow Night Blue</a></li>
+                    <li><a href="javascript:temper('tomorrow_night_bright')">Tomorrow Night Bright</a></li>
+                    <li><a href="javascript:temper('tomorrow_night_eighties')">Tomorrow Night Eighties</a></li>
+                    <li><a href="javascript:temper('twilight')">Twilight</a></li>
+                    <li><a href="javascript:temper('vibrant_ink')">Vibrant Ink</a></li>
+                </ul>
+        </button><!--
+            --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button>
         </div>
-        <div id="treeview"></div>
+        <div id="treeview" class="ui-widget-content"></div>
+        <div id="editorcol">
         <div id="tabbar">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab1" data-toggle="tab" class="active show">Tab 1<span class="close">&nbsp;&nbsp;×</span></a></li>
@@ -42,6 +78,14 @@
         <div id="terminal">
             <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
         </div>
+        </div>
+{#    <div id="bottomtoolbar" class="toolbar">#}
+{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-left fa-2x"></span></button>#}
+{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-up fa-2x"></span></button>#}
+{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-right fa-2x"></span></button>#}
+{#    </div>#}
     </div>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script>
+    </script>
 {% endblock %}

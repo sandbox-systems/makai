@@ -5,5 +5,40 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'notifications/css/style.css' %}">
-    Notifications
+    <div id="notificationsOverlay"></div>
+    <div id="notificationsContainer">
+        <div id="notificationsHeader">
+            <div id="notificationsTitle">
+                <span>NOTIFICATIONS</span>
+            </div>
+            <div id="notificationsTrash">
+                <span><button id="notificationsTrashBtn"><i class="fas fa-trash fa-2x"></i></button></span>
+            </div>
+        </div>
+        <div id="notifications">
+            <div id="div1">
+                <p style="
+                    font-size:128px;
+                    text-align:center;
+                    border-radius: 50%;
+                    border-style:solid;
+                    color: lightgray;
+                    margin-left: auto;
+                    width: 200px;
+                    height: 200px;
+                    margin-right: auto;
+                    margin-bottom: 0px;
+                    margin-top: 2%;
+                    ">✓
+                </p>
+                <p style="
+                    text-align:  center;
+                    color:  darkgray;
+                    font-size: 30px;
+                    font-family:  lato;
+                ">You're All Caught Up!</p>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

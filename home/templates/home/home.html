@@ -4,9 +4,57 @@
 {% load static %}
 
 {% block content %}
-    Home <br>
-    <a href="{% url 'sandbox:Sandbox' %}">Sandbox</a>
-    <a href="{% url 'castle:Projects' %}">Castle</a>
-    <a href="{% url 'luau:Luau' %}">Luau</a>
-    <a href="{% url 'notifications:Notifications' %}">Notifications</a>
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400" rel="stylesheet">
+
+    <div class="demo-wrapper">
+        <div class="dashboard clearfix" style="padding-bottom:0">
+            <ul class="tiles">
+                <div class="col1 clearfix">
+                    <a  href="{% url 'sandbox:Sandbox' %}">
+                        <li class="tile tile-big tile-6 slideTextUp">
+                            <div><p><i class="fa fa-terminal fa-1x"></i> Sandbox</p></div>
+                            <div><p>Let's Code</p></div>
+                        </li>
+                    </a>
+                </div>
+                <div class="col2 clearfix">
+                    <a href="{% url 'castle:Projects' %}">
+                        <li class="tile tile-big tile-6 slideTextUp">
+                            <div><p><i class="fa fa-archive fa"></i><font size="+9"> Castle</font></p></div>
+                            <div><p><font size="+4">Let's Explore</font></p></div>
+                        </li>
+                    </a>
+                </div>
+            </ul>
+        </div>
+        <div class="dashboard clearfix" style="padding-top:0">
+            <ul class="tiles">
+                <a href="{% url 'luau:Luau' %}">
+                    <div class="col3 clearfix slideTextUp">
+                        <li class="tile tile-big tile-6 slideTextUp">
+                            <div style="padding: 0"><p><i class="fas fa-comments"></i> Luau</p></div>
+                            <div><p><font size="+4">Let's Hangout</font></p></div>
+                        </li>
+                    </div>
+                </a>
+{#                <a href="{% url 'notifications:Notifications' %}">#}
+                <a href"">
+                    <div class="col4 clearfix">
+                        <li class="tile tile-big tile-6 slideTextUp">
+                            <div style="padding: 0"><p><i class="fas fa-bell"></i> Notifications</p></div>
+{#                            <div><p><font size="+4">Let's Update</font></p></div>#}
+                            <div><p><font size="+4">Coming Soon</font></p></div>
+                        </li>
+                    </div>
+                </a>
+            </ul>
+        </div>
+    </div><!--end dashboard-->
+    <script>
+        showPreloader();
+        $(function () {
+            setTimeout(hidePreloader, 500);
+        });
+    </script>
 {% endblock %}

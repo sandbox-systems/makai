@@ -253,7 +253,7 @@
             <img src="{% static 'home/images/Arya.jpg' %}" alt="" width="30%" class="frontprofilepic" id="aryaButton"
                  onclick="modalOpen('aryaModal')"/>
             <h2>Arya Saksena</h2>
-            <h3>Outreach Ambassador</h3>
+            <h3>Director of Philanthropy</h3>
         </div>
     </div>
     <div class="content row">
@@ -263,11 +263,29 @@
             <h2>Govind Joshi</h2>
             <h3>Development Project Manager</h3>
         </div>
-        <div id="riyac" class="inner column animated bounceIn">
+        <div id="sparshc" class="inner column animated bounceIn">
+            <img src="{% static 'home/images/sparsh4.png' %}" alt="" width="30%" class="frontprofilepic"
+                 onclick="modalOpen('sparshModal')"/>
+            <h2>Sparsh Patel</h2>
+            <h3>Developer</h3>
+        </div>
+        <div id="saitejac" class="inner column animated bounceIn">
             <img src="{% static 'home/images/riyapic.png' %}" alt="" width="30%" class="frontprofilepic"
-                 onclick="modalOpen('riyaModal')"/>
-            <h2>Riya Chaudhary</h2>
+                 onclick="modalOpen('saitejaModal')"/>
+            <h2>Saiteja Rawulwar</h2>
+            <h3>Developer</h3>
+        </div>
+        <div id="chaic" class="inner column animated bounceIn">
+            <img src="{% static 'home/images/chai1.jpg' %}" alt="" width="30%" class="frontprofilepic"
+                 onclick="modalOpen('chaiModal')"/>
+            <h2>Chai Bokka</h2>
             <h3>Marketing Coordinator</h3>
+        </div>
+        <div id="zacharyc" class="inner column animated bounceIn">
+            <img src="{% static 'home/images/riyapic.png' %}" alt="" width="30%" class="frontprofilepic"
+                 onclick="modalOpen('zacharyModal')"/>
+            <h2>Zachary Handshoe</h2>
+            <h3>Business Development Liaison</h3>
         </div>
         <div id="klerc" class="inner column animated bounceIn">
             <img src="{% static 'home/images/klerpic1.jpg' %}" alt="" width="30%" class="frontprofilepic"
@@ -295,7 +313,7 @@
                 many websites and programs in the past.</p>
         </div>
         <div class="modal-footer">
-            <h3>Co-Founder, CEO, and Jumping Jacks Expert</h3>
+            <h3>Co-Founder and Co-CEO</h3>
         </div>
     </div>
 </div>
@@ -315,7 +333,7 @@
                 leadership skills. An avid motivator and influencer, and most definitely ambitious entrepreneur.</p>
         </div>
         <div class="modal-footer">
-            <h3>Chief Business Officer and Music Enthusiast</h3>
+            <h3>Chief Business Officer (CBO)</h3>
         </div>
     </div>
 </div>
@@ -336,16 +354,35 @@
                 organization. Arya has various leadership experiences from various background.</p>
         </div>
         <div class="modal-footer">
-            <h3>Outreach Ambassador and Hippie</h3>
+            <h3>Director of Philanthropy</h3>
         </div>
     </div>
 </div>
-<div id="riyaModal" class="modal">
+<div id="chaiModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
         <div class="modal-header">
-            <span class="close" onclick="modalClose('riyaModal')">&times;</span>
-            <h2>Riya Chaudhary</h2>
+            <span class="close" onclick="modalClose('chaiModal')">&times;</span>
+            <h2>Chai Bokka</h2>
+        </div>
+        <div class="modal-body">
+            <img src="{% static 'home/images/chai1.jpg' %}" alt="" width="10%" height="50%"
+                 style="position: relative;border-radius: 1000px;border: 5px solid white;"/>
+            <p>Chai Bokka is a sophomore at McNeil High School with experience in Marketing, Business Management, and
+                Finance. He has been to DECA state twice, and hopes to apply his business knowledge to Sandbox Systems.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <h3>Marketing Coordinator</h3>
+        </div>
+    </div>
+</div>
+<div id="zacharyModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" onclick="modalClose('zacharyModal')">&times;</span>
+            <h2>Zachary Handshoe</h2>
         </div>
         <div class="modal-body">
             <img src="{% static 'home/images/riyapic.png' %}" alt="" width="10%" height="50%"
@@ -358,7 +395,51 @@
                 coding and collaboration.</p>
         </div>
         <div class="modal-footer">
-            <h3>Marketing Coordinator and Traveller</h3>
+            <h3>Business Development Liaison
+</h3>
+        </div>
+    </div>
+</div>
+<div id="sparshModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" onclick="modalClose('sparshModal')">&times;</span>
+            <h2>Sparsh Patel</h2>
+        </div>
+        <div class="modal-body">
+            <img src="{% static 'home/images/riyapic.png' %}" alt="" width="10%" height="50%"
+                 style="position: relative;border-radius: 1000px;border: 5px solid white;"/>
+            <p>Sparsh is a curious and enthusiast learner for subjects in math and science. He has many sources of
+                experience from STEM courses, clubs, and extracurriculars that focus on aspects of software and hardware.
+                He wants to further his education and skills through Sandbox and dealing with real world applications.
+                He is also well developed in not only the STEM field, but has experience pertaining to business ideals.
+                </p>
+        </div>
+        <div class="modal-footer">
+            <h3>Developer</h3>
+        </div>
+    </div>
+</div>
+<div id="saitejaModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" onclick="modalClose('saitejaModal')">&times;</span>
+            <h2>Saiteja Rawulwar</h2>
+        </div>
+        <div class="modal-body">
+            <img src="{% static 'home/images/riyapic.png' %}" alt="" width="10%" height="50%"
+                 style="position: relative;border-radius: 1000px;border: 5px solid white;"/>
+            <p>Riya is an ardent learner and marketer. She has taken various business and marketing courses and
+                participated in international career conferences. Apart from business, she has performed thorough
+                scientific research with universities, ranging
+                from biodiversity to the opioid crisis. She now employs her passion for learning and marketing at
+                Sandbox Systems to provide quality service to clients and spread awareness about the importance of
+                coding and collaboration.</p>
+        </div>
+        <div class="modal-footer">
+            <h3>Developer</h3>
         </div>
     </div>
 </div>
@@ -378,7 +459,7 @@
                 in leadership and executive positions from various fields.</p>
         </div>
         <div class="modal-footer">
-            <h3>Co-Founder, CEO, and Coffee Enthusiast</h3>
+            <h3>Co-Founder and Co-CEO</h3>
         </div>
     </div>
 </div>
@@ -402,7 +483,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <h3>Business Consultant and Racecar Driver</h3>
+            <h3>Chief Marketing Officer</h3>
         </div>
     </div>
 </div>
@@ -422,7 +503,7 @@
                 solving skills.</p>
         </div>
         <div class="modal-footer">
-            <h3>CTO and Master Wizard</h3>
+            <h3>Chief Technology Officer (CTO)</h3>
         </div>
     </div>
 </div>
@@ -439,7 +520,7 @@
             <p></p>
         </div>
         <div class="modal-footer">
-            <h3>Outreach Ambassador and Pancake Fanatic</h3>
+            <h3>Outreach Ambassador</h3>
         </div>
     </div>
 </div>
@@ -459,7 +540,7 @@
                 Patrol Leader in his Boy Scout Troop.</p>
         </div>
         <div class="modal-footer">
-            <h3>Developer and Wallclimber</h3>
+            <h3>Development Project Manager</h3>
         </div>
     </div>
 </div>
