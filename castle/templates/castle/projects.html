@@ -1,11 +1,198 @@
-<title>Projects</title>
 
 {% extends 'home/nav.html' %}
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'castle/css/style.css' %}">
+    <title>Projects</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        $( ".card" ).draggable({ revert: "invalid", scroll: false});
+      });
+    </script>
+    <style>
+        body
+        {
+            background-color: ghostwhite;
+        }
 
+        .navbar
+        {
+            background-color: rebeccapurple !important;
+        }
+
+        .navbar-brand
+        {
+            color: white !important;
+        }
+
+        .circle-bottom-left
+        {
+            position: fixed;
+            bottom: 1vw;
+            left: 1vw;
+            width: 6vw;
+            height: 6vw;
+            border-radius: 100%;
+            background-color: rebeccapurple;
+            background-image: url({% static 'castle/img/share.png' %});
+            background-size: 75%;
+            background-position: center center;
+            background-repeat: no-repeat;
+            box-shadow: 1px 1px 2rem gray;
+        }
+
+        .circle-bottom-left:hover
+        {
+            width: 8vw;
+            height: 8vw;
+        }
+
+        .circle-bottom-right
+        {
+            position: fixed;
+            bottom: 1vw;
+            right: 1vw;
+            width: 6vw;
+            height: 6vw;
+            border-radius: 100%;
+            background-color: rebeccapurple;
+            background-image: url({% static 'castle/img/trash.png' %});
+            background-size: 75%;
+            background-position: center center;
+            background-repeat: no-repeat;
+            box-shadow: 1px 1px 2rem gray;
+        }
+
+        .circle-bottom-right:hover
+        {
+            width: 8vw;
+            height: 8vw;
+        }
+
+        .card
+        {
+            margin: 10px;
+            border-style: solid;
+            border-color: rebeccapurple;
+            box-shadow: 1px 1px 1rem gray;
+        }
+
+        .container-fluid
+        {
+            bottom: 10vw;
+        }
+
+        .menu
+        {
+          width: 120px;
+          box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+          position: relative;
+          display: none;
+
+          .menu-options {
+            list-style: none;
+            padding: 10px 0;
+
+            .menu-option {
+              font-weight: 500;
+              font-size: 14px;
+              padding: 10px 40px 10px 20px;
+              cursor: pointer;
+
+              &:hover {
+                background: rgba(0, 0, 0, 0.2);
+              }
+            }
+          }
+        }
+    </style>
+
+    <style>
+      #draggable2 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
+    </style>
+
+    {# TODO Breadcrumbs #}
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand">Castle</a>
+      <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </nav>
+    <nav class="navbar navbar-light bg-light navbar-breadcrumb">
+      <a class="navbar-brand">Breadcrumbs</a>
+      <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </nav>
+
+    <div class="draggable-window">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card" style="width: 15rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                  </ul>
+                </div>
+
+                <div class="card" style="width: 15rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                  </ul>
+                </div>
+
+                <div class="card" style="width: 15rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                  </ul>
+                </div>
+
+                <div class="card" style="width: 15rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                  </ul>
+                </div>
+            </div>
+        </div>
+        <div class="circle-bottom-left">
+        </div>
+        <div class="circle-bottom-right">
+        </div>
+    </div>
+
+    <div class="menu">
+      <ul class="menu-options">
+        <li class="menu-option">Back</li>
+        <li class="menu-option">Reload</li>
+        <li class="menu-option">Save</li>
+        <li class="menu-option">Save As</li>
+        <li class="menu-option">Inspect</li>
+      </ul>
+    </div>
 
 {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
 {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
