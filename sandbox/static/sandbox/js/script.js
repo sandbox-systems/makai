@@ -186,8 +186,23 @@ $("#runButton").click(function () {
 });
 
 function temper(theme) {
-    // var editor = ace.edit('editor');
-    editor.setTheme("ace/theme/" + theme);
+    var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
+        if(lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && !lightThemes.includes(theme) || !lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && lightThemes.includes(theme)){
+            updateC();
+        }
+        editor.setTheme("ace/theme/" + theme);
+}
+
+function updateC(){
+     $(".toolbarbtn").toggleClass("lightgraytext");
+     $(".breadcrumb-item active").toggleClass("black");
+     $(".breadcrumb-item").toggleClass("lightestgray");
+     $(".breadcrumb").toggleClass("lightgray");
+     $("#treeview").toggleClass("lightestgray");
+     $("#tabbar li").toggleClass("black");
+     $("#tabbar .active").toggleClass("gray");
+     $("#tabbar > ul").toggleClass("lightestgray");
+     $("#tabbar").toggleClass("lightestgray");
 }
 
 $(document).ready(function () {

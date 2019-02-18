@@ -65,7 +65,7 @@
         </button><!--
             --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button>
         </div>
-        <div id="treeview" class="ui-widget-content"></div>
+        <div id="treeview"></div>
         <div id="editorcol">
         <div id="tabbar">
             <ul class="nav nav-tabs">
@@ -86,6 +86,25 @@
 {#    </div>#}
     </div>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script>
-    </script>
+    <style>
+        .black{
+    background: black !important;
+    color: white !important;
+}
+.gray{
+    background: #212121 !important;
+    color: white !important;
+}
+.lightgray{
+    background: #303030 !important;
+    color: white !important;
+}
+.lightestgray{
+    background: #424242 !important;
+    color: white !important;
+}
+    .lightgraytext{
+        color: #303030 !important;
+    }
+    </style>
 {% endblock %}
