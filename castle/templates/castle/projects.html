@@ -7,19 +7,8 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-      $( function() {
-        $( ".card" ).draggable({ revert: "invalid", scroll: false});
-      });
-
-      $(document).ready(function() {
-          $(".circle-bottom-mid").click(function () {
-              $(".circle-hidden-left").toggle();
-              $(".circle-hidden-top").toggle();
-              $(".circle-hidden-right").toggle();
-          });
-      });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="{% static 'castle/js/scriptUI.js' %}"></script>
     <style>
         body
         {
@@ -41,12 +30,6 @@
         .navbar-brand
         {
             color: white !important;
-        }
-
-        .tool-nav
-        {
-            background-color: mediumpurple !important;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
         }
 
         .circle-bottom-left
@@ -72,22 +55,6 @@
             height: 8vw;
         }
 
-        .circle-bottom-mid
-        {
-            position: fixed;
-            bottom: 1vw;
-            left: 50vw;
-            width: 6vw;
-            height: 6vw;
-            border-radius: 100%;
-            background-color: rebeccapurple;
-            background-image: url({% static 'castle/img/plussign.png' %});
-            background-size: 75%;
-            background-position: center center;
-            background-repeat: no-repeat;
-            box-shadow: 1px 1px 2rem gray;
-        }
-
         .circle-bottom-right
         {
             position: fixed;
@@ -111,57 +78,6 @@
             height: 8vw;
         }
 
-        .circle-hidden-left
-        {
-            position: fixed;
-            bottom: 1vw;
-            left: 50vw;
-            width: 6vw;
-            height: 6vw;
-            border-radius: 100%;
-            background-color: rebeccapurple;
-            background-image: url({% static 'castle/img/plussign.png' %});
-            background-size: 75%;
-            background-position: center center;
-            background-repeat: no-repeat;
-            box-shadow: 1px 1px 2rem gray;
-            display: none;
-        }
-
-        .circle-hidden-top
-        {
-            position: fixed;
-            bottom: 1vw;
-            left: 50vw;
-            width: 6vw;
-            height: 6vw;
-            border-radius: 100%;
-            background-color: rebeccapurple;
-            background-image: url({% static 'castle/img/plussign.png' %});
-            background-size: 75%;
-            background-position: center center;
-            background-repeat: no-repeat;
-            box-shadow: 1px 1px 2rem gray;
-            display: none;
-        }
-
-        .circle-hidden-right
-        {
-            position: fixed;
-            bottom: 1vw;
-            left: 50vw;
-            width: 6vw;
-            height: 6vw;
-            border-radius: 100%;
-            background-color: rebeccapurple;
-            background-image: url({% static 'castle/img/plussign.png' %});
-            background-size: 75%;
-            background-position: center center;
-            background-repeat: no-repeat;
-            box-shadow: 1px 1px 2rem gray;
-            display: none;
-        }
-
         .card
         {
             margin: 20px;
@@ -173,7 +89,18 @@
             bottom: 10vw;
         }
 
-        .context-menu {
+        .draggable-window
+        {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 70px;
+            top: 50px;
+        }
+
+        /* Context Menu */
+        .context-menu
+        {
           display: none;
           position: absolute;
           z-index: 10;
@@ -184,33 +111,168 @@
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
         }
 
-        .context-menu--active {
+        .context-menu--active{
           display: block;
         }
 
-        .context-menu__items {
+        .context-menu__items{
           list-style: none;
           margin: 0;
           padding: 0;
         }
 
-        .context-menu__item {
+        .context-menu__item{
           display: block;
           margin-bottom: 4px;
         }
 
-        .context-menu__item:last-child {
+        .context-menu__item:last-child{
           margin-bottom: 0;
         }
 
-        .context-menu__link {
+        .context-menu__link{
           display: block;
           padding: 4px 12px;
           color: rebeccapurple;
           text-decoration: none;
         }
 
-        .context-menu__link:hover {
+        .context-menu__link:hover{
+          color: #fff;
+          background-color: rebeccapurple;
+          text-decoration: none;
+        }
+
+        /* Context Menu */
+        .container-context-menu
+        {
+          display: none;
+          position: absolute;
+          z-index: 10;
+          padding: 12px 0;
+          width: 200px;
+          background-color: whitesmoke;
+          border: solid 1px #dfdfdf;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+        }
+
+        .container-context-menu--active{
+          display: block;
+        }
+
+        .container-context-menu__items{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .container-context-menu__item{
+          display: block;
+          margin-bottom: 4px;
+        }
+
+        .container-context-menu__item:last-child{
+          margin-bottom: 0;
+        }
+
+        .container-context-menu__link{
+          display: block;
+          padding: 4px 12px;
+          color: rebeccapurple;
+          text-decoration: none;
+        }
+
+        .container-context-menu__link:hover{
+          color: #fff;
+          background-color: rebeccapurple;
+          text-decoration: none;
+        }
+
+        /* Context Menu */
+        .repository-context-menu
+        {
+          display: none;
+          position: absolute;
+          z-index: 10;
+          padding: 12px 0;
+          width: 200px;
+          background-color: whitesmoke;
+          border: solid 1px #dfdfdf;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+        }
+
+        .repository-context-menu--active{
+          display: block;
+        }
+
+        .repository-context-menu__items{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .repository-context-menu__item{
+          display: block;
+          margin-bottom: 4px;
+        }
+
+        .repository-context-menu__item:last-child{
+          margin-bottom: 0;
+        }
+
+        .repository-context-menu__link{
+          display: block;
+          padding: 4px 12px;
+          color: rebeccapurple;
+          text-decoration: none;
+        }
+
+        .repository-context-menu__link:hover{
+          color: #fff;
+          background-color: rebeccapurple;
+          text-decoration: none;
+        }
+
+        /* Context Menu */
+        .container-repository-context-menu
+        {
+          display: none;
+          position: absolute;
+          z-index: 10;
+          padding: 12px 0;
+          width: 200px;
+          background-color: whitesmoke;
+          border: solid 1px #dfdfdf;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+        }
+
+        .container-repository-context-menu--active{
+          display: block;
+        }
+
+        .container-repository-context-menu__items{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .container-repository-context-menu__item{
+          display: block;
+          margin-bottom: 4px;
+        }
+
+        .container-repository-context-menu__item:last-child{
+          margin-bottom: 0;
+        }
+
+        .container-repository-context-menu__link{
+          display: block;
+          padding: 4px 12px;
+          color: rebeccapurple;
+          text-decoration: none;
+        }
+
+        .container-repository-context-menu__link:hover{
           color: #fff;
           background-color: rebeccapurple;
           text-decoration: none;
@@ -235,7 +297,7 @@
         <div class="draggable-window">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="card" style="width: 15rem;">
+                    <div class="card" style="width: 15rem; height: 18rem">
                       <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -246,7 +308,7 @@
                       </ul>
                     </div>
 
-                    <div class="card" style="width: 15rem;">
+                    <div class="card" style="width: 15rem;  height: 18rem">
                       <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -257,7 +319,7 @@
                       </ul>
                     </div>
 
-                    <div class="card" style="width: 15rem;">
+                    <div class="card" style="width: 15rem;  height: 18rem">
                       <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -268,7 +330,7 @@
                       </ul>
                     </div>
 
-                    <div class="card" style="width: 15rem;">
+                    <div class="card" style="width: 15rem;  height: 18rem">
                       <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -282,35 +344,83 @@
             </div>
             <div class="circle-bottom-left">
             </div>
-            <div class="circle-bottom-mid">
-            </div>
             <div class="circle-bottom-right">
             </div>
-
-            <div class="circle-hidden-left"></div>
-            <div class="circle-hidden-top"></div>
-            <div class="circle-hidden-right"></div>
         </div>
 
+      {# Right Click Menu on Repository Hub #}
       <nav id="context-menu" class="context-menu">
         <ul class="context-menu__items">
           <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="View"><i class="fa fa-eye"></i> Preview</a>
+            <a href="#" class="context-menu__link" data-action="Open"><i class="fa fa-eye"></i> Open</a>
           </li>
           <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Edit"><i class="fa fa-edit"></i> Edit</a>
+            <a href="#" class="context-menu__link" data-action="Edit Description"><i class="fa fa-edit"></i> Edit Description</a>
           </li>
           <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Delete"><i class="fas fa-share"></i> Share</a>
+            <a href="#" class="context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
+          </li>
+          <li class="context-menu__item">
+            <a href="#" class="context-menu__link" data-action="Share"><i class="fas fa-share"></i> Share</a>
           </li>
           <li class="context-menu__item">
             <a href="#" class="context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
           </li>
         </ul>
       </nav>
+
+       {# Right Click Menu on Repository Hub Container #}
+      <nav id="container-context-menu" class="container-context-menu">
+        <ul class="container-context-menu__items">
+          <li class="container-context-menu__item">
+            <a href="#" class="container-context-menu__link" data-action="New Repository"><i class="fas fa-plus"></i> New Repository</a>
+          </li>
+          <li class="container-context-menu__item">
+            <a href="#" class="container-context-menu__link" data-action="New Folder"><i class="fas fa-upload"></i> Upload Existing</a>
+          </li>
+        </ul>
+      </nav>
+
+        {# Right Click Menu INSIDE Repository #}
+      <nav id="repository-context-menu" class="repository-context-menu">
+        <ul class="repository-context-menu__items">
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
+          </li>
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
+          </li>
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
+          </li>
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
+          </li>
+        </ul>
+      </nav>
+
+    {# Right Click Menu INSIDE Repository #}
+      <nav id="container-repository-context-menu" class="container-repository-context-menu">
+        <ul class="container-repository-context-menu__items">
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
+          </li>
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
+          </li>
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
+          </li>
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
-    <script src="{% static 'castle/js/script.js' %}"></script>
+
+    <script src="{% static 'castle/js/contextMenuScript.js' %}"></script>
+    <script src="{% static 'castle/js/containerContextMenuScript.js' %}"></script>
 
 {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
 {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
