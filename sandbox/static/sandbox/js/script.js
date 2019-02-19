@@ -217,7 +217,6 @@ $(document).ready(function () {
         document.getElementById("editor").style.height = nheight;
         $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
     });
-
     $("#terminal").resize(function () {
         var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
         document.getElementById("editor").style.height = nheight;
