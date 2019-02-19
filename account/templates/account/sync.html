@@ -4,9 +4,11 @@
 {% block content %}
 <head>
     <title>Sync</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <style>
         body
         {
+            font-family: "Raleway";
             background-color: ghostwhite;
             text-align: center;
             height: 100%;
@@ -18,8 +20,8 @@
 
         h1
         {
-            margin: auto;
-            width: 100%;
+            margin-left: 70px;
+            width: calc(100% - 70px);
             padding: 2%;
             font-size: 5vw;
             color: rebeccapurple;
@@ -36,6 +38,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-left: 70px;
         }
 
         .col-
@@ -49,7 +52,8 @@
         .card
         {
             background-color: rgba(255, 255, 255, 0.75);
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-style: solid;
         }
 
         .img-container
