@@ -26,10 +26,16 @@ class Host:
                                  'grant_type': 'authorization_code'})
         return r
 
+    def refresh_token(self, refresh_token, endpoint):
+        r = post(endpoint,
+                 data={'client_id': self.client_id, 'client_secret': self.client_secret, 'refresh_token': refresh_token,
+                       'grant_type': 'refresh_token'})
+        return r
+
     def make_request(self, method, endpoint, data=None, params=None):
-        if data:
+        if data is not None:
             data['access_token'] = self.token
-        if params:
+        if params is not None:
             params['access_token'] = self.token
 
         if method == 'get':
@@ -44,3 +50,6 @@ class Host:
 
     def get_repos(self):
         return []
+
+    def get_repo(self):
+        return None
