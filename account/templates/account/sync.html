@@ -25,6 +25,12 @@
             color: rebeccapurple;
         }
 
+        .wrapper-sync
+        {
+            width: calc(100% - 70px);
+            margin-left: 70px;
+        }
+
         .parent
         {
             display: flex;
@@ -43,9 +49,7 @@
         .card
         {
             background-color: rgba(255, 255, 255, 0.75);
-            border-style: solid;
-            border-color: rebeccapurple;
-            box-shadow: 2px 2px 1rem gray;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
         }
 
         .img-container
@@ -71,10 +75,12 @@
 
     </style>
 </head>
+    <div class="wrapper-sync">
     <h1>Sync Accounts</h1>
     <div class="container parent">
         <div class="row">
             {% for host, account in accounts %}
+                {# TODO Check account.sync_link #}
                 {% if account.sync_link is not None %}
                     <div class="col-">
                         <div class="card">
@@ -119,6 +125,7 @@
                 <br>
             {% endfor %}
         </div>
+    </div>
     </div>
 
 {% endblock %}
