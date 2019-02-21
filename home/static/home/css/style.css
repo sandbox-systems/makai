@@ -1219,15 +1219,15 @@ header a {
        e the links appear below each other instead of side-by-side */
     text-align: center; /* Center-align text */
     padding: 6px; /* Add some padding */
-/ / padding-bottom: 100 %;
+// padding-bottom: 100 %;
     transition: all 0.3s ease; /* Add transition for hover effects */
-    color: white; /* White text color */
-/ / font-size: 36 px; /* Increased font-size */
+    color: white !important; /* White text color */
+// font-size: 36 px; /* Increased font-size */
 }
 
 .icon-bar a:hover {
-    background-color: #000; /* Add a hover color */
-    color: white;
+    background-color: white; /* Add a hover color */
+    color: rebeccapurple !important;
     text-decoration: none;
 }
 
@@ -1255,7 +1255,7 @@ header a {
     width: 100%;
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
