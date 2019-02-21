@@ -207,21 +207,29 @@ function updateC(){
 
 $(document).ready(function () {
     $("#editorcol").resizable({
-        handles: 'w'
+        handles: 'w',
+        resize: function(e,ui){
+            $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
+        }
     });
     $("#terminal").resizable({
-        handles: 'n'
+        handles: 'n',
+        start: function(e, ui){
+            $("#terminalframe").css("pointer-events", "none");
+            $("#terminalframe").css("display", "none");
+        },
+        resize: function(e,ui){
+            var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
+            document.getElementById("editor").style.height = nheight;
+        },
+        stop: function(e, ui){
+            $("#terminalframe").css("pointer-events", "auto");
+            $("#terminalframe").css("display", "block");
+        }
     });
     $(window).resize(function () {
         var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
         document.getElementById("editor").style.height = nheight;
-        $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
-    });
-    $("#terminal").resize(function () {
-        var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
-        document.getElementById("editor").style.height = nheight;
-    });
-    $("#editorcol").resize(function () {
-        $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
+        $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
     });
 });

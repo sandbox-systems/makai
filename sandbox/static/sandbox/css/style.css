@@ -126,7 +126,7 @@ body {
 
 #editor {
     width: 100%;
-    height: calc(70% - 51px);
+    height: calc(70% - 20px);
     position: relative;
     float: right;
 }
@@ -137,6 +137,9 @@ body {
     position: relative;
     float: right;
     top: 0 !important;
+    padding-top: 0.5%;
+    padding-left: 0.5%;
+    margin-top:0.5%;
 }
 
 #terminalFrame {
