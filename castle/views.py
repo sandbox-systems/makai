@@ -10,7 +10,19 @@ def projects(request):
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
-    accounts['github'].get_repos()
-    print("BREAK")
-    accounts['bitbucket'].get_repos()
+    repos = merge_dicts(accounts['github'].get_repos(), accounts['bitbucket'].get_repos())
+    print(repos);
+    return render(request, 'castle/projects.html', {'repos': repos})
+
+
+def project(request, host, owner, repo, branch, path):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+    print(host)
+    print(owner)
+    print(repo)
+    print(branch)
+    print(path)
     return render(request, 'castle/projects.html')

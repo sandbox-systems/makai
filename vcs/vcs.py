@@ -36,3 +36,9 @@ def auth_vcs(request):
     for host, account in accounts.iteritems():
         if isinstance(account, Host):
             account.authenticate(request)
+
+
+def merge_dicts(a, b):
+    c = a.copy()
+    c.update(b)
+    return c

@@ -4,347 +4,35 @@
 
 {% block content %}
     <title>Projects</title>
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'castle/css/style.css' %}">
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://d3js.org/d3-time.v1.min.js"></script>
+    <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
     <script src="{% static 'castle/js/scriptUI.js' %}"></script>
-    <style>
-        body
-        {
-            background-color: ghostwhite;
-        }
-
-        .wrapper-castle
-        {
-            width: calc(100% - 70px);
-            margin-left: 70px;
-        }
-
-        .breadcrumb-nav
-        {
-            background-color: rebeccapurple !important;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-        }
-
-        .navbar-brand
-        {
-            color: white !important;
-        }
-
-        .circle-bottom-left
-        {
-            position: fixed;
-            margin-left: 70px;
-            bottom: 1vw;
-            left: 1vw;
-            width: 6vw;
-            height: 6vw;
-            border-radius: 100%;
-            background-color: rebeccapurple;
-            background-image: url({% static 'castle/img/share.png' %});
-            background-size: 75%;
-            background-position: center center;
-            background-repeat: no-repeat;
-            box-shadow: 1px 1px 2rem gray;
-        }
-
-        .circle-bottom-left:hover
-        {
-            width: 8vw;
-            height: 8vw;
-        }
-
-        .circle-bottom-right
-        {
-            position: fixed;
-
-            bottom: 1vw;
-            right: 1vw;
-            width: 6vw;
-            height: 6vw;
-            border-radius: 100%;
-            background-color: rebeccapurple;
-            background-image: url({% static 'castle/img/trash.png' %});
-            background-size: 75%;
-            background-position: center center;
-            background-repeat: no-repeat;
-            box-shadow: 1px 1px 2rem gray;
-        }
-
-        .circle-bottom-right:hover
-        {
-            width: 8vw;
-            height: 8vw;
-        }
-
-        .card
-        {
-            margin: 20px;
-            box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-        }
-
-        .container-fluid
-        {
-            bottom: 10vw;
-        }
-
-        .draggable-window
-        {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            left: 70px;
-            top: 50px;
-        }
-
-        /* Context Menu */
-        .context-menu
-        {
-          display: none;
-          position: absolute;
-          z-index: 10;
-          padding: 12px 0;
-          width: 200px;
-          background-color: whitesmoke;
-          border: solid 1px #dfdfdf;
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-        }
-
-        .context-menu--active{
-          display: block;
-        }
-
-        .context-menu__items{
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-
-        .context-menu__item{
-          display: block;
-          margin-bottom: 4px;
-        }
-
-        .context-menu__item:last-child{
-          margin-bottom: 0;
-        }
-
-        .context-menu__link{
-          display: block;
-          padding: 4px 12px;
-          color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        .context-menu__link:hover{
-          color: #fff;
-          background-color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        /* Context Menu */
-        .container-context-menu
-        {
-          display: none;
-          position: absolute;
-          z-index: 10;
-          padding: 12px 0;
-          width: 200px;
-          background-color: whitesmoke;
-          border: solid 1px #dfdfdf;
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-        }
-
-        .container-context-menu--active{
-          display: block;
-        }
-
-        .container-context-menu__items{
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-
-        .container-context-menu__item{
-          display: block;
-          margin-bottom: 4px;
-        }
-
-        .container-context-menu__item:last-child{
-          margin-bottom: 0;
-        }
-
-        .container-context-menu__link{
-          display: block;
-          padding: 4px 12px;
-          color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        .container-context-menu__link:hover{
-          color: #fff;
-          background-color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        /* Context Menu */
-        .repository-context-menu
-        {
-          display: none;
-          position: absolute;
-          z-index: 10;
-          padding: 12px 0;
-          width: 200px;
-          background-color: whitesmoke;
-          border: solid 1px #dfdfdf;
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-        }
-
-        .repository-context-menu--active{
-          display: block;
-        }
-
-        .repository-context-menu__items{
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-
-        .repository-context-menu__item{
-          display: block;
-          margin-bottom: 4px;
-        }
-
-        .repository-context-menu__item:last-child{
-          margin-bottom: 0;
-        }
-
-        .repository-context-menu__link{
-          display: block;
-          padding: 4px 12px;
-          color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        .repository-context-menu__link:hover{
-          color: #fff;
-          background-color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        /* Context Menu */
-        .container-repository-context-menu
-        {
-          display: none;
-          position: absolute;
-          z-index: 10;
-          padding: 12px 0;
-          width: 200px;
-          background-color: whitesmoke;
-          border: solid 1px #dfdfdf;
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-        }
-
-        .container-repository-context-menu--active{
-          display: block;
-        }
-
-        .container-repository-context-menu__items{
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-
-        .container-repository-context-menu__item{
-          display: block;
-          margin-bottom: 4px;
-        }
-
-        .container-repository-context-menu__item:last-child{
-          margin-bottom: 0;
-        }
-
-        .container-repository-context-menu__link{
-          display: block;
-          padding: 4px 12px;
-          color: rebeccapurple;
-          text-decoration: none;
-        }
-
-        .container-repository-context-menu__link:hover{
-          color: #fff;
-          background-color: rebeccapurple;
-          text-decoration: none;
-        }
-    </style>
 
     <div class="wrapper-castle">
         {# TODO Breadcrumbs #}
         <nav class="navbar navbar-light bg-light breadcrumb-nav">
-          <a class="navbar-brand">Breadcrumbs</a>
+          <a class="navbar-brand">Castle</a>
           <form class="form-inline">
             <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
           </form>
         </nav>
 
-        <!--<nav class="navbar navbar-light bg-light tool-nav">
+        <nav class="navbar navbar-light bg-light tool-nav">
           <a class="navbar-brand">Tools</a>
         </nav>
-        -->
 
         <div class="draggable-window">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="card" style="width: 15rem; height: 18rem">
-                      <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                      </ul>
-                    </div>
-
-                    <div class="card" style="width: 15rem;  height: 18rem">
-                      <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                      </ul>
-                    </div>
-
-                    <div class="card" style="width: 15rem;  height: 18rem">
-                      <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                      </ul>
-                    </div>
-
-                    <div class="card" style="width: 15rem;  height: 18rem">
-                      <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                      </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="circle-bottom-left">
-            </div>
-            <div class="circle-bottom-right">
+                <ul class="row" id="card-list">
+                </ul>
             </div>
         </div>
 
@@ -353,6 +41,9 @@
         <ul class="context-menu__items">
           <li class="context-menu__item">
             <a href="#" class="context-menu__link" data-action="Open"><i class="fa fa-eye"></i> Open</a>
+          </li>
+           <li class="context-menu__item">
+            <a href="#" class="context-menu__link" data-action="Details"><i class="fas fa-info-circle"></i> Details</a>
           </li>
           <li class="context-menu__item">
             <a href="#" class="context-menu__link" data-action="Edit Description"><i class="fa fa-edit"></i> Edit Description</a>
@@ -422,7 +113,38 @@
     <script src="{% static 'castle/js/contextMenuScript.js' %}"></script>
     <script src="{% static 'castle/js/containerContextMenuScript.js' %}"></script>
 
+    <script>
+        window.repos = [];
+        var i = 0;
+        {% for full_name, repo in repos.items %}
+            var owner = "{{ full_name }}";
+            owner = owner.split("/")[0];
+            window.repos.push({"updated_on": "{{ repo.updated_on }}",
+            "host": "{{ repo.host }}",
+            "name": "{{ repo.name }}",
+            "is_private": "{{ repo.is_private }}",
+            "description": "{{ repo.description }}",
+            "owner": owner});
+
+            var node = document.createElement("li");
+            node.className = "card";
+            node.id = i;
+            var bodynode = document.createElement("div");
+            bodynode.className = "card-body";
+            bodynode.id = i;
+            var subnode = document.createElement("h5");
+            subnode.className = "card-title";
+            subnode.id = i;
+            var textnode = document.createTextNode('{{ repo.name }}');
+            subnode.appendChild(textnode);
+            bodynode.appendChild(subnode);
+            node.appendChild(bodynode);
+
+            document.getElementById('card-list').appendChild(node);
+            i++;
+        {% endfor %}
+    </script>
+
 {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
 {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
 {% endblock %}
-

@@ -79,6 +79,8 @@
   var windowWidth;
   var windowHeight;
 
+  window.currId = 0;
+
   /**
    * Initialise our application's code.
    */
@@ -98,6 +100,7 @@
 
       if ( taskItemInContext ) {
         e.preventDefault();
+        window.currId = e.srcElement.id;
         toggleMenuOn();
         positionMenu(e);
       } else {

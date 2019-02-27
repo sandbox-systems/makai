@@ -1,9 +1,47 @@
-$( function() {
-$( ".card" ).draggable({ revert: "invalid", scroll: false, cursor: "move", cursorAt: { top: 50, left: 50 } });
-});
-
-// A $( document ).ready() block.
 $( document ).ready(function() {
+    // TODO Details Function
+    $( function() {
+        $( document ).tooltip();
+    } );
+
+    $('a[data-action="Details"]').click(function() {
+
+        //Repository Details
+        let title = window.repos[window.currId].name;
+        let description = window.repos[window.currId].description===""?"No Description..."
+            :window.repos[window.currId].description;
+        let owner = "<i class='fas fa-user'></i> " + window.repos[window.currId].owner;
+        let privacy = window.repos[window.currId].is_private ? "<i class='fas fa-lock' " +
+            "></i> Private" : "<i class='fas fa-lock' style='color: rebeccapurple'></i> Public";
+        let language = "JavaScript";
+        let filesize = "32.67 MB";
+
+        //Timestamp TODO Bitbucket Timestamp %S doesn't accept double values
+        let strictIsoParse = d3.timeParse("%Y-%m-%dT%H:%M:%S%Z");
+        let date = strictIsoParse(window.repos[window.currId].updated_on)
+        let formatTime = d3.timeFormat("%B %d, %Y");
+        let formatToolTip = d3.timeFormat("Updated on %B %d, %Y at %H:%M");
+        let timestamp = formatTime(date);
+        let tooltip = formatToolTip(date);
+
+        let host = window.repos[window.currId].host==="github" ? "<i class='fab fa-github'></i> Github"
+            : "<i class='fab fa-bitbucket'></i> Bitbucket" ;
+
+        Swal.fire({
+         title: title,
+         html: "<div><p>" + description + "</p><hr><row><h5><span class='col-sm-6'>" + owner +
+             "</span><span class='col-sm-6'>" + privacy + "</span></h5></row><hr>" +
+             "<span class='col-sm-4'><i class='fas fa-code'></i> " + language + "</span>" +
+             "<span class='col-sm-4'><i class='fas fa-folder-open'></i> " + filesize + "</span>" +
+             "<span class='col-sm-4' title='" + tooltip + "'><i class='far fa-calendar-alt'></i> " + timestamp + "</span><hr>" +
+             host + "</div>",
+         type: "info",
+         showCloseButton: true,
+         closeButtonAriaLabel: "Close Repository Details",
+         showConfirmButton: false
+        });
+    });
+
     // TODO Rename Function
     $('a[data-action="Rename"]').click(async function(){
         const {value: name} = await Swal.fire({
@@ -21,6 +59,7 @@ $( document ).ready(function() {
           confirmButtonColor: '#663399'
         })
         if(name) {
+          // TODO Server Side Renaming
           Swal.fire({
               title: 'Renamed!',
               text: 'The Repository has been renamed to ' + name,
@@ -36,7 +75,7 @@ $( document ).ready(function() {
                  confirmButtonColor: '#663399'
             })
         }
-  });
+    });
 
     // TODO Edit Description Function
     $('a[data-action="Edit Description"]').click(async function(){
@@ -54,8 +93,9 @@ $( document ).ready(function() {
           confirmButtonText: "Confirm",
           cancelButtonText: "Cancel",
           confirmButtonColor: '#663399'
-        })
+        });
         if(name) {
+          // TODO Server Side Edit Desc.
           Swal.fire({
               title: 'Description Changed!',
               text: "The Repository's description has been changed",
@@ -76,8 +116,7 @@ $( document ).ready(function() {
     // TODO Share Function
 
     // TODO Delete Function
-  $('a[data-action="Delete"]').click(function(){
-     console.log("Hello World");
+    $('a[data-action="Delete"]').click(function(){
      Swal.fire({
          title: 'Confirm Deletion',
          text: 'Are you sure you want to delete this repository?',
@@ -88,6 +127,7 @@ $( document ).ready(function() {
          confirmButtonColor: '#663399'
      }).then((result) => {
          if(result.value) {
+             // TODO Server side deletion
              Swal.fire(
              {
                  title: 'Deleted!',
