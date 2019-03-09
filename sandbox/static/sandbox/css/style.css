@@ -6,29 +6,7 @@ body {
     width: calc(100% - 70px);
     margin-left: 70px;
 }
-/*#breadcrumbs {*/
-    /*width: 50%;*/
-    /*height: 40px;*/
-    /*position: relative;*/
-    /*display: inline-block;*/
-/*}*/
 
-/*#breadcrumbs .breadcrumb {*/
-    /*border-radius: 0px;*/
-    /*margin-bottom: 0px;*/
-    /*height: 40px;*/
-    /*background: ghostwhite;*/
-/*}*/
-
-/*#breadcrumbs .breadcrumb > li + li:before {*/
-    /*color: #ccc;*/
-    /*content: ">";*/
-    /*padding: 0 10px;*/
-/*}*/
-
-/*#breadcrumbs .breadcrumb .active{*/
-    /*color: #3A8BCC;*/
-/*}*/
 #breadcrumbs {
     width:50%;
     height:40px;
@@ -38,7 +16,7 @@ body {
     font-family: Raleway;
     font-size: 14px;
     //line-height: 1em;
-    border-radius: 2px; /* Little curvature in the borders */
+    //border-radius: 2px; /* Little curvature in the borders */
     //overflow-x: scroll;
     overflow-y: scroll;/* Hide everything that overflows, like shadows */
 }
@@ -89,6 +67,11 @@ body {
     background-color: #EEF5FF;
 }
 
+.breadcrumb{
+    border-radius:0px;
+}
+
+
 #toolbar, .toolbar {
     width: 50%;
     height: 40px;
@@ -118,10 +101,9 @@ body {
 
 #tabbar {
     width: 100%;
-    height: 60px;
+    height: 42px;
     position: relative;
     float: right;
-    background: rebeccapurple;
 }
 
 #tabbar > ul {
@@ -144,7 +126,7 @@ body {
 
 #editor {
     width: 100%;
-    height: calc(70% - 51px);
+    height: calc(70% - 20px);
     position: relative;
     float: right;
 }
@@ -155,6 +137,9 @@ body {
     position: relative;
     float: right;
     top: 0 !important;
+    padding-top: 0.5%;
+    padding-left: 0.5%;
+    margin-top:0.5%;
 }
 
 #terminalFrame {
@@ -177,3 +162,10 @@ body {
     float:right;
     text-align: center;
 }
+
+/*Dark Theme*/
+
+.list-group-item{
+    border: 0;
+}
+

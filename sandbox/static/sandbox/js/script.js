@@ -197,28 +197,50 @@ $("#runButton").click(function () {
 });
 
 function temper(theme) {
-    // var editor = ace.edit('editor');
-    editor.setTheme("ace/theme/" + theme);
+    var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
+        if(lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && !lightThemes.includes(theme) || !lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && lightThemes.includes(theme)){
+            updateC();
+        }
+        editor.setTheme("ace/theme/" + theme);
+}
+
+function updateC(){
+     $(".toolbarbtn").toggleClass("lightgraytext");
+     $(".breadcrumb-item active").toggleClass("black");
+     $(".breadcrumb-item").toggleClass("lightestgray");
+     $(".breadcrumb").toggleClass("lightgray");
+     $("#treeview").toggleClass("lightestgray");
+     $("#tabbar li").toggleClass("black");
+     $("#tabbar .active").toggleClass("gray");
+     $("#tabbar > ul").toggleClass("lightestgray");
+     $("#tabbar").toggleClass("lightestgray");
 }
 
 $(document).ready(function () {
     $("#editorcol").resizable({
-        handles: 'w'
+        handles: 'w',
+        resize: function(e,ui){
+            $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
+        }
     });
     $("#terminal").resizable({
-        handles: 'n'
+        handles: 'n',
+        start: function(e, ui){
+            $("#terminalframe").css("pointer-events", "none");
+            $("#terminalframe").css("display", "none");
+        },
+        resize: function(e,ui){
+            var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
+            document.getElementById("editor").style.height = nheight;
+        },
+        stop: function(e, ui){
+            $("#terminalframe").css("pointer-events", "auto");
+            $("#terminalframe").css("display", "block");
+        }
     });
     $(window).resize(function () {
         var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
         document.getElementById("editor").style.height = nheight;
-        $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
-    });
-
-    $("#terminal").resize(function () {
-        var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
-        document.getElementById("editor").style.height = nheight;
-    });
-    $("#editorcol").resize(function () {
-        $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
+        $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
     });
 });
