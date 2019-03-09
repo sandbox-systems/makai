@@ -170,7 +170,9 @@ $('#tabbar').on('click', 'a', function (e) {
 
 function addTab(name) {
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
-    sessions[name] = ace.createEditSession("", "ace/mode/java");
+    if(!(name in sessions)){
+        sessions[name] = ace.createEditSession("", "ace/mode/java");
+    }
     activateTab($('#tabbar .nav a:last'));
 }
 
@@ -183,6 +185,7 @@ function activateTab(tab){
 }
 
 $("#tabbar").on('click', 'span', function (event) {
+    event.stopPropagation();
     var tabContentId = $(this).parent().attr("href");
     $(this).parent().parent().remove();
     $(tabContentId).remove();
