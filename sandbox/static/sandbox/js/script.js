@@ -202,6 +202,22 @@ $("#runButton").click(function () {
     }, "http://127.0.0.1:7681");
 });
 
+//Live Editor
+function toggleLive(){
+    $("#editor").toggleClass("liveview");
+    if($("#editor").hasClass("liveview")){
+        $("#livedisplay").css("display", "block");
+        editor.addEventListener("change", updateLiveData);
+    }else{
+        $("#livedisplay").css("display", "none");
+        editor.removeEventListener("change", updateLiveData);
+    }
+}
+
+function updateLiveData(){
+    $("#livedisplayFrame").contents().find("html").html(editor.getValue());
+}
+
 function temper(theme) {
     var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
         if(lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && !lightThemes.includes(theme) || !lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && lightThemes.includes(theme)){
