@@ -65,35 +65,41 @@ editor.setOptions({
 function getTree() {
     var data = [
         {
-            text: "Folder 1",
+            text: "My Website",
             color: "#000000",
             backColor: "#C4C4C4",
             nodes: [
                 {
-                    text: "File 1",
+                    text: "home.html",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "File 2",
+                    text: "aboutme.html",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "Folder 2",
+                    text: "contact.html",
+                    icon: "glyphicon glyphicon-file",
+                    color: "#000000",
+                    backColor: "#C4C4C4"
+                },
+                {
+                    text: "Other Sites",
                     color: "#000000",
                     backColor: "#C4C4C4",
                     nodes: [
                         {
-                            text: "File 1",
+                            text: "resume",
                             icon: "glyphicon glyphicon-file",
                             color: "#000000",
                             backColor: "#C4C4C4"
                         },
                         {
-                            text: "File 2",
+                            text: "blog",
                             icon: "glyphicon glyphicon-file",
                             color: "#000000",
                             backColor: "#C4C4C4"
@@ -171,7 +177,7 @@ $('#tabbar').on('click', 'a', function (e) {
 function addTab(name) {
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
     if(!(name in sessions)){
-        sessions[name] = ace.createEditSession("", "ace/mode/java");
+        sessions[name] = ace.createEditSession("", "ace/mode/html");
     }
     activateTab($('#tabbar .nav a:last'));
 }
@@ -208,6 +214,7 @@ function toggleLive(){
     if($("#editor").hasClass("liveview")){
         $("#livedisplay").css("display", "block");
         editor.addEventListener("change", updateLiveData);
+        updateLiveData();
         $("#editor").css("width", "50%");
     }else{
         $("#livedisplay").css("display", "none");
