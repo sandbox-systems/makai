@@ -160,23 +160,26 @@ function setBreadcrumb(data) {
 
 //Tab Bar
 var tabnum = 0;
+var sessions = {};
 
-$('#tabbar a').click(function (e) {
+$('#tabbar').on('click', 'a', function (e) {
     console.log(this);
     e.preventDefault();
-    $(this).tab('show');
+    activateTab($(this));
 });
 
 function addTab(name) {
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
+    sessions[name] = ace.createEditSession("", "ace/mode/java");
     activateTab($('#tabbar .nav a:last'));
-    ace.createEditSession(name, "ace/mode/java");
 }
 
 function activateTab(tab){
-    $("#tabbar a.active").removeClass("active")
-    tab.click();
+    $("#tabbar a.active").removeClass("active").removeClass("show");
+    tab.addClass("show");
     tab.addClass("active");
+    editor.setSession(sessions[tab.html().split('<span class="close">&nbsp;&nbsp;×</span>')[0]]);
+    console.log("activated");
 }
 
 $("#tabbar").on('click', 'span', function (event) {
