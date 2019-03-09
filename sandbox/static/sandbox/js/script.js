@@ -160,7 +160,6 @@ function setBreadcrumb(data) {
 
 //Tab Bar
 var tabnum = 0;
-var editors = [];
 
 $('#tabbar a').click(function (e) {
     console.log(this);
@@ -171,6 +170,7 @@ $('#tabbar a').click(function (e) {
 function addTab(name) {
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
     activateTab($('#tabbar .nav a:last'));
+    ace.createEditSession(name, "ace/mode/java");
 }
 
 function activateTab(tab){
@@ -183,6 +183,9 @@ $("#tabbar").on('click', 'span', function (event) {
     var tabContentId = $(this).parent().attr("href");
     $(this).parent().parent().remove();
     $(tabContentId).remove();
+    if($(this).parent().hasClass("active") && $("#tabbar a").size()>0){
+        activateTab($("#tabbar .nav a:last"));
+    }
 });
 
 //Toolbar
