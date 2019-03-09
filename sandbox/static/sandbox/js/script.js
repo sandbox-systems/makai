@@ -160,6 +160,7 @@ function setBreadcrumb(data) {
 
 //Tab Bar
 var tabnum = 0;
+var editors = [];
 
 $('#tabbar a').click(function (e) {
     console.log(this);
@@ -169,6 +170,13 @@ $('#tabbar a').click(function (e) {
 
 function addTab(name) {
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
+    activateTab($('#tabbar .nav a:last'));
+}
+
+function activateTab(tab){
+    $("#tabbar a.active").removeClass("active")
+    tab.click();
+    tab.addClass("active");
 }
 
 $("#tabbar").on('click', 'span', function (event) {
