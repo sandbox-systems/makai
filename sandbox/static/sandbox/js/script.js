@@ -208,9 +208,11 @@ function toggleLive(){
     if($("#editor").hasClass("liveview")){
         $("#livedisplay").css("display", "block");
         editor.addEventListener("change", updateLiveData);
+        $("#editor").css("width", "50%");
     }else{
         $("#livedisplay").css("display", "none");
         editor.removeEventListener("change", updateLiveData);
+        $("#editor").css("width", "100%");
     }
 }
 
@@ -254,6 +256,7 @@ $(document).ready(function () {
         resize: function(e,ui){
             var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
             document.getElementById("editor").style.height = nheight;
+            document.getElementById("livedisplay").style.height = nheight;
         },
         stop: function(e, ui){
             $("#terminalframe").css("pointer-events", "auto");
@@ -263,6 +266,7 @@ $(document).ready(function () {
     $(window).resize(function () {
         var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
         document.getElementById("editor").style.height = nheight;
+        document.getElementById("livedisplay").style.height = nheight;
         $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
     });
 });

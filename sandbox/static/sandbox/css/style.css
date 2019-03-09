@@ -81,7 +81,7 @@ body {
 
 #toolbar .toolbarbtn {
     height: 100%;
-    width: 20%;
+    width: calc(100% / 6);
     margin: 0;
     font-size: 12pt;
 }
@@ -142,6 +142,8 @@ body {
     position: relative;
     float: right;
     display: none;
+    border-left: solid 2px rebeccapurple;
+    background: white;
 }
 
 #livedisplayFrame {
