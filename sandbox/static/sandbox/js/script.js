@@ -65,35 +65,41 @@ editor.setOptions({
 function getTree() {
     var data = [
         {
-            text: "Folder 1",
+            text: "My Website",
             color: "#000000",
             backColor: "#C4C4C4",
             nodes: [
                 {
-                    text: "File 1",
+                    text: "home.html",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "File 2",
+                    text: "aboutme.html",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "Folder 2",
+                    text: "contact.html",
+                    icon: "glyphicon glyphicon-file",
+                    color: "#000000",
+                    backColor: "#C4C4C4"
+                },
+                {
+                    text: "Other Sites",
                     color: "#000000",
                     backColor: "#C4C4C4",
                     nodes: [
                         {
-                            text: "File 1",
+                            text: "resume",
                             icon: "glyphicon glyphicon-file",
                             color: "#000000",
                             backColor: "#C4C4C4"
                         },
                         {
-                            text: "File 2",
+                            text: "blog",
                             icon: "glyphicon glyphicon-file",
                             color: "#000000",
                             backColor: "#C4C4C4"
@@ -160,21 +166,38 @@ function setBreadcrumb(data) {
 
 //Tab Bar
 var tabnum = 0;
+var sessions = {};
 
-$('#tabbar a').click(function (e) {
+$('#tabbar').on('click', 'a', function (e) {
     console.log(this);
     e.preventDefault();
-    $(this).tab('show');
+    activateTab($(this));
 });
 
 function addTab(name) {
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
+    if(!(name in sessions)){
+        sessions[name] = ace.createEditSession("", "ace/mode/html");
+    }
+    activateTab($('#tabbar .nav a:last'));
+}
+
+function activateTab(tab){
+    $("#tabbar a.active").removeClass("active").removeClass("show");
+    tab.addClass("show");
+    tab.addClass("active");
+    editor.setSession(sessions[tab.html().split('<span class="close">&nbsp;&nbsp;×</span>')[0]]);
+    console.log("activated");
 }
 
 $("#tabbar").on('click', 'span', function (event) {
+    event.stopPropagation();
     var tabContentId = $(this).parent().attr("href");
     $(this).parent().parent().remove();
     $(tabContentId).remove();
+    if($(this).parent().hasClass("active") && $("#tabbar a").size()>0){
+        activateTab($("#tabbar .nav a:last"));
+    }
 });
 
 //Toolbar
@@ -184,6 +207,25 @@ $("#runButton").click(function () {
         code: editor.getValue()
     }, "http://127.0.0.1:7681");
 });
+
+//Live Editor
+function toggleLive(){
+    $("#editor").toggleClass("liveview");
+    if($("#editor").hasClass("liveview")){
+        $("#livedisplay").css("display", "block");
+        editor.addEventListener("change", updateLiveData);
+        updateLiveData();
+        $("#editor").css("width", "50%");
+    }else{
+        $("#livedisplay").css("display", "none");
+        editor.removeEventListener("change", updateLiveData);
+        $("#editor").css("width", "100%");
+    }
+}
+
+function updateLiveData(){
+    $("#livedisplayFrame").contents().find("html").html(editor.getValue());
+}
 
 function temper(theme) {
     var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
@@ -221,6 +263,7 @@ $(document).ready(function () {
         resize: function(e,ui){
             var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
             document.getElementById("editor").style.height = nheight;
+            document.getElementById("livedisplay").style.height = nheight;
         },
         stop: function(e, ui){
             $("#terminalframe").css("pointer-events", "auto");
@@ -230,6 +273,7 @@ $(document).ready(function () {
     $(window).resize(function () {
         var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
         document.getElementById("editor").style.height = nheight;
+        document.getElementById("livedisplay").style.height = nheight;
         $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
     });
 });

@@ -81,7 +81,7 @@ body {
 
 #toolbar .toolbarbtn {
     height: 100%;
-    width: 20%;
+    width: calc(100% / 6);
     margin: 0;
     font-size: 12pt;
 }
@@ -129,6 +129,27 @@ body {
     height: calc(70% - 20px);
     position: relative;
     float: right;
+}
+
+#editor.liveview {
+    width: 50% !important;
+    float: left !important;
+}
+
+#livedisplay {
+    width: 50%;
+    height: calc(70% - 20px);
+    position: relative;
+    float: right;
+    display: none;
+    border-left: solid 2px rebeccapurple;
+    background: white;
+}
+
+#livedisplayFrame {
+    width: 100%;
+    height: 100%;
+    border: 0px;
 }
 
 #terminal {

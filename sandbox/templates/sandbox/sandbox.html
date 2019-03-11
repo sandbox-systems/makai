@@ -62,18 +62,18 @@
                     <li><a href="javascript:temper('vibrant_ink')">Vibrant Ink</a></li>
                 </ul>
         </button><!--
-            --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button>
+            --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button><!--
+            --><button class="btn toolbarbtn" onclick="toggleLive()" title="Live Preview"><span class="fas fa-bolt" style="font-size:1.75rem"></span></button>
         </div>
         <div id="treeview"></div>
         <div id="editorcol">
         <div id="tabbar">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab1" data-toggle="tab" class="active show">Tab 1<span class="close">&nbsp;&nbsp;×</span></a></li>
-                <li><a href="#tab2" data-toggle="tab">Tab 2<span class="close">&nbsp;&nbsp;×</span></a></li>
-                <li><a href="#tab3" data-toggle="tab">Tab 3<span class="close">&nbsp;&nbsp;×</span></a></li>
-            </ul>
+            <ul class="nav nav-tabs"></ul>
         </div>
         <div id="editor"></div>
+        <div id="livedisplay">
+            <iframe id="livedisplayFrame"></iframe>
+        </div>
         <div id="terminal">
             <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
         </div>
