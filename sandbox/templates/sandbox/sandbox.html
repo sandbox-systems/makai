@@ -67,43 +67,17 @@
         </div>
         <div id="treeview"></div>
         <div id="editorcol">
-        <div id="tabbar">
-            <ul class="nav nav-tabs"></ul>
+            <div id="tabbar">
+                <ul class="nav nav-tabs"></ul>
+            </div>
+            <div id="editor"></div>
+            <div id="livedisplay">
+                <iframe id="livedisplayFrame"></iframe>
+            </div>
+            <div id="terminal">
+                <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
+            </div>
         </div>
-        <div id="editor"></div>
-        <div id="livedisplay">
-            <iframe id="livedisplayFrame"></iframe>
-        </div>
-        <div id="terminal">
-            <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
-        </div>
-        </div>
-{#    <div id="bottomtoolbar" class="toolbar">#}
-{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-left fa-2x"></span></button>#}
-{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-up fa-2x"></span></button>#}
-{#        <button class="btn toolbarbtn"><span class="fas fa-angle-double-right fa-2x"></span></button>#}
-{#    </div>#}
     </div>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
-    <style>
-        .black{
-    background: black !important;
-    color: white !important;
-}
-.gray{
-    background: #212121 !important;
-    color: white !important;
-}
-.lightgray{
-    background: #303030 !important;
-    color: white !important;
-}
-.lightestgray{
-    background: #424242 !important;
-    color: white !important;
-}
-    .lightgraytext{
-        color: #303030 !important;
-    }
-    </style>
 {% endblock %}

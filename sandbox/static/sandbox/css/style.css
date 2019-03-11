@@ -2,23 +2,24 @@ body {
     background: ghostwhite;
     font-family: "Raleway";
 }
-#content{
+
+#content {
     width: calc(100% - 70px);
     margin-left: 70px;
 }
 
 #breadcrumbs {
-    width:50%;
-    height:40px;
-    //bottom:0;
+    width: 50%;
+    height: 40px;
+/ / bottom: 0;
     display: inline-block; /* The menu will have width as needed, not 100% */
     position: relative;
     font-family: Raleway;
     font-size: 14px;
-    //line-height: 1em;
-    //border-radius: 2px; /* Little curvature in the borders */
-    //overflow-x: scroll;
-    overflow-y: scroll;/* Hide everything that overflows, like shadows */
+/ / line-height: 1 em;
+/ / border-radius: 2 px; /* Little curvature in the borders */
+/ / overflow-x: scroll;
+    overflow-y: scroll; /* Hide everything that overflows, like shadows */
 }
 
 /* Icons */
@@ -29,7 +30,7 @@ body {
 /* Menu */
 #breadcrumbs ul {
     display: flex; /* A key part of our menu, displays items side by side, and allows reversing them */
-    //flex-direction: row-reverse; /* Reverse the items */
+/ / flex-direction: row-reverse; /* Reverse the items */
     /* Reset styles, overwrite browser defaults */
     list-style: none;
     margin: 0;
@@ -39,6 +40,7 @@ body {
 #breadcrumbs ul li {
     margin: 0;
 }
+
 #breadcrumbs ul li {
     display: inline-block;
     font-family: Raleway;
@@ -53,22 +55,23 @@ body {
     border-radius: 0 100px 100px 0; /* Get the right side rounded */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Apply the shadow */
 }
+
 #breadcrumbs ul li:hover {
     background-color: rebeccapurple;
 }
 
-.breadcrumb>li+li:before, .breadcrumb-item+.breadcrumb-item::before{
-    content:"";
+.breadcrumb > li + li:before, .breadcrumb-item + .breadcrumb-item::before {
+    content: "";
 }
 
 /* Active item is a bit different */
-#breadcrumbs ul li.active  {
+#breadcrumbs ul li.active {
     color: mediumpurple;
     background-color: #EEF5FF;
 }
 
-.breadcrumb{
-    border-radius:0px;
+.breadcrumb {
+    border-radius: 0px;
 }
 
 
@@ -86,9 +89,9 @@ body {
     font-size: 12pt;
 }
 
-.toolbarbtn:hover{
-    background:ghostwhite;
-    color:rebeccapurple;
+.toolbarbtn:hover {
+    background: ghostwhite;
+    color: rebeccapurple;
 }
 
 #treeview {
@@ -128,12 +131,11 @@ body {
     width: 100%;
     height: calc(70% - 20px);
     position: relative;
-    float: right;
+    display: inline-block;
 }
 
-#editor.liveview {
+#editor .liveview {
     width: 50% !important;
-    float: left !important;
 }
 
 #livedisplay {
@@ -144,6 +146,7 @@ body {
     display: none;
     border-left: solid 2px rebeccapurple;
     background: white;
+    left: 0 !important;
 }
 
 #livedisplayFrame {
@@ -160,7 +163,7 @@ body {
     top: 0 !important;
     padding-top: 0.5%;
     padding-left: 0.5%;
-    margin-top:0.5%;
+    margin-top: 0.5%;
 }
 
 #terminalFrame {
@@ -169,24 +172,46 @@ body {
     border: 0px;
 }
 
-#editorcol{
-    float:left;
-    width:85%;
+#editorcol {
+    float: left;
+    width: 85%;
     left: 0 !important;
 }
 
-#bottomtoolbar{
+#bottomtoolbar {
     position: fixed;
     background: rebeccapurple;
     bottom: 0;
     width: calc(100% - 70px);
-    float:right;
     text-align: center;
 }
 
 /*Dark Theme*/
 
-.list-group-item{
+.list-group-item {
     border: 0;
 }
 
+.black {
+    background: black !important;
+    color: white !important;
+}
+
+.gray {
+    background: #212121 !important;
+    color: white !important;
+}
+
+.lightgray {
+    background: #303030 !important;
+    color: white !important;
+}
+
+.lightestgray {
+    background: #424242 !important;
+    color: white !important;
+}
+
+.lightgraytext {
+    color: #303030 !important;
+}
