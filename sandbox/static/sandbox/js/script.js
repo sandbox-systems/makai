@@ -13,11 +13,16 @@ Object.keys(files).forEach(pathStr => {
         e.preventDefault();
         // Ensure tab was clicked, not close button
         if ($(e.target).prop('nodeName') === "A") {
-            // Activate tab
-            $(this).tab('show');
-            // Set activePath
             let tabFileID = $(this).parent().attr("data-fileid");
-            activePath = tabPaths[tabFileID];
+            if (tabPaths[tabFileID] !== activePath) {
+                switchToTab(tabFileID);
+            }
+            return false;
+            // // Activate tab
+            // $(this).tab('show');
+            // // Set activePath
+            // let tabFileID = $(this).parent().attr("data-fileid");
+            // activePath = tabPaths[tabFileID];
         }
     });
     tabs[pathStr] = {
@@ -66,14 +71,14 @@ $("#treeview").on("click", function (event) {
 });
 
 //Tab Bar
-$('#tabbar a').click(function (e) {
+/**TODO CHECK THIS**//*$('#tabbar a').click(function (e) {
     e.preventDefault();
-    // Activate tab
-    $(this).tab('show');
-    // Set activePath
-    var tabFileID = $(this).parent().attr("data-fileid");
-    activePath = tabPaths[tabFileID];
-});
+    // // Activate tab
+    // $(this).tab('show');
+    // // Set activePath
+    // var tabFileID = $(this).parent().attr("data-fileid");
+    // activePath = tabPaths[tabFileID];
+});*/
 
 $("#tabbar").on('click', 'span', function () {
     var tabFileID = $(this).parent().parent().attr("data-fileid");

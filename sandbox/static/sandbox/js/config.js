@@ -1,6 +1,6 @@
 //ACE Editor
-var editor = ace.edit("editor");
-editor.setOptions({
+var editor;
+var editorOptions = {
     // editor options
     selectionStyle: 'line',// "line"|"text"
     highlightActiveLine: true, // boolean
@@ -59,7 +59,16 @@ editor.setOptions({
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
     enableSnippets: true
+};
+
+// Set up Firebase
+firebase.initializeApp(config);
+var firestore = firebase.firestore();
+firestore.settings({
+    timestampsInSnapshots: true
 });
+var realtime = firebase.database();
+// var storage = firebase.storage();
 
 var files = {
     "file.txt": {
@@ -99,3 +108,13 @@ var files = {
         contents: "6"
     }
 };
+
+// TODO When merging with chat, use global firebase initUser function
+let uid = "";
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        uid = user.uid;
+    } else {
+        // No user is signed in.
+    }
+});

@@ -34,11 +34,29 @@
         <div id="tabbar">
             <ul class="nav nav-tabs"></ul>
         </div>
-        <div id="editor"></div>
+        <div id="editorContainer"></div>
         <div id="terminal">
             <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
         </div>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <!--TODO Is css needed?-->
+    <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+    <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "{{ config.apiKey }}",
+            authDomain: "{{ config.authDomain }}",
+            databaseURL: "{{ config.databaseURL }}",
+            projectId: "{{ config.projectId }}",
+            storageBucket: "{{ config.storageBucket }}",
+            messagingSenderId: "{{ config.messagingSenderId }}"
+        };
+    </script>
     <script src="{% static 'sandbox/js/config.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'sandbox/js/helper.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
