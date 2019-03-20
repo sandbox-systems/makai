@@ -3550,6 +3550,10 @@ div.chat-fixed {
         padding-top: 2%;
     }
 
+    .rendersection{
+        padding-top: 2%;
+    }
+
 }
 
 		@media screen and (max-width: 736px) {
