@@ -267,6 +267,23 @@ $(document).ready(function () {
             $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
         }
     });
+    $("#livedisplay").resizable({
+        handles: 'w',
+        start: function(e, ui){
+            $("#livedisplay").css("pointer-events", "none");
+            $("#livedisplay").css("display", "none");
+        },
+        resize: function(e,ui){
+            var temp = ($("#editorcol").width() - $("#livedisplay").width()-2);
+            console.log($("#livedisplay").width());
+            console.log($("#treeview").width())
+            $("#editor").css('width', temp, 'important');
+            $("#livedisplay").css("display", "inline-block");
+        }, stop: function(e, ui){
+            $("#livedisplay").css("pointer-events", "auto");
+            $("#livedisplay").css("display", "block");
+        }
+    });
     $("#terminal").resizable({
         handles: 'n',
         start: function(e, ui){
