@@ -82,7 +82,7 @@ function getTree() {
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "contact.html",
+                    text: "contact.py",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
