@@ -1229,7 +1229,7 @@ header a {
 }
 
 .icon-bar a:hover {
-    background-color: white; /* Add a hover color */
+    background-color: white !important; /* Add a hover color */
     color: rebeccapurple !important;
     text-decoration: none;
 }
