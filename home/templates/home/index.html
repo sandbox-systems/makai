@@ -137,7 +137,7 @@
         font-family: arial;
         color: #fff;
         text-decoration: none;
-        background: #FF3366;
+        background: rebeccapurple;
         padding: 24px 20px 8px;
         display: block;
         font-weight: bold;
@@ -151,10 +151,6 @@
         transition: background 0.4s, right 0.2s;
     }
 
-    .btn-chat a:hover {
-        background: mediumseagreen;
-        /*right: -20px;*/
-    }
 
     img {
         vertical-align: middle;
@@ -221,39 +217,29 @@
         width: 40%;
     }
 
-    @media screen and (max-width: 800px) {
-        .picture {
-            position: absolute;
-            height: 40%;
-            top: 15%;
-            left: 60%;
-        }
+    {#@media screen and (max-width: 800px) {#}
+    {#    .picture {#}
+    {#        position: absolute;#}
+    {#        height: 40%;#}
+    {#        top: 15%;#}
+    {#        left: 60%;#}
+    {#    }#}
+    {##}
+    {#    .videowrapper {#}
+    {#        position: relative;#}
+    {#        height: 20em;#}
+    {#        width: 100%;#}
+    {#        overflow: hidden;#}
+    {#        /* 16:9 */#}
+    {#        margin-top: -0.5%;#}
+    {#    }#}
+    {#}#}
 
     .rendersection {
         text-align: center;
         background-size: cover;
-        height: 100vh;
+        height: 80vh;
         background-position: center;
-    }
-
-    .uno {
-        background-image: url("{% static 'home/images/Renderings.svg' %}");
-    }
-
-    .dos {
-        background-image: url("{% static 'home/images/Search.svg' %}");
-    }
-
-    .tres {
-        background-image: url("{% static 'home/images/Treasury.svg' %}");
-    }
-
-    .four {
-        background-image: url("{% static 'home/images/Chat.svg' %}");
-    }
-
-    .cinco {
-        background-image: url("{% static 'home/images/Pricing.svg' %}");
     }
 
     p {
@@ -325,13 +311,9 @@
 <div id="wrapper">
     <!-- Intro -->
     <section id="intro" class="wrapper style1 fullscreen fade-up" style="background-color: whitesmoke">
-        <div class="inner">
-            <h1 style="color:mediumpurple;margin-bottom: 0;">Makai</h1>
-            <p style="color: mediumpurple">The Right Way to Code</p>
+        <div class="inner" style="z-index: 20;">
             <img src="{% static 'home/images/makai_logo-02.png' %}" alt="Logo" class="picture">
-            <ul class="actions">
-                <li><a href="{% url 'account:Login' %}" class="button scrolly">Start Coding!</a></li>
-            </ul>
+                <a href="{% url 'account:Login' %}" id="startButton" class="button scrolly">Start Coding!</a>
         </div>
         <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave">
             <title>
@@ -390,6 +372,7 @@
      data-aos-anchor-placement="center-center">
             <span class="icon major fa-code" style="margin-left: auto;margin-right: auto;margin-top: 10px;" padding="10px"></span>
             <h2>Castle</h2>
+            <img style="width:80%;" src="{% static 'home/images/renderings.svg' %}"/>
             <p><font size = "4">The file manager, which provides easy access to all your files and projects stored on Github</font></p>
         </section>
         <section class="rendersection">
@@ -399,65 +382,6 @@
                 lead to the next big thing!</font>
             </p>
         </section>
-        <!--<ul class="actions">
-        <li><a href="#" class="button">Learn more</a></li>
-    </ul>-->
-    <!--</section>
-    <section class="wrapper style1">
-        <div class="inner">
-            <h2 style="text-align:center">FAQ</h2>
-            <button class="accordion">Section 1</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
-            </div>
-
-            <button class="accordion">Why Are We Better?</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
-            </div>
-
-            <button class="accordion">Section 3</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
-            </div>
-        </div>
-    </section>--!>
-    <!--
-                <section id="two" class="wrapper style2 spotlights">
-                            <div class="inner">
-                            <h2>Gallery</h2>
-                            <div class="slideshow-container" style="height: 100%; width:100%;">
-                                <div class="mySlides animated fadeIn">
-                                  <img src="images/ide.svg" style="width:100%">
-                                  <div class="text">Castle - Home</div>
-                                </div>
-
-                                <div class="mySlides animated fadeIn">
-                                  <img src="images/home.svg" style="width:100%">
-                                  <div class="text">Playground - IDE</div>
-                                </div>
-
-                                </div>
-                                <br>
-
-                                <div style="text-align:center">
-                                  <span class="dot"></span>
-                                  <span class="dot"></span>
-                                  <span class="dot"></span>
-                                </div>
-                                </div>
-                </section>
-
-
-                <section class="wrapper fade-up">
-                    <div class="inner">
-                      <div class="middle">
-                        <h1>COMING SOON!</h1>
-                        <hr>
-                        <p id="demo" style="font-size:30px"></p>
-                      </div>
-                        </div>
-                </section>-->
 </div>
 <!-- Three -->
 <div class="btn-chat" id="livechat-compact-container" style="visibility: visible; opacity: 1;">
@@ -474,7 +398,7 @@
         $(window).on("load", function () {
 
             $("#preloader").fadeOut(500);
-            document.getElementById('yellow').src = "https://biteable.com/watch/embed/intro-video-1875233";
+            {#document.getElementById('yellow').src = "https://biteable.com/watch/embed/intro-video-1875233";#}
         });
     });
     $('#feel-the-wave').wavify({
