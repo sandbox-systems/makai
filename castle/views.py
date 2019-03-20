@@ -20,9 +20,14 @@ def project(request, host, owner, repo, branch, path):
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
+<<<<<<< HEAD
     print(host)
     print(owner)
     print(repo)
     print(branch)
     print(path)
     return render(request, 'castle/projects.html')
+=======
+    contents = accounts[host].get_repo(owner, repo, branch, path)
+    return render(request, 'castle/project.html', {'contents': contents})
+>>>>>>> origin/castle-backend

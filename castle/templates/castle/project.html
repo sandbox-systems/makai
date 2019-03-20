@@ -5,5 +5,8 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'castle/css/style.css' %}">
-
+    {% for path, content in contents.items %}
+        {{ content.name }}<br>
+    {% endfor %}
+    <br>
 {% endblock %}
