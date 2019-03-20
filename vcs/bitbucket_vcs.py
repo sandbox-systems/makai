@@ -41,5 +41,5 @@ class BitbucketHost(Host):
             repos[raw_repo[u'full_name']] = repo
         return repos
 
-    def get_repo(self):
+    def get_repo(self, owner, name, branch, path):
         pass

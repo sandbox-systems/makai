@@ -2,6 +2,16 @@ from credentials import *
 from requests import post, get, put
 
 
+def path_concat(orig_path, to_concat, concat_before=False):
+    if orig_path == '':
+        return to_concat
+    else:
+        if concat_before:
+            return to_concat + '/' + orig_path
+        else:
+            return orig_path + '/' + to_concat
+
+
 class Host:
     def __init__(self, session_key, sync_link, client_id, client_secret):
         self.token = None
@@ -51,5 +61,5 @@ class Host:
     def get_repos(self):
         return []
 
-    def get_repo(self):
+    def get_repo(self, owner, name, branch, path):
         return None

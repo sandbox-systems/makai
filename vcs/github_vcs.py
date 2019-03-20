@@ -2,7 +2,8 @@ from github import Github
 
 from git import *
 from urlparse import parse_qs
-
+from hashlib import sha1
+from firebase.firebase import get_doc
 
 class GithubHost(Host):
     def __init__(self, token_exists):
@@ -38,12 +39,28 @@ class GithubHost(Host):
         # for repo in g.get_user().get_repos():
         #     print(g.get_repo(repo.full_name))
 
-    def get_repo(self):
-        pass
+    def get_repo(self, owner, name, branch, path):
+        repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
+        response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
+                                     params={'ref': branch}).json()
+        contents = dict()
+        for raw_content in response:
+            _path = path_concat(path, raw_content[u'name'])
+            full_path = path_concat(_path, branch, concat_before=True)
+            content = {
+                'type': raw_content[u'type'],
+                'name': raw_content[u'name']
+            }
+            contents[full_path] = content
 
-# # or using an access token
-# g = Github("03e9927266b7d61aa86d823ed7fe2271d9d0975e")
-#
-# # Then play with your Github objects:
-# for repo in g.get_user().get_repos():
-#     print(repo.name)
+        changes = get_doc('file_changes', repo_hash).to_dict()
+        for full_path, change in changes.items():
+            if change[u'branch_parent'] == branch + '_' + path:
+                if change[u'type'] == 'del':
+                    del contents[full_path]
+                elif change[u'type'] == 'add':
+                    contents[full_path] = {
+                        'type': 'file',
+                        'name': change[u'name']
+                    }
+        return contents
