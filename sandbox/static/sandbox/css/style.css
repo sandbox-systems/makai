@@ -215,3 +215,7 @@ body {
 .lightgraytext {
     color: #303030 !important;
 }
+
+.modal i{
+    display: block;
+}

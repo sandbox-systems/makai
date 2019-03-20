@@ -32,7 +32,7 @@
         <div id="toolbar" style="background:rebeccapurple">
             <button id="runButton" class="btn toolbarbtn"><span class="glyphicon glyphicon-play"></span></button><!--
             --><button class="btn toolbarbtn"><span class="fas fa-bug" style="font-size:1.75rem"></span></button><!--
-            --><button class="btn toolbarbtn"><span class="fab fa-git" style="font-size:1.75rem"></span></button><!--
+            --><button class="btn toolbarbtn" data-toggle="modal" data-target="#myModal"><span class="fab fa-git" style="font-size:1.75rem"></span></button><!--
             --><button class="btn dropdown toolbarbtn">
         <a class="dropdown-toggle" data-toggle="dropdown" data-display="static"><span class="glyphicon glyphicon-tint"></span></a>
                 <ul class="dropdown-menu">
@@ -78,6 +78,27 @@
                 <iframe id="terminalFrame" src="http://127.0.0.1:7681"></iframe>
             </div>
         </div>
+    </div>
+    <div class="modal" id="myModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Version Control System</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="text-align: center; font-size: 30px;">
+            <button type="button" class="btn btn-primary"><i class="far fa-circle"></i>Commit</button>
+            <button type="button" class="btn btn-primary"><i class="fas fa-cloud-upload-alt"></i>Push</button>
+            <button type="button" class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i>Pull</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Done</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}

@@ -250,9 +250,9 @@ function temper(theme) {
 
 function updateC(){
      $(".toolbarbtn").toggleClass("lightgraytext");
-     $(".breadcrumb-item active").toggleClass("black");
-     $(".breadcrumb-item").toggleClass("lightestgray");
-     $(".breadcrumb").toggleClass("lightgray");
+     // $(".breadcrumb-item active").toggleClass("black");
+     // $(".breadcrumb-item").toggleClass("lightestgray");
+     // $(".breadcrumb").toggleClass("lightgray");
      $("#treeview").toggleClass("lightestgray");
      $("#tabbar li").toggleClass("black");
      $("#tabbar .active").toggleClass("gray");
