@@ -1,0 +1,136 @@
+{% extends 'home/nav.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <title>Sync</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <style>
+        body
+        {
+            font-family: "Raleway";
+            background-color: ghostwhite;
+            text-align: center;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        h1
+        {
+            margin-left: 70px;
+            width: calc(100% - 70px);
+            padding: 2%;
+            font-size: 5vw;
+            color: rebeccapurple;
+        }
+
+        .wrapper-sync
+        {
+            width: calc(100% - 70px);
+            margin-left: 70px;
+        }
+
+        .parent
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 70px;
+        }
+
+        .col-
+        {
+            padding-left: 5%;
+            padding-right: 5%;
+            width: 50%;
+            height: 100%;
+        }
+
+        .card
+        {
+            background-color: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-style: solid;
+        }
+
+        .img-container
+        {
+            height: 20vw;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .card-img-top
+        {
+            position: relative;
+            width: 90%;
+
+        }
+
+        a, .btn-primary, .btn
+        {
+            background-color: rebeccapurple !important;
+            border-color: rebeccapurple !important;
+            size: 10vw;
+        }
+
+    </style>
+</head>
+    <div class="wrapper-sync">
+    <h1>Sync Accounts</h1>
+    <div class="container parent">
+        <div class="row">
+            {% for host, account in accounts %}
+                {# TODO Check account.sync_link #}
+                {% if account.sync_link is not None %}
+                    <div class="col-">
+                        <div class="card">
+                        <table class="img-container">
+                        <tr>
+                        <td>
+                                {% if host == "github" %}
+                                    <img src="{% static 'account/img/GitHub_Logo.png' %}" class="card-img-top" alt="Github-Mark">
+                                {% else %}
+                                    <img src="{% static 'account/img/Bitbucket@2x-blue.png' %}" class="card-img-top" alt="Bitbucket-Blue">
+                                {% endif %}
+                        </td>
+                        </tr>
+                        </table>
+                            <div class="card-body">
+                                <a class="btn btn-primary text-white" href="{{ account.sync_link }}">Sync</a>
+                            </div>
+                        </div>
+                    </div>
+                {%  elif account.sync_link is None %}
+                    <div class="col-">
+                        <div class="card">
+                        <table class="img-container">
+                        <tr>
+                        <td>
+                                {% if host == "github" %}
+                                    <img src="{% static 'account/img/GitHub_Logo.png' %}" class="card-img-top" alt="Github-Mark">
+                                {% else %}
+                                    <img src="{% static 'account/img/Bitbucket@2x-blue.png' %}" class="card-img-top" alt="Bitbucket-Blue">
+                                {% endif %}
+                        </td>
+                        </tr>
+                        </table>
+                           <div class="card-body">
+                               Account Details
+                                {# TODO Information about the account #}
+                                {# Use Bootstrap Kitchen Sink #}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,33 @@
+<html lang="en">
+
+{% extends 'home/nav.html' %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Syncing...</title>
+    <style>
+        body{
+            background-color: ghostwhite;
+        }
+
+        .swal2-show{
+            animation: swal2-show 5s !important;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script>
+        window.onload = function(){
+            Swal.fire({
+               type: 'success',
+               title: 'Success!',
+               text: 'Your Account was Successfully Synced'
+            }).then(function(){
+                window.location.href = 'account/username/sync';
+            });
+        }
+    </script>
+</head>
+</html>
