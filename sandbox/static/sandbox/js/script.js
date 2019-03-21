@@ -76,7 +76,7 @@ function getTree() {
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "aboutme.html",
+                    text: "aboutme.java",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
