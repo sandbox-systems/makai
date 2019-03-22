@@ -96,4 +96,10 @@ body {
 
 .firepad {
     margin-top: 42px !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.powered-by-firepad{
+    display: none !important;
 }
