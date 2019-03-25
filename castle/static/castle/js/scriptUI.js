@@ -4,10 +4,16 @@ $( document ).ready(function() {
         $( document ).tooltip();
     } );
 
+    $( function() {
+        $( "#card-list" ).selectable()
+    } );
+
+    let title = window.repos[window.currId].name;
+
     $('a[data-action="Details"]').click(function() {
 
         //Repository Details
-        let title = window.repos[window.currId].name;
+        title = window.repos[window.currId].name;
         let description = window.repos[window.currId].description===""?"No Description..."
             :window.repos[window.currId].description;
         let owner = "<i class='fas fa-user'></i> " + window.repos[window.currId].owner;
@@ -45,7 +51,7 @@ $( document ).ready(function() {
     // TODO Rename Function
     $('a[data-action="Rename"]').click(async function(){
         const {value: name} = await Swal.fire({
-          title: 'Rename Repository',
+          title: 'Rename ' + title + '',
           text: 'Enter the new name below',
           input: 'text',
           inputPlaceholder: 'Repository Name',
@@ -119,7 +125,7 @@ $( document ).ready(function() {
     $('a[data-action="Delete"]').click(function(){
      Swal.fire({
          title: 'Confirm Deletion',
-         text: 'Are you sure you want to delete this repository?',
+         html: 'Are you sure you want to delete <strong>' + title + '</strong>',
          type: 'warning',
          showCancelButton: true,
          confirmButtonText: "Delete",

@@ -6,4 +6,40 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'castle/css/style.css' %}">
 
+    {# Right Click Menu INSIDE Repository #}
+      <nav id="repository-context-menu" class="repository-context-menu">
+        <ul class="repository-context-menu__items">
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
+          </li>
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
+          </li>
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
+          </li>
+          <li class="repository-context-menu__item">
+            <a href="#" class="repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
+          </li>
+        </ul>
+      </nav>
+
+    {# Right Click Menu INSIDE Repository #}
+      <nav id="container-repository-context-menu" class="container-repository-context-menu">
+        <ul class="container-repository-context-menu__items">
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
+          </li>
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
+          </li>
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
+          </li>
+          <li class="container-repository-context-menu__item">
+            <a href="#" class="container-repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
+          </li>
+        </ul>
+      </nav>
+
 {% endblock %}

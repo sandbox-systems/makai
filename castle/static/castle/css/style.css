@@ -89,11 +89,17 @@
             white-space: nowrap;
         }
 
-        /*.swal2-icon*/
-        /*{*/
-            /*color: rebeccapurple !important;*/
-            /*border-color: rebeccapurple !important;*/
-        /*}*/
+        #card-list .ui-selecting
+        {
+
+        }
+
+        #card-list .ui-selected
+        {
+            background: mediumpurple;
+            box-sizing: border-box;
+            color: white;
+        }
 
         .container-fluid
         {

@@ -25,4 +25,4 @@ def project(request, host, owner, repo, branch, path):
     print(repo)
     print(branch)
     print(path)
-    return render(request, 'castle/projects.html')
+    return render(request, 'castle/project.html')
