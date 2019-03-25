@@ -19,7 +19,7 @@ class GithubHost(Host):
         if 'error_description' in response:
             return False
         # When parsed, the access_token is mapped to an array only containing the token for some reason
-        return response['access_token'][0], None
+        return response['access_token'][0], ""
 
     def get_repos(self):
         response = self.make_request('get', 'https://api.github.com/user/repos', params={}).json()
@@ -47,9 +47,12 @@ class GithubHost(Host):
         for raw_content in response:
             _path = path_concat(path, raw_content[u'name'])
             full_path = path_concat(_path, branch, concat_before=True)
+            content_id = repo_hash + sha1(_path).hexdigest()
             content = {
                 'type': raw_content[u'type'],
-                'name': raw_content[u'name']
+                'name': raw_content[u'name'],
+                'id': content_id,
+                'repo_id': repo_hash
             }
             contents[full_path] = content
 

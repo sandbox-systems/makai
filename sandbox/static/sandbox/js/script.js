@@ -2,93 +2,107 @@
 var data = {files: {}};
 let tree = [];
 
-let tabNum = 0;
-Object.keys(files).forEach(pathStr => {
-    let path = pathStr.split('/');
-    let filename = path.pop();
-    addFile(filename, files[pathStr], path, data);
+async function load() {
+    await populateFiles();
 
-    let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
-    htmlObj.find("a").click(function (e) {
-        e.preventDefault();
-        // Ensure tab was clicked, not close button
-        if ($(e.target).prop('nodeName') === "A") {
-            let tabFileID = $(this).parent().attr("data-fileid");
-            if (tabPaths[tabFileID] !== activePath) {
-                switchToTab(tabFileID);
+    let tabNum = 0;
+    Object.keys(files).forEach(pathStr => {
+        let path = pathStr.split('/');
+        let filename = path.pop();
+        addFile(filename, files[pathStr], path, data);
+
+        let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
+        htmlObj.find("a").click(function (e) {
+            e.preventDefault();
+            // Ensure tab was clicked, not close button
+            if ($(e.target).prop('nodeName') === "A") {
+                let tabFileID = $(this).parent().attr("data-fileid");
+                if (tabPaths[tabFileID] !== activePath) {
+                    switchToTab(tabFileID);
+                }
+                return false;
+                // // Activate tab
+                // $(this).tab('show');
+                // // Set activePath
+                // let tabFileID = $(this).parent().attr("data-fileid");
+                // activePath = tabPaths[tabFileID];
             }
-            return false;
-            // // Activate tab
-            // $(this).tab('show');
-            // // Set activePath
-            // let tabFileID = $(this).parent().attr("data-fileid");
-            // activePath = tabPaths[tabFileID];
-        }
+        });
+        tabs[pathStr] = {
+            id: files[pathStr].id,
+            repo_id: files[pathStr].repo_id,
+            contents: files[pathStr].contents,
+            isOpen: false,
+            isSaving: false,
+            htmlObj: htmlObj
+        };
+        tabPaths[files[pathStr].id] = pathStr;
     });
-    tabs[pathStr] = {
-        id: files[pathStr].id,
-        contents: files[pathStr].contents,
-        isOpen: false,
-        isSaving: false,
-        htmlObj: htmlObj
-    };
-    tabPaths[files[pathStr].id] = pathStr;
-});
 
-treeify(data, tree);
+    bindFileChanges();
 
-$('#treeview').treeview({
-    data: tree,
-    levels: 1,
-    expandIcon: "glyphicon glyphicon-chevron-down",
-    collapseIcon: "glyphicon glyphicon-chevron-up"
-});
+    treeify(data, tree);
 
-$('#treeview').on('nodeSelected', function (event, data) {
-    setBreadcrumb(data);
-});
+    $('#treeview').treeview({
+        data: tree,
+        levels: 1,
+        expandIcon: "glyphicon glyphicon-chevron-down",
+        collapseIcon: "glyphicon glyphicon-chevron-up"
+    });
 
-var clicks = 0;
-var timer = null;
+    $('#treeview').on('nodeSelected', function (event, data) {
+        setBreadcrumb(data);
+    });
 
-$("#treeview").on("click", function (event) {
-    clicks++;
-    if (clicks === 1) {
-        timer = setTimeout(function () {
-            $('#treeview').treeview('toggleNodeExpanded', [parseInt(event.target.dataset.nodeid), {silent: false}]);
+    var clicks = 0;
+    var timer = null;
+
+    $("#treeview").on("click", function (event) {
+        clicks++;
+        if (clicks === 1) {
+            timer = setTimeout(function () {
+                $('#treeview').treeview('toggleNodeExpanded', [parseInt(event.target.dataset.nodeid), {silent: false}]);
+                clicks = 0;
+            }, 200);
+        } else {
+            if ($(event.target).find("span.expand-icon").length === 0) {
+                // Open appropriate tab on double click
+                let fileID = $(event.target).attr('data-fileid');
+                handleFileDC(fileID);
+            }
             clicks = 0;
-        }, 200);
-    } else {
-        if ($(event.target).find("span.expand-icon").length === 0) {
-            // Open appropriate tab on double click
-            let fileID = $(event.target).attr('data-fileid');
-            handleFileDC(fileID);
         }
-        clicks = 0;
-    }
-}).on("dblclick", function (event) {
-    event.preventDefault();
-});
+    }).on("dblclick", function (event) {
+        event.preventDefault();
+    });
 
-//Tab Bar
-/**TODO CHECK THIS**//*$('#tabbar a').click(function (e) {
-    e.preventDefault();
-    // // Activate tab
-    // $(this).tab('show');
-    // // Set activePath
-    // var tabFileID = $(this).parent().attr("data-fileid");
-    // activePath = tabPaths[tabFileID];
-});*/
+    //Tab Bar
+    /**TODO CHECK THIS**/
+    /*$('#tabbar a').click(function (e) {
+        e.preventDefault();
+        // // Activate tab
+        // $(this).tab('show');
+        // // Set activePath
+        // var tabFileID = $(this).parent().attr("data-fileid");
+        // activePath = tabPaths[tabFileID];
+    });*/
 
-$("#tabbar").on('click', 'span', function () {
-    var tabFileID = $(this).parent().parent().attr("data-fileid");
-    closeTab(tabFileID);
-});
+    $("#tabbar").on('click', 'span', function () {
+        var tabFileID = $(this).parent().parent().attr("data-fileid");
+        closeTab(tabFileID);
+    });
 
-//Toolbar
-$("#runButton").click(function () {
-    document.getElementById("terminalFrame").contentWindow.postMessage({
-        filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
-        code: editor.getValue()
-    }, "http://127.0.0.1:7681");
-});
+    //Toolbar
+    $("#runButton").click(function () {
+        document.getElementById("terminalFrame").contentWindow.postMessage({
+            filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
+            code: editor.getValue()
+        }, "http://127.0.0.1:7681");
+    });
+
+    $(window).on("beforeunload", function () {
+        leaveCurrentCollabSession();
+    });
+}
+
+load();
