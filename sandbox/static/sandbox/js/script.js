@@ -76,7 +76,7 @@ function getTree() {
                     backColor: "#C4C4C4"
                 },
                 {
-                    text: "aboutme.html",
+                    text: "aboutme.java",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
                     backColor: "#C4C4C4"
@@ -188,9 +188,31 @@ $('#tabbar').on('click', 'a', function (e) {
 });
 
 function addTab(name) {
+    var ext = name.substring(name.lastIndexOf(".")+1);
+    var lang = "";
     $('<li><a href="#tab' + (++tabnum) + '" data-toggle="tab">' + name + '<span class="close">&nbsp;&nbsp;×</span></a></li>').appendTo('#tabbar .nav');
     if(!(name in sessions)){
-        sessions[name] = ace.createEditSession("", "ace/mode/html");
+        switch(ext){
+            case "java":
+                lang = "ace/mode/java";
+                break;
+            case "py":
+                lang = "ace/mode/python";
+                break;
+            case "html":
+                lang = "ace/mode/html";
+                break;
+            case "js":
+                lang = "ace/mode/javascript";
+                break;
+            case "php":
+                lang = "ace/mode/php";
+                break;
+            default:
+                lang = "ace/mode/text";
+                break;
+        }
+        sessions[name] = ace.createEditSession("", lang);
     }
     activateTab($('#tabbar .nav a:last'));
 }
