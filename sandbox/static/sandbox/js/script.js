@@ -262,6 +262,53 @@ function updateLiveData(){
     $("#livedisplayFrame").contents().find("html").html(editor.getValue());
 }
 
+//Debugger
+var debug = false;
+var breakpointAnchors = [];
+$("#debugButton").click(function() {
+    debug = !debug;
+});
+
+editor.on("guttermousedown", function (e) {
+    if (debug) {
+        var target = e.domEvent.target;
+        if (target.className.indexOf("ace_gutter-cell") == -1) //make sure that user clicked on a gutter cell
+            return;
+        var breakpoints = e.editor.session.getBreakpoints(row, 0);
+        var row = e.getDocumentPosition().row;
+        if (typeof breakpoints[row] === typeof undefined) { //add breakpoint
+            e.editor.session.setBreakpoint(row);
+            breakpointAnchors.push(editor.getSession().getDocument().createAnchor(row, 0));
+            breakpointAnchors[breakpointAnchors.length - 1].on("change", function (element) {
+                e.editor.session.clearBreakpoint(element.old.row); //moves breakpoint in sync with line of code
+                e.editor.session.setBreakpoint(element.value.row);
+            });
+        } else { //delete breakpoint
+            e.editor.session.clearBreakpoint(row);
+            breakpointAnchors.forEach(function (element, index) {
+                if (row == element.row) {
+                    element.detach();
+                    breakpointAnchors.splice(index, 1);
+                }
+            });
+        }
+        e.stop();
+    }
+});
+
+var Range = ace.require('ace/range').Range;
+
+function setCurrentDebugLine(num){
+    if(!debug) return;
+    return editor.session.addMarker(new Range(num-1, 0, num-1, 1), "currentDebugLine", "fullLine");
+}
+
+function clearMarker(marker){
+    editor.getSession().removeMarker(marker);
+}
+
+
+//Theme
 function temper(theme) {
     var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
         if(lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && !lightThemes.includes(theme) || !lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && lightThemes.includes(theme)){

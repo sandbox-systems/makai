@@ -186,6 +186,17 @@ body {
     text-align: center;
 }
 
+/*Debugger*/
+.ace_gutter-cell.ace_breakpoint {
+    background-color: #DCA038;
+}
+
+.currentDebugLine{
+    position: absolute;
+    background-color: #C3D2DE;
+}
+
+
 /*Dark Theme*/
 
 .list-group-item {
