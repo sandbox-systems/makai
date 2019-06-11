@@ -2,6 +2,7 @@
 </script>
 <script>
 window.addEventListener("message", function(event){
+console.log(event.data.action);
     switch(event.data.action){
         case "run":
             terminal.socket.send("0"+"cd ../ && rm -rf src"+"\n");
@@ -24,7 +25,28 @@ window.addEventListener("message", function(event){
             }
             break;
         case "debug":
-            alert("debugging");
+            terminal.socket.send("0"+"cd ../ && rm -rf src"+"\n");
+            var ext = event.data.filename.substring(event.data.filename.lastIndexOf(".")+1)
+            terminal.socket.send("0"+"mkdir src && cd src"+"\n");
+            terminal.socket.send("0"+"echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename)+"\n");
+            terminal.socket.send("0"+"clear"+"\n");
+            switch(ext){
+                case "py":
+                    alert("Not possible currently");
+                    break;
+                case "java":
+                    terminal.socket.send("0"+"javac "+shellEscape(event.data.filename)+"\n");
+                    terminal.socket.send("0"+"clear"+"\n");
+                    terminal.socket.send("0"+"jdb "+shellEscape(event.data.filename.substring(0, event.data.filename.lastIndexOf(".")))+"\n");
+                    event.data.breakpoints.forEach(function(value){
+                        terminal.socket.send("0"+"stop at "+event.data.filename.substring(0, event.data.filename.lastIndexOf("."))+":"+value+"\n");
+                    });
+                    terminal.socket.send("0"+"run"+"\n");
+                    break;
+                default:
+                    alert("Not possible currently");
+                    break;
+            }
             break;
     }
 }, false);
