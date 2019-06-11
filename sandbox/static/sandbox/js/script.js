@@ -238,9 +238,10 @@ $("#tabbar").on('click', 'span', function (event) {
 //Toolbar
 $("#runButton").click(function () {
     document.getElementById("terminalFrame").contentWindow.postMessage({
+        action: "run",
         filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
         code: editor.getValue()
-    }, "http://makaide.com:7681");
+    }, "http://localhost:7681");
 });
 
 //Live Editor
