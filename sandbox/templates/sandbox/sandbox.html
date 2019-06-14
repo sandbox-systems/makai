@@ -20,6 +20,8 @@
   integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
   crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
 
     <div id="content">
         <div id="breadcrumbs">
@@ -73,6 +75,66 @@
             <div id="editor"></div>
             <div id="livedisplay">
                 <iframe id="livedisplayFrame"></iframe>
+            </div>
+            <div id="debug">
+                <div id="debugbtncontainer">
+                    <button class="btn toolbarbtn" title="Start"><i class="fas fa-eject"></i></button>
+                    <button class="btn toolbarbtn" title="Pause"><i class="fas fa-pause-circle"></i></button>
+                    <button class="btn toolbarbtn" title="Continue"><i class="fas fa-play-circle"></i></button>
+                    <button class="btn toolbarbtn" title="Step Over"><i class="fas fa-step-forward"></i></button>
+                    <button class="btn toolbarbtn" title="Step Into"><i class="fas fa-forward"></i></button>
+                    <button class="btn toolbarbtn" title="Step Out"><i class="fas fa-fast-forward"></i></button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Function</th>
+                            <th scope="col">File:Line</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Variable</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Expression</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
             </div>
             <div id="terminal">
                 <iframe id="terminalFrame" src="http://localhost:7681"></iframe>

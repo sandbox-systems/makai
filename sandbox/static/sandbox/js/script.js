@@ -246,16 +246,23 @@ $("#runButton").click(function () {
 
 //Live Editor
 function toggleLive(){
-    $("#editor").toggleClass("liveview");
-    if($("#editor").hasClass("liveview")){
-        $("#livedisplay").css("display", "block");
-        editor.addEventListener("change", updateLiveData);
-        updateLiveData();
-        $("#editor").css("width", "50%");
-    }else{
-        $("#livedisplay").css("display", "none");
-        editor.removeEventListener("change", updateLiveData);
-        $("#editor").css("width", "100%");
+    if($("#editor").hasClass("debugview")) {
+        Swal.fire({
+            type: 'error',
+            title: 'Please Toggle Debugger To Enable Live Preview'
+        });
+    }else {
+        $("#editor").toggleClass("liveview");
+        if ($("#editor").hasClass("liveview")) {
+            $("#livedisplay").css("display", "block");
+            editor.addEventListener("change", updateLiveData);
+            updateLiveData();
+            $("#editor").css("width", "50%");
+        } else {
+            $("#livedisplay").css("display", "none");
+            editor.removeEventListener("change", updateLiveData);
+            $("#editor").css("width", "100%");
+        }
     }
 }
 
@@ -264,10 +271,27 @@ function updateLiveData(){
 }
 
 //Debugger
+function toggleDebug(){
+    if($("#editor").hasClass("liveview")) {
+        toggleLive();
+    }
+    $("#editor").toggleClass("debugview");
+    console.log("hi");
+    if($("#editor").hasClass("debugview")){
+        $("#debug").css("display", "block");
+        $("#editor").css("width", "50%");
+    }else{
+        $("#debug").css("display", "none");
+        $("#editor").css("width", "100%");
+    }
+}
+
+
 var debug = false;
 var breakpointAnchors = [];
 var breakpointList = [];
 $("#debugButton").click(function () {
+    toggleDebug();
     debug = !debug;
     document.getElementById("terminalFrame").contentWindow.postMessage({
         action: "debug",
@@ -352,8 +376,6 @@ $(document).ready(function () {
         },
         resize: function(e,ui){
             var temp = ($("#editorcol").width() - $("#livedisplay").width()-2);
-            console.log($("#livedisplay").width());
-            console.log($("#treeview").width())
             $("#editor").css('width', temp, 'important');
             $("#livedisplay").css("display", "inline-block");
         }, stop: function(e, ui){
@@ -371,16 +393,17 @@ $(document).ready(function () {
             var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
             document.getElementById("editor").style.height = nheight;
             document.getElementById("livedisplay").style.height = nheight;
+            document.getElementById("debug").style.height = nheight;
         },
         stop: function(e, ui){
             $("#terminalframe").css("pointer-events", "auto");
             $("#terminalframe").css("display", "block");
         }
     });
-    $(window).resize(function () {
-        var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
-        document.getElementById("editor").style.height = nheight;
-        document.getElementById("livedisplay").style.height = nheight;
-        $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
-    });
+    // $(window).resize(function () {
+    //     var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
+    //     document.getElementById("editor").style.height = nheight;
+    //     document.getElementById("livedisplay").style.height = nheight;
+    //     $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
+    // });
 });

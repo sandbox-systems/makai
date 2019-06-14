@@ -90,7 +90,7 @@ body {
 }
 
 .toolbarbtn:hover {
-    background: ghostwhite;
+    background: ghostwhite !important;
     color: rebeccapurple;
 }
 
@@ -135,6 +135,9 @@ body {
 }
 
 #editor .liveview {
+    width: 50% !important;
+}
+#editor .debugview {
     width: 50% !important;
 }
 
@@ -195,7 +198,25 @@ body {
     position: absolute;
     background-color: #C3D2DE;
 }
-
+#debug {
+    width: 50%;
+    height: calc(70% - 20px);
+    position: relative;
+    float: right;
+    display: none;
+    border-left: solid 2px rebeccapurple;
+    background: white;
+    left: 0 !important;
+    overflow: scroll;
+}
+#debug .toolbarbtn{
+    width: calc(100% / 7);
+    background: rebeccapurple;
+}
+#debugbtncontainer{
+    display: inline-block;
+    width: 100%;
+}
 
 /*Dark Theme*/
 
