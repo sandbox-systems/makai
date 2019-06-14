@@ -236,12 +236,13 @@ $("#tabbar").on('click', 'span', function (event) {
 });
 
 //Toolbar
-$("#runButton").click(function () {
-    document.getElementById("terminalFrame").contentWindow.postMessage({
+$("#runButton").click(function(){
+    termPost({
         action: "run",
         filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
-        code: editor.getValue()
-    }, "http://localhost:7681");
+        code: editor.getValue(),
+        breakpoints: breakpointList.map(function(value){return value+1})
+    });
 });
 
 //Live Editor
@@ -293,12 +294,70 @@ var breakpointList = [];
 $("#debugButton").click(function () {
     toggleDebug();
     debug = !debug;
-    document.getElementById("terminalFrame").contentWindow.postMessage({
+
+    if(!debug)
+        return;
+
+    termPost({
         action: "debug",
         filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
         code: editor.getValue(),
         breakpoints: breakpointList.map(function(value){return value+1})
-    }, "http://localhost:7681");
+    });
+});
+
+$("#debugStart").click(function(){
+    if(!debug)
+        return;
+
+    termPost({
+        action: "start",
+    });
+});
+
+$("#debugPause").click(function(){
+    if(!debug)
+        return;
+
+    //termPost({
+
+    //});
+});
+
+$("#debugCont").click(function(){
+    if(!debug)
+        return;
+
+    termPost({
+        action: "debugCont"
+    });
+});
+
+$("#debugStepOver").click(function(){
+    if(!debug)
+        return;
+
+    termPost({
+        action: "debugStepOver"
+    });
+});
+
+$("#debugStepInto").click(function(){
+    if(!debug)
+        return;
+
+    termPost({
+        action: "debugStepInto"
+    });
+});
+
+$("#debugStepOut").click(function(){
+    if(!debug)
+        return;
+
+    termPost({
+        action: "debugStepOut"
+    });
 });
 
 editor.on("guttermousedown", function (e) {
@@ -339,6 +398,11 @@ function clearMarker(marker){
     editor.getSession().removeMarker(marker);
 }
 
+//Terminal Communications
+
+function termPost(parameters){
+    document.getElementById("terminalFrame").contentWindow.postMessage(parameters, "http://localhost:7681");
+}
 
 //Theme
 function temper(theme) {
