@@ -107,6 +107,7 @@ body {
     height: 42px;
     position: relative;
     float: right;
+    background: #E3E3E3;
 }
 
 #tabbar > ul {
