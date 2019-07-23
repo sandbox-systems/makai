@@ -71,43 +71,50 @@ var realtime = firebase.database();
 // var storage = firebase.storage();
 
 var files = {
-    "file.txt": {
-        id: 1,
-        contents: "Hello world!"
-    },
-    "anotherfile.js": {
-        id: 2,
-        contents: "Another 2"
-    },
-    "folder2/boom.txt": {
-        id: 3,
-        contents: "7"
-    },
-    "folder1/nestedfile.html": {
-        id: 4,
-        contents: "Another 3"
-    },
-    "folder3/folder4/folder5/hello.txt": {
-        id: 5,
-        contents: "9"
-    },
-    "folder1/anothenested.txt": {
-        id: 6,
-        contents: "4"
-    },
-    "folder1/another/anotherone/another/verynested.txt": {
-        id: 7,
-        contents: "5"
-    },
-    "folder2/booms.txt": {
-        id: 8,
-        contents: "8"
-    },
-    "folder1/another/anotherone/hello.txt": {
-        id: 9,
-        contents: "6"
-    }
+    // "file.txt": {
+    //     id: 1,
+    //     contents: "Hello world!"
+    // },
+    // "anotherfile.js": {
+    //     id: 2,
+    //     contents: "Another 2"
+    // },
+    // "folder2/boom.txt": {
+    //     id: 3,
+    //     contents: "7"
+    // },
+    // "folder1/nestedfile.html": {
+    //     id: 4,
+    //     contents: "Another 3"
+    // },
+    // "folder3/folder4/folder5/hello.txt": {
+    //     id: 5,
+    //     contents: "9"
+    // },
+    // "folder1/anothenested.txt": {
+    //     id: 6,
+    //     contents: "4"
+    // },
+    // "folder1/another/anotherone/another/verynested.txt": {
+    //     id: 7,
+    //     contents: "5"
+    // },
+    // "folder2/booms.txt": {
+    //     id: 8,
+    //     contents: "8"
+    // },
+    // "folder1/another/anotherone/hello.txt": {
+    //     id: 9,
+    //     contents: "6"
+    // }
 };
+
+var csrftoken = Cookies.get('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
 
 // TODO When merging with chat, use global firebase initUser function
 let uid = "";

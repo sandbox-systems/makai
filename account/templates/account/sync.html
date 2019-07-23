@@ -1,0 +1,15 @@
+<title>Sync</title>
+
+{% extends 'home/nav.html' %}
+{% load static %}
+
+{% block content %}
+    Syncing stuff<br>
+    {% for host, account in accounts %}
+        {% if account.sync_link is not None %}
+            <a href="{{ account.sync_link }}">{{ host }}</a>
+        {% endif %}
+        <br>
+    {% endfor %}
+
+{% endblock %}

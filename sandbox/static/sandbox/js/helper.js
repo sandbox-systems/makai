@@ -6,6 +6,49 @@ let collab = {
     canSave: false
 };
 
+function populateFiles(owner, repo, branch) {
+    return new Promise(resolve => {
+        $.ajax({
+            type: "POST",
+            url: "/castle/github/ShivashriganeshMahato/cs-3-labs/master/Lab40",
+            data: {},
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            success: function (data, status, xhttp) {
+                Object.keys(data).forEach(fullPath => {
+                    let path = fullPath.substring(7);
+                    let datum = data[fullPath];
+                    if (datum.type === "file") {
+                        files[path] = {
+                            id: datum.id,
+                            repo_id: datum.repo_id,
+                            contents: datum.content
+                        };
+                    }
+                });
+                resolve();
+            }, error: function (data) {
+                console.log(data);
+            },
+            dataType: "json"
+        });
+    });
+}
+
+function bindFileChanges() {
+    if (Object.keys(tabs).length === 0)
+        return;
+    firestore.collection('file_changes').doc(tabs[Object.keys(tabs)[0]].repo_id)
+        .onSnapshot(doc => {
+            Object.keys(doc.data()).forEach(fullPath => {
+                console.log(fullPath);
+            });
+        });
+}
+
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
@@ -159,12 +202,14 @@ async function switchToTab(id) {
     newActiveTab.htmlObj.addClass("active");
     newActiveTab.htmlObj.find("a").addClass("active");
 
+    newActiveTab.contents = await getFileContents(activePath);
+
     let wasCollabSessionCreated = !(await doesCollabSessionExist(id));
     /*Join collab session*/
-    joinExistingCollabSession(id);
+    joinCollabSession(id, wasCollabSessionCreated);
     // Does collab session exist for file?
     // if (await doesCollabSessionExist(id)) {
-    //     // /*Join collab session*/ joinExistingCollabSession(id);
+    //     // /*Join collab session*/ joinCollabSession(id);
     //     openTab(id);
     //     return;
     // }
@@ -184,14 +229,38 @@ function saveCurrentFile() {
     if (tab.contents !== editorVal) {
         tab.contents = editorVal;
         tab.isSaving = true;
-        firestore.collection('file_changes').doc(tab.id.toString()).set({contents: editorVal})
-            .then(function (docRef) {
-                tab.isSaving = false;
-            })
-            .catch(function (error) {
-                /*TODO Handle error saving*/
-            });
+        // firestore.collection('file_changes').doc(tab.id.toString()).set({contents: editorVal})
+        //     .then(function (docRef) {
+        //         tab.isSaving = false;
+        //     })
+        //     .catch(function (error) {
+        //         /*TODO Handle error saving*/
+        //     });
     }
+}
+
+function getFileContents(path) {
+    return new Promise(async resolve => {
+        // await fetchChangesToFile(path);
+        resolve("HSOX");
+    });
+}
+
+function fetchChangesToFile(path) {
+    return new Promise(resolve => {
+       firestore.collection('file_changes').doc(tabs[path].repo_id.toString()).get()
+           .then(doc => {
+               if (!doc.exists) {
+                   resolve(false);
+               } else {
+                   console.log(doc.data());
+                   resolve("oidxcv");
+               }
+           })
+           .catch(err => {
+               // TODO Handle error
+           });
+    });
 }
 
 function doesCollabSessionExist(id) {
@@ -211,7 +280,7 @@ function setupEditor() {
     editor.setOptions(editorOptions);
 }
 
-function joinExistingCollabSession(id) {
+function joinCollabSession(id, shouldCreate) {
     setupEditor();
     // Get or upsert reference to location in db where data with id is stored
     let ref = realtime.ref(id);
@@ -221,6 +290,10 @@ function joinExistingCollabSession(id) {
     // });
     // Bind editor to firepad
     Firepad.fromACE(ref, editor, {userId: uid});
+    // Set editor text to file contents
+    if (shouldCreate) {
+        editor.setValue(tabs[activePath].contents, -1);
+    }
     // Update online list with added or removed children
     ref.child("users").on("child_added", childSnapshot => {
         // Push added child to online list as appropriate
