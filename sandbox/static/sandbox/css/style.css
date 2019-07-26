@@ -1,5 +1,20 @@
+:root{
+    --primary-color: rebeccapurple;
+    --secondary-color: mediumpurple;
+    --color-three: ghostwhite;
+    --color-four: white;
+    --text: black;
+}
+[data-theme="dark"]{
+    --primary-color: #202020;
+    --secondary-color: #424242;
+    --color-three: #303030;
+    --color-four: #424242;
+    --text: white;
+}
+
 body {
-    background: ghostwhite;
+    background: var(--color-three);
     font-family: "Raleway";
 }
 
@@ -29,6 +44,7 @@ body {
 
 /* Menu */
 #breadcrumbs ul {
+    background: var(--color-four);
     display: flex; /* A key part of our menu, displays items side by side, and allows reversing them */
 / / flex-direction: row-reverse; /* Reverse the items */
     /* Reset styles, overwrite browser defaults */
@@ -49,7 +65,7 @@ body {
     padding: 12px 30px; /* Adjusting padding to get the proper space */
     margin-left: -20px; /* Pull the items to the left, so the rounded right side will get over them */
     color: white;
-    background-color: mediumpurple;
+    background-color: var(--secondary-color);
     text-decoration: none;
     text-transform: uppercase;
     border-radius: 0 100px 100px 0; /* Get the right side rounded */
@@ -57,7 +73,7 @@ body {
 }
 
 #breadcrumbs ul li:hover {
-    background-color: rebeccapurple;
+    background-color: mediumpurple;
 }
 
 .breadcrumb > li + li:before, .breadcrumb-item + .breadcrumb-item::before {
@@ -67,7 +83,7 @@ body {
 /* Active item is a bit different */
 #breadcrumbs ul li.active {
     color: mediumpurple;
-    background-color: #EEF5FF;
+    background-color: var(--color-four);
 }
 
 .breadcrumb {
@@ -87,19 +103,20 @@ body {
     width: calc(100% / 5);
     margin: 0;
     font-size: 12pt;
+    color: var(--color-four);
 }
 
 .toolbarbtn:hover {
-    background: ghostwhite !important;
-    color: rebeccapurple;
+    background: var(--color-four) !important;
+    color: var(--primary-color) !important;
 }
 
 #treeview {
     width: 15%;
-    height: 100%;
+    height: 103%;
     display: inline-block;
     float: left;
-    background: #f5f5f5;
+    background: var(--color-three);
 }
 
 #tabbar {
@@ -107,14 +124,15 @@ body {
     height: 42px;
     position: relative;
     float: right;
+    background: var(--color-three);
 }
 
 #tabbar > ul {
-    background: #E3E3E3;
+    background: var(--color-three);
 }
 
 #tabbar .active {
-    background: #F0F0F0;
+    background: var(--color-four);
     border-color: #C3C3C3;
     border-bottom-color: transparent;
 }
@@ -183,7 +201,7 @@ body {
 
 #bottomtoolbar {
     position: fixed;
-    background: rebeccapurple;
+    background: var(--primary-color);
     bottom: 0;
     width: calc(100% - 70px);
     text-align: center;
@@ -205,47 +223,25 @@ body {
     float: right;
     display: none;
     border-left: solid 2px rebeccapurple;
-    background: white;
+    background: var(--color-four);
     left: 0 !important;
     overflow: scroll;
 }
+#debug table{
+    color: var(--text);
+}
+
 #debug .toolbarbtn{
     width: calc(100% / 7);
-    background: rebeccapurple;
+    background: var(--primary-color);
 }
 #debugbtncontainer{
     display: inline-block;
     width: 100%;
 }
 
-/*Dark Theme*/
-
 .list-group-item {
     border: 0;
-}
-
-.black {
-    background: black !important;
-    color: white !important;
-}
-
-.gray {
-    background: #212121 !important;
-    color: white !important;
-}
-
-.lightgray {
-    background: #303030 !important;
-    color: white !important;
-}
-
-.lightestgray {
-    background: #424242 !important;
-    color: white !important;
-}
-
-.lightgraytext {
-    color: #303030 !important;
 }
 
 .modal i{

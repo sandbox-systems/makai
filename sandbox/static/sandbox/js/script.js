@@ -143,31 +143,75 @@ $("#treeview").on("click", function (event) {
     event.preventDefault();
 });
 
-$("#treeview").on("contextmenu", ".node-treeview", function(key, options) {
-        var m = "clicked: " + key;
-        window.console && console.log(m) || alert(m);
-        return false;
-    },
-    {
-        "edit": {name: "Edit", icon: "edit"},
-        "cut": {name: "Cut", icon: "cut"},
-        "copy": {name: "Copy", icon: "copy"},
-        "paste": {name: "Paste", icon: "paste"},
-        "delete": {name: "Delete", icon: "delete"},
-        "sep1": "---------"
+$(function(){
+    $('#treeview').contextMenu({
+        selector: '.node-treeview',
+        zIndex:10,
+        callback: function(key, options) {
+            // var m = "clicked: " + key + " on " + $(this).text();
+            // window.console && console.log(m) || alert(m);
+        },
+        items: {
+            "new": {
+                name: "New",
+                icon: "fas fa-plus",
+                disabled: function(){
+                    return !($(this).context.innerHTML.includes("chevron-down"));
+                },
+                items:{
+                    "newfile": {
+                        name: "New File",
+                        icon:'fas fa-file',
+                        items:{
+                            "filename":{
+                                name: "Filename",
+                                type: 'text',
+                                events:{
+                                    keyup: function(e){
+                                        //FUNCTION TO CREATE NEW FILE
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "newfolder": {
+                        name: "New Folder",
+                        icon: "fas fa-folder",
+                        items:{
+                            "foldername":{
+                                name: "Foldername",
+                                type: 'text',
+                                events:{
+                                    keyup: function(e){
+                                        //FUNCTION TO CREATE NEW FOLDER
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                }
+                ,
+            "rename ": {name: "Rename", icon: "edit"},
+            "duplicate": {name: "Duplicate", icon: "copy"},
+            "delete": {name: "Delete", icon: "delete"},
+            // "sep1": "---------",
+            // "quit": {name: "Quit", icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
+        }
     });
+});
 
 //Breadcrumbs
 function setBreadcrumb(data) {
     var crumbArray = [];
     while (!$(data).is($("#treeview"))) {
-        console.log(data);
+        // console.log(data);
         crumbArray.push(data.text);
         data = $("#treeview").treeview("getParent", data.nodeId)
     }
     crumbArray.push("Repository");
     crumbArray.reverse();
-    console.log(crumbArray);
+    // console.log(crumbArray);
 
     $("#breadcrumbs .breadcrumb").empty();
     var i = 0;
@@ -404,31 +448,21 @@ function termPost(parameters){
 }
 
 //Theme
-function temper(theme) {
+function changeTheme(theme) {
     var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
-        if(lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && !lightThemes.includes(theme) || !lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && lightThemes.includes(theme)){
-            updateC();
+        if(lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && !lightThemes.includes(theme)){
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }else if(!lightThemes.includes(editor.getTheme().substring(editor.getTheme().lastIndexOf("/")+1)) && lightThemes.includes(theme)){
+            document.documentElement.setAttribute('data-theme', 'light');
         }
         editor.setTheme("ace/theme/" + theme);
-}
-
-function updateC(){
-     $(".toolbarbtn").toggleClass("lightgraytext");
-     // $(".breadcrumb-item active").toggleClass("black");
-     // $(".breadcrumb-item").toggleClass("lightestgray");
-     // $(".breadcrumb").toggleClass("lightgray");
-     $("#treeview").toggleClass("lightestgray");
-     $("#tabbar li").toggleClass("black");
-     $("#tabbar .active").toggleClass("gray");
-     $("#tabbar > ul").toggleClass("lightestgray");
-     $("#tabbar").toggleClass("lightestgray");
 }
 
 $(document).ready(function () {
     $("#editorcol").resizable({
         handles: 'w',
         resize: function(e,ui){
-            $("#treeview").width(($(window).width() - 80) - $("#editorcol").width());
+            $("#treeview").width(($(window).width() - 70) - $("#editorcol").width());
         }
     });
     $("#livedisplay").resizable({
@@ -463,10 +497,10 @@ $(document).ready(function () {
             $("#terminalframe").css("display", "block");
         }
     });
-    // $(window).resize(function () {
-    //     var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
-    //     document.getElementById("editor").style.height = nheight;
-    //     document.getElementById("livedisplay").style.height = nheight;
-    //     $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
-    // });
+    $(window).resize(function () {
+        // var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
+        // document.getElementById("editor").style.height = nheight;
+        // document.getElementById("livedisplay").style.height = nheight;
+        $("#treeview").width(($(window).width() - 75) - $("#editorcol").width());
+    });
 });
