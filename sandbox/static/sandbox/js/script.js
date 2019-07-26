@@ -277,7 +277,6 @@ function toggleDebug(){
         toggleLive();
     }
     $("#editor").toggleClass("debugview");
-    console.log("hi");
     if($("#editor").hasClass("debugview")){
         $("#debug").css("display", "block");
         $("#editor").css("width", "50%");
