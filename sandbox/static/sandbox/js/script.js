@@ -7,9 +7,10 @@ async function load() {
 
     let tabNum = 0;
     Object.keys(files).forEach(pathStr => {
-        let path = pathStr.split('/');
-        let filename = path.pop();
-        addFile(filename, files[pathStr], path, data);
+        let pathArr = pathStr.split('/');
+        let filename = pathArr.pop();
+        // Parse array of full paths to recursive tree contained in data
+        addFile(filename, files[pathStr], pathArr, data);
 
         let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
         htmlObj.find("a").click(function (e) {
@@ -101,7 +102,7 @@ async function load() {
     });
 
     $(window).on("beforeunload", function () {
-        leaveCurrentCollabSession();
+        leaveAndSaveCurrentCollabSession();
     });
 }
 

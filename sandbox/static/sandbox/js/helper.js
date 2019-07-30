@@ -6,8 +6,27 @@ let collab = {
     canSave: false
 };
 
+/**
+ * Extract filename from path (should be rightmost node)
+ */
+function getFilenameFromPath(path) {
+    let nodes = path.split('/');
+    return nodes.pop();
+}
+
+/**
+ * Convert path to format that paths are stored in firebase keys (/ -> ; and . -> : TODO change as necessary--ensure
+ * they don't can't show up in the path otherwise)
+ */
+function firebasePathConvert(path) {
+    let converted = path.replace(/\//g, ';');
+    converted = converted.replace(/\./g, ':');
+    return converted;
+}
+
 function populateFiles(owner, repo, branch) {
     return new Promise(resolve => {
+        // Send request to castle endpoints so python handles loading and processing saved changes to repo
         $.ajax({
             type: "POST",
             url: "/castle/github/ShivashriganeshMahato/cs-3-labs/master/Lab40",
@@ -41,10 +60,32 @@ function populateFiles(owner, repo, branch) {
 function bindFileChanges() {
     if (Object.keys(tabs).length === 0)
         return;
-    firestore.collection('file_changes').doc(tabs[Object.keys(tabs)[0]].repo_id)
-        .onSnapshot(doc => {
-            Object.keys(doc.data()).forEach(fullPath => {
-                console.log(fullPath);
+    let repo_id = tabs[Object.keys(tabs)[0]].repo_id;
+    firestore.collection('file_changes').doc(repo_id)
+        .onSnapshot(snapshot => {
+            Object.keys(snapshot.data()).forEach(fullPath => {
+                let changeToThisFile = snapshot.data()[firebasePathConvert(fullPath)];
+                // TODO 2 only add and del, upd handled by tab click handler
+                // fullPath contains branch, filePath doesn't
+                // TODO 1 replace master with arbitrary branch
+                let filePath = fullPath.replace('master/', '');
+                let tab = tabs[filePath];
+                // if (changeToThisFile.type === "add" && !tab) {
+                //     let newTab = {
+                //         id: changeToThisFile.file_id,
+                //         repo_id: repo_id,
+                //         contents: "",
+                //         // TODO 1 add other parts of tab (including html object to be generated--create function for it)
+                //     };
+                //     let pathArr = filePath.split('/');
+                //     tabs.push(newTab);
+                //     // TODO 1 test to make sure data is defined
+                //     addFile(changeToThisFile.name, newTab, pathArr, data);
+                // } else if (changeToThisFile.type === "del" && tab) {
+                //     // Delete tab
+                // } else if (changeToThisFile.type === "upd" && tab && activePath !== filePath) {
+                //     tab.content = changeToThisFile.content;
+                // }
             });
         });
 }
@@ -74,14 +115,14 @@ function setBreadcrumb(data) {
 /**
  * Recursive function to populate data by parsing array of full file paths mapped to file data
  */
-function addFile(filename, file, path, ref) {
-    if (path.length > 0) {
-        if (!ref[path[0]]) {
-            ref[path[0]] = {files: {}};
+function addFile(filename, file, pathArr, ref) {
+    if (pathArr.length > 0) {
+        if (!ref[pathArr[0]]) {
+            ref[pathArr[0]] = {files: {}};
         }
-        let newRef = ref[path[0]];
-        path.shift();
-        addFile(filename, file, path, newRef);
+        let newRef = ref[pathArr[0]];
+        pathArr.shift();
+        addFile(filename, file, pathArr, newRef);
     } else {
         ref.files[filename] = file;
     }
@@ -170,16 +211,16 @@ function getNextTab(baseTab) {
     return null;
 }
 
-function closeTab(id) {
+async function closeTab(id) {
     let tab = tabs[tabPaths[id]];
     // Switch to next closest tab
     if (tabPaths[id] === activePath) {
         let nextTab = getNextTab(tab.htmlObj[0]);
         if (nextTab === null) {
-            leaveCurrentCollabSession();
+            await leaveAndSaveCurrentCollabSession();
             activePath = null;
         } else {
-            switchToTab(nextTab.id);
+            await switchToTab(nextTab.id);
         }
     }
     tab.isOpen = false;
@@ -193,11 +234,10 @@ async function switchToTab(id) {
         let activeTab = tabs[activePath];
         activeTab.htmlObj.removeClass("active");
         activeTab.htmlObj.find("a").removeClass("active");
-        leaveCurrentCollabSession();
-        saveCurrentFile();
+        await leaveAndSaveCurrentCollabSession();
     }
     // Switch to new tab
-    activePath = tabPaths[id];
+    activePath = tabPaths[id]; // Update activePath with new tab
     let newActiveTab = tabs[activePath];
     newActiveTab.htmlObj.addClass("active");
     newActiveTab.htmlObj.find("a").addClass("active");
@@ -221,45 +261,87 @@ async function switchToTab(id) {
 }
 
 function saveCurrentFile() {
-    if (!collab.canSave)
-        return;
-    let tab = tabs[activePath];
-    let editorVal = editor.getSession().getValue();
-    // Was file edited?
-    if (tab.contents !== editorVal) {
-        tab.contents = editorVal;
-        tab.isSaving = true;
-        // firestore.collection('file_changes').doc(tab.id.toString()).set({contents: editorVal})
-        //     .then(function (docRef) {
-        //         tab.isSaving = false;
-        //     })
-        //     .catch(function (error) {
-        //         /*TODO Handle error saving*/
-        //     });
-    }
+    return new Promise(resolve => {
+        if (collab.canSave) {
+            let tab = tabs[activePath];
+            let editorVal = editor.getSession().getValue();
+            // Was file edited?
+            if (tab.contents !== editorVal) { // TODO bc of this, don't update tab.contents anywhere else
+                tab.contents = editorVal;
+                tab.isSaving = true;
+
+                // Construct update object mapping to add to firebase
+                let fullPath = firebasePathConvert("master/" + activePath); // TODO generalize branch
+                let changeObj = {
+                    branch_parent: "master_" + activePath, // TODO generalize branch
+                    file_id: tab.id.toString(),
+                    name: getFilenameFromPath(activePath),
+                    type: "upd",
+                    content: tab.contents
+                };
+
+                // Construct document update object containing mapping
+                let docUpdate = {};
+                docUpdate[fullPath] = changeObj;
+
+                // Update firebase
+                resolve();
+                firestore.collection('file_changes').doc(tab.repo_id.toString()).update(docUpdate)
+                    .then(() => {
+                        tab.isSaving = false;
+                        resolve();
+                    })
+                    .catch(error => {
+                        /*TODO Handle error saving*/
+                        console.log(error);
+                        resolve();
+                    });
+            } else {
+                resolve();
+            }
+        } else {
+            resolve();
+        }
+    });
+}
+
+function fetchOriginalContents(path) {
+    return "filler";
 }
 
 function getFileContents(path) {
     return new Promise(async resolve => {
-        // await fetchChangesToFile(path);
-        resolve("HSOX");
+        let change = await fetchChangesToFile(path);
+        if (change) {
+            switch (change.type) {
+                case 'add':
+                    resolve('');
+                    break;
+                case 'upd':
+                    resolve(change.content);
+                    break;
+            }
+        } else {
+            resolve(fetchOriginalContents(path));
+        }
     });
 }
 
 function fetchChangesToFile(path) {
+    let full_path = firebasePathConvert('master/' + path); // TODO generalize branch
     return new Promise(resolve => {
-       firestore.collection('file_changes').doc(tabs[path].repo_id.toString()).get()
-           .then(doc => {
-               if (!doc.exists) {
-                   resolve(false);
-               } else {
-                   console.log(doc.data());
-                   resolve("oidxcv");
-               }
-           })
-           .catch(err => {
-               // TODO Handle error
-           });
+        firestore.collection('file_changes').doc(tabs[path].repo_id.toString()).get()
+            .then(doc => {
+                let changesAtPath = doc.data()[full_path];
+                if (!doc.exists || !changesAtPath) {
+                    resolve(false);
+                } else {
+                    resolve(changesAtPath);
+                }
+            })
+            .catch(err => {
+                // TODO Handle error
+            });
     });
 }
 
@@ -351,13 +433,51 @@ function joinCollabSession(id, shouldCreate) {
     });
 }
 
+/**
+ * @return  true: other users were online and session ownership transferred to one of them
+ *          false: no other users were online and session deleted
+ */
 function leaveCurrentCollabSession() {
-    let id = getKeyByValue(tabPaths, activePath);
-    realtime.ref(id).child("users").child(uid).remove();
-    setCollabSessionOwner(id, false);
-    $('#editorContainer').empty();
+    return new Promise(resolve => {
+        // Remove user from file's users
+        let id = getKeyByValue(tabPaths, activePath);
+        realtime.ref(id).child("users").child(uid).remove();
+
+        // Set new owner, if viable
+        let wasOwnershipTransferred = setCollabSessionOwner(id, false);
+
+        // Remove editor binding to session
+        $('#editorContainer').empty();
+
+        // Reset local collab data (except for canSave, which can't be reset until potential save is done (see
+        // leaveAndSaveCurrentCollabSession)
+        collab.online.splice(0, collab.online.length);
+
+        resolve(wasOwnershipTransferred);
+    });
 }
 
+/**
+ * Save file associated with session if ownership wasn't transferred (indicating this user was last collaborator on file
+ * and should save final changes as they will not be handled by auto-save from someone else)
+ */
+async function leaveAndSaveCurrentCollabSession() {
+    return new Promise(async resolve => {
+        let wasOwnershipTransferred = await leaveCurrentCollabSession();
+        if (!wasOwnershipTransferred) {
+            await saveCurrentFile();
+        }
+        // Reset remaining local collab data
+        collab.canSave = false;
+        resolve();
+    });
+}
+
+/**
+ * @return  true: other users were online and session ownership transferred to one of them
+ *          false: no other users were online and session deleted
+ *          null: setToCurrentUser was true
+ */
 function setCollabSessionOwner(id, setToCurrentUser) {
     let ref = realtime.ref(id);
 
@@ -366,6 +486,7 @@ function setCollabSessionOwner(id, setToCurrentUser) {
         ref.child("users").child("?owner").set({
             uid: uid
         });
+        return null;
     } else {
         // If this user is owner and other users are online, transfer ownership
         // If no other users are online, delete collab session
@@ -374,8 +495,10 @@ function setCollabSessionOwner(id, setToCurrentUser) {
                 ref.child("users").child("?owner").set({
                     uid: collab.online[0]
                 });
+                return true;
             } else {
                 ref.remove();
+                return false;
             }
         }
     }

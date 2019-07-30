@@ -23,6 +23,7 @@ def settings(request):
 def sync(request):
     init_tokens(request)
     init_vcs()
+    # print(request.session['bitbucket_token'])
     # request.session.flush()
     return render(request, 'account/sync.html', {'accounts': accounts.items()})
 

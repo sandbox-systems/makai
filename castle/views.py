@@ -23,6 +23,8 @@ def project(request, host, owner, repo, branch, path):
     auth_vcs(request)
     contents = accounts[host].get_repo(owner, repo, branch, path)
     if request.method == 'POST':
+        # Used as endpoint by Sandbox, so respond with repo contents
         return HttpResponse(json_dump(contents), 'application/json')
     else:
+        # Used to map template to URL
         return render(request, 'castle/project.html', {'contents': contents})
