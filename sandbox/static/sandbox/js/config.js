@@ -61,6 +61,14 @@ var editorOptions = {
     enableSnippets: true
 };
 
+String.prototype.format = function () {
+    let str = this;
+    for (let i = 0; i < arguments.length; i++) {
+        str = str.replace("{" + i + "}", arguments[i])
+    }
+    return str;
+};
+
 // Set up Firebase
 firebase.initializeApp(config);
 var firestore = firebase.firestore();
@@ -116,12 +124,40 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-// TODO When merging with chat, use global firebase initUser function
+// TODO put onAuthStateChanged and priv_user get events in functions to be able to await response
+
+// T O D O When merging with chat, use global firebase initUser function
 let uid = "";
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        uid = user.uid;
-    } else {
-        // No user is signed in.
-    }
+let tokens = {};
+let init = (async () => {
+    await (() => {
+        return new Promise(resolve => {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    uid = user.uid;
+                    resolve();
+                } else {
+                    // TODO Handle no user is signed in
+                }
+            }); // TODO Handle error
+        })
+    })();
+
+    // Fetch access tokens
+    await (() => {
+        return new Promise(resolve => {
+            firestore.collection('priv_user').doc(uid).get()
+                .then(doc => {
+                    let data = doc.data();
+                    Object.keys(data).forEach(key => {
+                        let type = key.replace("_token", "");
+                        tokens[type] = data[key];
+                    });
+                    resolve();
+                })
+                .catch(err => {
+                    // TODO Handle error
+                });
+        })
+    })();
 });

@@ -14,22 +14,13 @@ function getFilenameFromPath(path) {
     return nodes.pop();
 }
 
-/**
- * Convert path to format that paths are stored in firebase keys (/ -> ; and . -> : TODO change as necessary--ensure
- * they don't can't show up in the path otherwise)
- */
-function firebasePathConvert(path) {
-    let converted = path.replace(/\//g, ';');
-    converted = converted.replace(/\./g, ':');
-    return converted;
-}
-
 function populateFiles(owner, repo, branch) {
     return new Promise(resolve => {
         // Send request to castle endpoints so python handles loading and processing saved changes to repo
+        // TODO axios
         $.ajax({
             type: "POST",
-            url: "/castle/github/ShivashriganeshMahato/cs-3-labs/master/Lab40",
+            url: "/castle/github/makaide/test/master/",
             data: {},
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -64,7 +55,7 @@ function bindFileChanges() {
     firestore.collection('file_changes').doc(repo_id)
         .onSnapshot(snapshot => {
             Object.keys(snapshot.data()).forEach(fullPath => {
-                let changeToThisFile = snapshot.data()[firebasePathConvert(fullPath)];
+                let changeToThisFile = snapshot.data()[Firebase.firebasePathEncode(fullPath)];
                 // TODO 2 only add and del, upd handled by tab click handler
                 // fullPath contains branch, filePath doesn't
                 // TODO 1 replace master with arbitrary branch
@@ -271,7 +262,7 @@ function saveCurrentFile() {
                 tab.isSaving = true;
 
                 // Construct update object mapping to add to firebase
-                let fullPath = firebasePathConvert("master/" + activePath); // TODO generalize branch
+                let fullPath = Firebase.firebasePathEncode("master/" + activePath); // TODO generalize branch
                 let changeObj = {
                     branch_parent: "master_" + activePath, // TODO generalize branch
                     file_id: tab.id.toString(),
@@ -328,7 +319,7 @@ function getFileContents(path) {
 }
 
 function fetchChangesToFile(path) {
-    let full_path = firebasePathConvert('master/' + path); // TODO generalize branch
+    let full_path = Firebase.firebasePathEncode('master/' + path); // TODO generalize branch
     return new Promise(resolve => {
         firestore.collection('file_changes').doc(tabs[path].repo_id.toString()).get()
             .then(doc => {

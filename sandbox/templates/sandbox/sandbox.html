@@ -24,6 +24,7 @@
             </nav>
         </div>
         <div id="toolbar" class="blue-gradient">
+            <button id="commitButton">Commit</button>
             <button id="runButton" class="btn blue-gradient toolbarbtn"><span class="glyphicon glyphicon-play"></span>&nbsp;&nbsp;run</button><!--
             --><button class="btn peach-gradient toolbarbtn"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;debug</button><!--
             --><button class="btn aqua-gradient toolbarbtn"><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;vcs</button><!--
@@ -47,6 +48,7 @@
     <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
     <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         // Initialize Firebase
         var config = {
@@ -59,6 +61,7 @@
         };
     </script>
     <script src="{% static 'sandbox/js/config.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'sandbox/js/vcs.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'sandbox/js/helper.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}

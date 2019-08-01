@@ -59,6 +59,7 @@ class GithubHost(Host):
             contents[full_path] = content
 
         # TODO modularize since this will be used for BB as well
+        # TODO handle if change doc DNE
         changes = get_doc('file_changes', repo_hash).to_dict()
         for raw_path, change in changes.items():
             # TODO modularize and ensure ; and : are safe to use
