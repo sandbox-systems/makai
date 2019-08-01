@@ -43,13 +43,12 @@ let Firebase = {
     }
 };
 
-// TODO comment and rename to make more consistent
 function Github(accessToken) {
     // Instantiate the axios request builder with github API and access token
     this.reqBuilder = axios.create({
         baseURL: 'https://api.github.com/',
         headers: {
-            "Authorization": "token {0}".format(accessToken) // c371e8a8710ece07c946d4d143acaa101bdf7f5d
+            "Authorization": "token {0}".format(accessToken)
         }
     });
 
@@ -240,6 +239,12 @@ function Github(accessToken) {
             for (let i = 0; i < Object.keys(changes).length; i++) {
                 let fullPath = Object.keys(changes)[i];
                 let change = changes[fullPath];
+
+                // Ignore changes that aren't applied to this branch
+                if (!change.branch_path.startsWith(branch)) {
+                    continue;
+                }
+
                 let filePath = fullPath.replace("{0}/".format(branch), ""); // fullPath contains <branch>/
 
                 switch (change.type) {
@@ -266,7 +271,70 @@ function Github(accessToken) {
             await this.updateRef(owner, repo, branch, newRef);
         } catch (err) {
             console.log("Error committing: {0}".format(err));
-            // TODO Handle error "Uh oh! We had some trouble committing your changes. Pleas try again"
+            // TODO Handle error "Uh oh! We had some trouble committing your changes. Please try again"
+        }
+    }
+}
+
+function Bitbucket(accessToken) {
+    // Instantiate the axios request builder with bitbucket API and access token
+    this.reqBuilder = axios.create({
+        baseURL: ' https://api.bitbucket.org/2.0/',
+        headers: {
+            "Authorization": "Bearer {0}".format(accessToken)
+        }
+    });
+
+    this.commit = async function (owner, repo, repo_id, branch, message) {
+        try {
+            // let changes = await Firebase.fetchFileChanges(repo_id);
+            let formData = new FormData();
+
+            formData.append('files', 'somepath.txt');
+            formData.append('files', 'manage2.py');
+            formData.append('somepath2.txt', 'hello world!');
+            formData.append('somepath3.txt', 'hello world!\n    hello\thellotabbed');
+
+            // for (let i = 0; i < Object.keys(changes).length; i++) {
+            //     let fullPath = Object.keys(changes)[i];
+            //     let change = changes[fullPath];
+            //
+            //     // Ignore changes that aren't applied to this branch
+            //     if (!change.branch_path.startsWith(branch)) {
+            //         continue;
+            //     }
+            //
+            //     let filePath = fullPath.replace("{0}/".format(branch), ""); // fullPath contains <branch>/
+            //
+            //     switch (change.type) {
+            //         case 'add':
+            //         case 'upd':
+            //             // TODO determine if sha for blank file is constant; if so, no need for request
+            //             let sha = await this.getBlobSha(owner, repo, change.type === "add" ? "" : change.content);
+            //             let node = {
+            //                 mode: "100644", // TODO account for executables (mode 100755) or subtrees (mode 040000)
+            //                 path: filePath,
+            //                 sha: sha,
+            //                 type: "blob"
+            //             };
+            //             tree[fullPath] = node;
+            //             break;
+            //         case 'del':
+            //             delete tree[fullPath];
+            //             break;
+            //     }
+            // }
+
+            this.reqBuilder.post('repositories/Shriggs/makai-test/src', formData)
+                .then(function (response) {
+                    console.log(response)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log("Error committing: {0}".format(err));
+            // TODO Handle error "Uh oh! We had some trouble committing your changes. Please try again"
         }
     }
 }

@@ -45,6 +45,7 @@ class GithubHost(Host):
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()
         contents = dict()
+        # TODO handle error if repo not found
         for raw_content in response:
             _path = path_concat(path, raw_content[u'name'])
             full_path = path_concat(_path, branch, concat_before=True)

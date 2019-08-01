@@ -6,6 +6,7 @@ async function load() {
     await init();
 
     let github = new Github(tokens['github']);
+    let bitbucket = new Bitbucket(tokens['bitbucket']);
 
     await populateFiles();
 
@@ -110,7 +111,8 @@ async function load() {
     });
 
     $("#commitButton").click(() => {
-        github.commit("makaide", "test", "9264fd2810f564a78db33766132bcf997184661fa94a8fe5ccb19ba61c4c0873d391e987982fbbd3", "master", "A newer commit")
+        bitbucket.commit("makaide", "test", "123", "master", "A newer commit")
+        // github.commit("makaide", "test", "9264fd2810f564a78db33766132bcf997184661fa94a8fe5ccb19ba61c4c0873d391e987982fbbd3", "master", "A newer commit")
     });
 }
 

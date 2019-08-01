@@ -20,7 +20,8 @@ function populateFiles(owner, repo, branch) {
         // TODO axios
         $.ajax({
             type: "POST",
-            url: "/castle/github/makaide/test/master/",
+            url: "/castle/bitbucket/Shriggs/makai-test/master/",
+            // url: "/castle/github/makaide/test/master/",
             data: {},
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -276,7 +277,6 @@ function saveCurrentFile() {
                 docUpdate[fullPath] = changeObj;
 
                 // Update firebase
-                resolve();
                 firestore.collection('file_changes').doc(tab.repo_id.toString()).update(docUpdate)
                     .then(() => {
                         tab.isSaving = false;
