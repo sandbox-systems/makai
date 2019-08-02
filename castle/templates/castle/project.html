@@ -1,45 +1,191 @@
-<title>Projects</title>
+<!DOCTYPE html>
+<title>Makai</title>
 
 {% extends 'home/nav.html' %}
 {% load static %}
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'castle/css/style.css' %}">
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+          integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"
+            integrity="sha256-412FxT7SHXk39AYYNe8+6YGQAhZhlKhthDw2Z3qp/B0=" crossorigin="anonymous"></script>
+    <script src="{% static 'castle/js/scriptUI.js' %}"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ace.js"#}
+    {#            integrity="sha256-5Xkhn3k/1rbXB+Q/DX/2RuAtaB4dRRyQvMs83prFjpM=" crossorigin="anonymous"></script>#}
+    <div class="wrapper-castle">
+        <nav class="navbar navbar-light bg-light breadcrumb-nav">
+            <a class="navbar-brand" href="{% url 'account:Sync' %}">Sync</a>
+            <div class="input-group" style="width: 17%">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+                </div>
+                <input class="form-control" type="search" placeholder="Search..." onInput="search()" id="searchBar"
+                       aria-label="Search">
+            </div>
+        </nav>
 
-    {# Right Click Menu INSIDE Repository #}
-      <nav id="repository-context-menu" class="repository-context-menu">
-        <ul class="repository-context-menu__items">
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
-          </li>
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
-          </li>
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
-          </li>
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
-          </li>
-        </ul>
-      </nav>
+        <nav class="navbar navbar-light bg-light tool-nav">
+            <div class="btn-toolbar" role="toolbar" style="margin: auto" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2">
+                    <button class="btn" onClick="newFile()" type="button"><i class="fas fa-file"></i> New File</button>
+                    <button class="btn" onClick="newFolder()" type="button"><i class="fas fa-folder"></i> New Folder
+                    </button>
+                    <button class="btn" onClick="uploadItem()" type="button"><i class="fas fa-upload"></i> Upload
+                    </button>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Basic example">
+                    <button class="btn" onClick="pull()" type="button"><i class="fas fa-chevron-circle-down"></i> Pull
+                    </button>
+                    <button class="btn" onClick="push()" type="button"><i class="fas fa-chevron-circle-up"></i> Push
+                    </button>
+                    <button class="btn" onClick="newBranch()" type="button"><i class="fas fa-code-branch"></i> Branch
+                    </button>
+                    <button class="btn" onClick="commit()" type="button"><i class="far fa-dot-circle"></i> Commit
+                    </button>
+                </div>
+                <div class="dropdown mr-2">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown button
+                    </button>
+                    <div class="dropdown-menu" id="branchesMenu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+                <button class="btn" onClick="shareRepo('{{ repoName }}')" type="button"><i class="fas fa-share"></i>
+                    Share Repo
+                </button>
+            </div>
+        </nav>
 
-    {# Right Click Menu INSIDE Repository #}
-      <nav id="container-repository-context-menu" class="container-repository-context-menu">
-        <ul class="container-repository-context-menu__items">
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
-          </li>
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
-          </li>
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
-          </li>
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
-          </li>
-        </ul>
-      </nav>
+        <div class="container-fluid">
+            <div class="card-columns" id="card-list">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $.contextMenu({
+                selector: 'body',
+                callback: function (key, options) {
+                    if (key == "file") {
+                        newFile();
+                    } else if (key == "folder") {
+                        newFolder();
+                    } else if (key == "upload") {
+                        uploadItem();
+                    }
+                },
+                items: {
+                    "file": {name: "New File", icon: "fas fa-file"},
+                    "folder": {name: "New Folder", icon: "fas fa-folder-open"},
+                    "upload": {name: "Upload", icon: "fas fa-upload"}
+                }
+            });
+            $(".card-columns").contextMenu({
+                selector: '.card',
+                callback: function (key, options) {
+                    if (key == "preview") {
+                        previewContents($(this).attr('id'));
+                    } else if (key == "rename") {
+                        renameContents($(this).attr('id'));
+                    } else if (key == "copy") {
+                        copyRepo($(this).attr('id'));
+                    } else if (key == "delete") {
+                        deleteContents($(this).attr('id'));
+                    }
+                },
+                items: {
+                    "preview": {name: "Preview", icon: "fas fa-eye"},
+                    "rename": {name: "Rename", icon: "fas fa-edit"},
+                    "copy": {name: "Copy", icon: "fas fa-copy"},
+                    "delete": {name: "Delete", icon: "fas fa-trash"},
+                }
+            });
+        });
 
+        {% for name,content in entries.items %}
+            var node = document.createElement("div");
+            node.classList.add("card");
+            node.id = "{{ content.name }}";
+            node.setAttribute("data-entry-type", "{{ content.type }}");
+            {#node.setAttribute("data-entry-repoName", "{{ content.repoName }}");#}
+            var bodynode = document.createElement("div");
+            bodynode.className = "card-body";
+            var link = document.createElement("a");
+            {% if repoHost == "github" %}
+                link.href = '{% url 'castle:Project' host=repoHost repo=repoName owner=repoOwner branch='master' path=content.filepath %}';
+            {% elif repoHost == "bitbucket" %}
+                link.href = '{% url 'castle:Project' host=repoHost repo=repoName owner=repoOwner branch='master' path=content.requestLink %}';
+            {% endif %}
+            var subnode = document.createElement("h5");
+            subnode.className = "card-title";
+            {#subnode.id=i;#}
+            var textnode = document.createTextNode('{{ content.name }}');
+            var icon = document.createElement("i");
+            {% if content.type == "dir" or content.type == "commit_directory" %}
+                icon.className = "fas fa-folder-open";
+                node.setAttribute("data-entry-type", "folder");
+            {% elif content.type == "file" or content.type == "commit_file"%}
+                icon.className = "fas fa-file";
+                node.setAttribute("data-entry-type", "file");
+            {% endif %}
+            subnode.appendChild(icon);
+            subnode.appendChild(textnode);
+            bodynode.appendChild(subnode);
+            node.appendChild(bodynode);
+            link.appendChild(node);
+
+            document.getElementById('card-list').appendChild(link);
+        {% endfor %}
+
+        $(".card").draggable({
+            containment: "#card-list",
+            revert: function (is_valid_drop) {
+                if (!is_valid_drop) {
+                    return true;
+                } else {
+                    //TODO Move Stuff
+                    $(this).css("display", "none");
+                }
+            }
+        });
+
+        $(".card[data-entry-type*='folder']").droppable({
+            hoverClass: "expand",
+            drop: function (event, ui) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    type: 'success',
+                    title: 'Moved ' + ui.draggable.data("entry-name") + ' to ' + $(this).data("entry-name")
+                });
+            }
+        });
+
+        {% for name in branches.items %}
+            var dropdown = document.getElementById('branchesMenu');
+            var branchLink = document.createElement("a");
+            branchLink.className = "dropdown-item";
+            var textnode = document.createTextNode('{{ name }}');
+            branchLink.appendChild(textnode);
+            {#branchLink.href = "{% url 'castle:Project' host=content.filehost repo=content.repoName owner=content.repoOwner branch=name path=content.filepath %}";#}
+        {% endfor %}
+    </script>
+
+    {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
+    {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
 {% endblock %}

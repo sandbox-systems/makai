@@ -10,8 +10,11 @@ def projects(request):
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
-    repos = merge_dicts(accounts['github'].get_repos(), accounts['bitbucket'].get_repos())
-    print(repos);
+    # request.session.flush()
+    # repos = dict()
+    # repos = merge_dicts(accounts['bitbucket'].get_repos(),accounts['github'].get_repos())
+    repos = accounts['github'].get_repos()
+    # print request.session['github_token']
     return render(request, 'castle/projects.html', {'repos': repos})
 
 
@@ -20,9 +23,8 @@ def project(request, host, owner, repo, branch, path):
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
-    print(host)
-    print(owner)
-    print(repo)
-    print(branch)
-    print(path)
-    return render(request, 'castle/project.html')
+    items = accounts[host].get_repo(owner, repo, branch, path)
+    # branches = accounts[host].get_branches(owner, repo)
+    # print branches
+    return render(request, 'castle/project.html',
+                  {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch})
