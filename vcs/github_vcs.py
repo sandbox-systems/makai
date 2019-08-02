@@ -25,12 +25,18 @@ class GithubHost(Host):
         # TODO Pagination
         repos = dict()
         for raw_repo in response:
+            languageResponse = self.make_request('get',
+                                                 raw_repo[u'languages_url']).json()
+            # print languageResponse
             repo = {
                 'host': 'github',
                 'name': raw_repo[u'name'],
                 'description': raw_repo[u'description'],
                 'updated_on': raw_repo[u'updated_at'],
-                'is_private': raw_repo[u'private']
+                'is_private': raw_repo[u'private'],
+                'size': raw_repo[u'size'],
+                'language': languageResponse.keys()[0],
+                'owner': raw_repo[u'full_name'].split('/')[0]
             }
             repos[raw_repo[u'full_name']] = repo
         return repos
@@ -38,8 +44,34 @@ class GithubHost(Host):
         # for repo in g.get_user().get_repos():
         #     print(g.get_repo(repo.full_name))
 
-    def get_repo(self):
-        pass
+    def get_repo(self, owner, name, branch, path):
+        # repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
+        response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
+                                     params={'ref': branch}).json()
+        contents = dict()
+        for raw_content in response:
+            # _path = path_concat(path, raw_content[u'name'])
+            # full_path = path_concat(_path, branch, concat_before=True)
+            content = {
+                'type': raw_content[u'type'],
+                'name': raw_content[u'name'],
+                'filepath': raw_content[u'path']
+            }
+            contents[raw_content[u'name']] = content
+        return contents
+
+    def get_branches(self, owner, name):
+        response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/branches').json()
+        contents = dict()
+        for raw_content in response:
+            # _path = path_concat(path, raw_content[u'name'])
+            # full_path = path_concat(_path, branch, concat_before=True)
+            content = {
+                'name': raw_content[u'name']
+            }
+            contents[raw_content[u'name']] = content
+        return contents
+    # def create_repo(self, ):
 
 # # or using an access token
 # g = Github("03e9927266b7d61aa86d823ed7fe2271d9d0975e")

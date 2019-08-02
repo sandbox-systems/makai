@@ -51,5 +51,5 @@ class Host:
     def get_repos(self):
         return []
 
-    def get_repo(self):
+    def get_repo(self, owner, name, branch, path):
         return None

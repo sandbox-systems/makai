@@ -3,8 +3,8 @@ vcs_hosts = ['github', 'bitbucket']
 
 # Set up github app credentials for global use
 github_config = {
-    'client_id': 'cfcb9d0319f6d921ae8d',
-    'client_secret': 'f011bb24a20ece7cb495df5cd057c3aeaa3f7de2'
+    'client_id': '2be96338b2d8b6b9d8d6',
+    'client_secret': '423cdd817e03b6241922d4396f879194aabbe998'
 }
 
 # Set up bitbucket app credentials for global use
