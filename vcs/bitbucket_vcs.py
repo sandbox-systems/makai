@@ -2,7 +2,18 @@ from git import *
 from hashlib import sha1
 
 
+# TODO use str.format instead of concatenating strings
 class BitbucketHost(Host):
+    @staticmethod
+    def normalize_type(raw_type):
+        if raw_type == 'commit_file':
+            return 'file'
+        elif raw_type == 'commit_direcotry':
+            return 'directory'
+        else:
+            print("Error: Invalid raw type, couldn't normalize")
+            return ''
+
     def __init__(self, token_exists):
         # If token is not saved in session, let Host set up syncing link as instance variable
         Host.__init__(self, 'bitbucket_token',
@@ -42,21 +53,31 @@ class BitbucketHost(Host):
 
     def get_repo(self, owner, name, branch, path):
         repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
-        response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
-                                     params={'ref': branch}).json()
+        response = self.make_request(
+            'get',
+            'https://api.bitbucket.org/2.0/repositories/{}/{}/src/{}/{}'.format(owner, name, branch, path),
+            params={'ref': branch}
+        ).json()
         contents = dict()
-        for raw_content in response:
-            _path = path_concat(path, raw_content[u'name'])
-            full_path = path_concat(_path, branch, concat_before=True)
-            content_id = repo_hash + sha1(full_path).hexdigest()
-            content = {
-                'type': raw_content[u'type'],
-                'name': raw_content[u'name'],
-                'id': content_id,
-                'repo_id': repo_hash,
-                # File contents
-            }
-            contents[full_path] = content
+        directories = list()
+
+        # TODO handle error if repo not found at path
+        for raw_content in response[u'values']:
+            if raw_content[u'type'] == 'commit_directory':
+                directories.append(raw_content[u'path'])
+            else:
+                _path = raw_content[u'path']
+                full_path = path_concat(_path, branch, concat_before=True)
+                content_id = repo_hash + sha1(full_path).hexdigest()
+                name = raw_content[u'path'].split('/')[-1]
+                content = {
+                    'type': self.normalize_type(raw_content[u'type']),
+                    'name': name,
+                    'id': content_id,
+                    'repo_id': repo_hash,
+                    # File contents
+                }
+                contents[full_path] = content
 
         # TODO modularize since this will be used for BB as well
         # TODO handle if change doc DNE
@@ -76,4 +97,16 @@ class BitbucketHost(Host):
         #                 'repo_id': repo_hash
         #             }
         #             contents[full_path] = content
+        return contents, directories
+
+    def fill_full_repo(self, owner, name, branch, path, out_content):
+        files, directories = self.get_repo(owner, name, branch, path)
+        out_content.update(files)
+
+        for directory in directories:
+            self.fill_full_repo(owner, name, branch, directory, out_content)
+
+    def get_full_repo(self, owner, name, branch):
+        contents = dict()
+        self.fill_full_repo(owner, name, branch, '', contents)
         return contents

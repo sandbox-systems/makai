@@ -111,7 +111,7 @@ async function load() {
     });
 
     $("#commitButton").click(() => {
-        bitbucket.commit("makaide", "test", "123", "master", "A newer commit")
+        bitbucket.commit("Shriggs", "makai-test", activeRepo.id, "master", "An even newer commit")
         // github.commit("makaide", "test", "9264fd2810f564a78db33766132bcf997184661fa94a8fe5ccb19ba61c4c0873d391e987982fbbd3", "master", "A newer commit")
     });
 }

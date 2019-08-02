@@ -40,6 +40,29 @@ let Firebase = {
                     // TODO Handle error "Uh oh! We had some trouble retrieving your changes to this repository. Please try again"
                 });
         });
+    },
+    clearChanges: function (repo_id, branch, existChangesFromOtherBranch) {
+        return new Promise(resolve => {
+            if (existChangesFromOtherBranch === undefined) {
+                // TODO check if changes from other branch exist in document for repo_id and define
+                // existChangesFromOtherBranch
+            }
+
+            if (existChangesFromOtherBranch) {
+                // TODO find and delete only changes from given branch
+            } else {
+                // Delete entire document as it is now empty
+                firestore.collection("file_changes").doc(repo_id).delete()
+                    .then(function () {
+                        console.log("Deleted changes document for branch {0}".format(branch));
+                        resolve();
+                    }).catch(function (error) {
+                        // TODO Handle error-move clearChanges invocation before commit push so if unsuccessful in
+                        // deleting, user asked to retry before commit made?
+                        console.error("Error removing document: ", error);
+                    });
+            }
+        });
     }
 };
 
@@ -187,7 +210,6 @@ function Github(accessToken) {
      */
     this.postTree = async function (owner, repo, tree) {
         return new Promise(resolve => {
-            console.log(tree);
             this.reqBuilder.post('/repos/{0}/{1}/git/trees'.format(owner, repo),
                 {
                     "tree": tree
@@ -287,51 +309,46 @@ function Bitbucket(accessToken) {
 
     this.commit = async function (owner, repo, repo_id, branch, message) {
         try {
-            // let changes = await Firebase.fetchFileChanges(repo_id);
+            let changes = await Firebase.fetchFileChanges(repo_id);
+            let existChangesFromOtherBranch = false;
             let formData = new FormData();
 
-            formData.append('files', 'somepath.txt');
-            formData.append('files', 'manage2.py');
-            formData.append('somepath2.txt', 'hello world!');
-            formData.append('somepath3.txt', 'hello world!\n    hello\thellotabbed');
+            for (let i = 0; i < Object.keys(changes).length; i++) {
+                let fullPath = Object.keys(changes)[i];
+                let change = changes[fullPath];
 
-            // for (let i = 0; i < Object.keys(changes).length; i++) {
-            //     let fullPath = Object.keys(changes)[i];
-            //     let change = changes[fullPath];
-            //
-            //     // Ignore changes that aren't applied to this branch
-            //     if (!change.branch_path.startsWith(branch)) {
-            //         continue;
-            //     }
-            //
-            //     let filePath = fullPath.replace("{0}/".format(branch), ""); // fullPath contains <branch>/
-            //
-            //     switch (change.type) {
-            //         case 'add':
-            //         case 'upd':
-            //             // TODO determine if sha for blank file is constant; if so, no need for request
-            //             let sha = await this.getBlobSha(owner, repo, change.type === "add" ? "" : change.content);
-            //             let node = {
-            //                 mode: "100644", // TODO account for executables (mode 100755) or subtrees (mode 040000)
-            //                 path: filePath,
-            //                 sha: sha,
-            //                 type: "blob"
-            //             };
-            //             tree[fullPath] = node;
-            //             break;
-            //         case 'del':
-            //             delete tree[fullPath];
-            //             break;
-            //     }
-            // }
+                // Ignore changes that aren't applied to this branch but note that they exist to determine whether to
+                // delete document after applying all changes
+                if (!change.branch_parent.startsWith(branch)) {
+                    existChangesFromOtherBranch = true;
+                    continue;
+                }
 
-            this.reqBuilder.post('repositories/Shriggs/makai-test/src', formData)
+                let filePath = fullPath.replace("{0}/".format(branch), ""); // fullPath contains <branch>/
+
+                switch (change.type) {
+                    case 'add':
+                    case 'upd':
+                        formData.append(filePath, change.type === "add" ? "" : change.content);
+                        break;
+                    case 'del':
+                        formData.append('files', filePath);
+                        break;
+                }
+            }
+
+            this.reqBuilder.post('repositories/{0}/{1}/src'.format(owner, repo), formData, {params: {
+                    branch: branch,
+                    message: message
+                }})
                 .then(function (response) {
                     console.log(response)
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+
+            await Firebase.clearChanges(repo_id, branch, existChangesFromOtherBranch);
         } catch (err) {
             console.log("Error committing: {0}".format(err));
             // TODO Handle error "Uh oh! We had some trouble committing your changes. Please try again"

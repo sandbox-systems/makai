@@ -1,5 +1,6 @@
 let tabs = {};
 let tabPaths = {};
+let activeRepo = {};
 let activePath = null;
 let collab = {
     online: [],
@@ -20,7 +21,7 @@ function populateFiles(owner, repo, branch) {
         // TODO axios
         $.ajax({
             type: "POST",
-            url: "/castle/bitbucket/Shriggs/makai-test/master/",
+            url: "/castle/bitbucket/Shriggs/makai-test/master",
             // url: "/castle/github/makaide/test/master/",
             data: {},
             beforeSend: function (xhr, settings) {
@@ -30,7 +31,7 @@ function populateFiles(owner, repo, branch) {
             },
             success: function (data, status, xhttp) {
                 Object.keys(data).forEach(fullPath => {
-                    let path = fullPath.substring(7);
+                    let path = fullPath.replace("master/", ""); // TODO generalize branch
                     let datum = data[fullPath];
                     if (datum.type === "file") {
                         files[path] = {
@@ -39,6 +40,7 @@ function populateFiles(owner, repo, branch) {
                             contents: datum.content
                         };
                     }
+                    activeRepo.id = datum.repo_id;
                 });
                 resolve();
             }, error: function (data) {
@@ -50,7 +52,7 @@ function populateFiles(owner, repo, branch) {
 }
 
 function bindFileChanges() {
-    if (Object.keys(tabs).length === 0)
+    /*if (Object.keys(tabs).length === 0)
         return;
     let repo_id = tabs[Object.keys(tabs)[0]].repo_id;
     firestore.collection('file_changes').doc(repo_id)
@@ -79,7 +81,7 @@ function bindFileChanges() {
                 //     tab.content = changeToThisFile.content;
                 // }
             });
-        });
+        });*/
 }
 
 function getKeyByValue(object, value) {
@@ -277,7 +279,7 @@ function saveCurrentFile() {
                 docUpdate[fullPath] = changeObj;
 
                 // Update firebase
-                firestore.collection('file_changes').doc(tab.repo_id.toString()).update(docUpdate)
+                firestore.collection('file_changes').doc(tab.repo_id.toString()).set(docUpdate, {merge: true})
                     .then(() => {
                         tab.isSaving = false;
                         resolve();
@@ -331,6 +333,7 @@ function fetchChangesToFile(path) {
                 }
             })
             .catch(err => {
+                resolve(false);
                 // TODO Handle error
             });
     });

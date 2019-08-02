@@ -2,6 +2,7 @@ from credentials import *
 from requests import post, get, put
 
 
+# TODO remove concat_before; if want to concat before, just put to_concat as orig_path and vice versa
 def path_concat(orig_path, to_concat, concat_before=False):
     if orig_path == '':
         return to_concat
