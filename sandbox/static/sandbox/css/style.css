@@ -113,7 +113,7 @@ body {
 
 #treeview {
     width: 15%;
-    height: 103%;
+    height: caic(100% - 84px);
     display: inline-block;
     float: left;
     background: var(--color-three);
@@ -147,7 +147,7 @@ body {
 
 #editor {
     width: 100%;
-    height: calc(70% - 20px);
+    height: 65%;
     position: relative;
     display: inline-block;
 }
@@ -178,7 +178,7 @@ body {
 
 #terminal {
     width: 100%;
-    height: calc(30% - 9px);
+    height: calc(35vh - 84px);
     position: relative;
     float: right;
     top: 0 !important;
