@@ -4,11 +4,18 @@
 var debugLang = "";
 window.addEventListener("message", function(event){
     switch(event.data.action){
+        case "download":
+            download(event.data.path, event.data.code);
+            break;
         case "run":
-            terminal.socket.send("0"+"cd ../ && rm -rf src"+"\n");
+            //terminal.socket.send("0"+"cd ../ && rm -rf src"+"\n");
             var ext = event.data.filename.substring(event.data.filename.lastIndexOf(".")+1)
-            terminal.socket.send("0"+"mkdir src && cd src"+"\n");
-            terminal.socket.send("0"+"echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename)+"\n");
+            //extra for multiple files
+            terminal.socket.send("0"+"mkdir /src"+"\n");
+            terminal.socket.send("0"+"cd /src"+"\n");
+            //extra for multiple files
+            //terminal.socket.send("0"+"mkdir src && cd src"+"\n");
+            //terminal.socket.send("0"+"echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename)+"\n");
             terminal.socket.send("0"+"clear"+"\n");
             switch(ext){
                 case "py":
@@ -69,6 +76,10 @@ window.addEventListener("message", function(event){
     }
 }, false);
 
+function download(path, code){
+    terminal.socket.send("0"+"echo "+shellEscape(code)+" > "+shellEscape(path)+"\n");
+}
+
 function start(lang){
     switch(lang){
         case "java":
@@ -112,4 +123,5 @@ function stepOut(lang){
 function shellEscape(text){
     return "'"+text.replace("'", "\\'")+"'";
 }
+
 </script></body></html>

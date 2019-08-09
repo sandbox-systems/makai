@@ -13,3 +13,6 @@ ENV PATH="$JAVA_HOME/bin:${PATH}"
 
 #Python
 RUN apk add python3
+
+#Housekeeping
+RUN mkdir /src
