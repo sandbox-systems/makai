@@ -1,0 +1,2 @@
+#!/bin/bash
+ttyd --index terminal.html docker run -it --rm ripple

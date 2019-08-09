@@ -82,6 +82,18 @@ function getTree() {
                     backColor: "#C4C4C4"
                 },
                 {
+                    text: "file1.java",
+                    icon: "glyphicon glyphicon-file",
+                    color: "#000000",
+                    backColor: "#C4C4C4"
+                },
+                {
+                    text: "file2.java",
+                    icon: "glyphicon glyphicon-file",
+                    color: "#000000",
+                    backColor: "#C4C4C4"
+                },
+                {
                     text: "contact.py",
                     icon: "glyphicon glyphicon-file",
                     color: "#000000",
@@ -224,6 +236,8 @@ function setBreadcrumb(data) {
 //Tab Bar
 var tabnum = 0;
 var sessions = {};
+var changedFiles = [];
+var folderDownloaded = "";
 
 $('#tabbar').on('click', 'a', function (e) {
     console.log(this);
@@ -265,8 +279,14 @@ function activateTab(tab){
     $("#tabbar a.active").removeClass("active").removeClass("show");
     tab.addClass("show");
     tab.addClass("active");
-    editor.setSession(sessions[tab.html().split('<span class="close">&nbsp;&nbsp;×</span>')[0]]);
+    name = tab.html().split('<span class="close">&nbsp;&nbsp;×</span>')[0];
+    editor.setSession(sessions[name]);
     console.log("activated");
+
+    if(changedFiles.indexOf(name)==-1)
+        changedFiles.push(name);
+
+    console.log(changedFiles);
 }
 
 $("#tabbar").on('click', 'span', function (event) {
@@ -281,6 +301,17 @@ $("#tabbar").on('click', 'span', function (event) {
 
 //Toolbar
 $("#runButton").click(function(){
+    if(folderDownloaded==""){
+        //download current folder
+        changedFiles.forEach(function(file){
+            termPost({
+                action: "download",
+                path: "src/"+file,
+                code: sessions[file].getValue(),
+            });
+        });
+    }
+
     termPost({
         action: "run",
         filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
