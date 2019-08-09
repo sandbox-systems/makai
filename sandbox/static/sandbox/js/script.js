@@ -478,6 +478,11 @@ function termPost(parameters){
     document.getElementById("terminalFrame").contentWindow.postMessage(parameters, "http://localhost:7681");
 }
 
+window.addEventListener("message", function(event){
+    switch(event.data.action){
+    }
+});
+
 //Theme
 function changeTheme(theme) {
     var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
