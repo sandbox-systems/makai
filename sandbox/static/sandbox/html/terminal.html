@@ -2,6 +2,11 @@
 </script>
 <script>
 var debugLang = "";
+
+function debuggerPost(parameters){
+    window.top.postMessage(parameters, "http://localhost:8000");
+}
+
 window.addEventListener("message", function(event){
     switch(event.data.action){
         case "run":
