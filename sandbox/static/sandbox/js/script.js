@@ -306,7 +306,7 @@ $("#runButton").click(function(){
         changedFiles.forEach(function(file){
             termPost({
                 action: "download",
-                path: "src/"+file,
+                path: "/src/"+file,
                 code: sessions[file].getValue(),
             });
         });
