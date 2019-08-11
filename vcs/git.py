@@ -35,21 +35,17 @@ class Host:
         return r
 
     def make_request(self, method, endpoint, data=None, params=None):
-        if method == 'post':
-            if data is None:
-                data = dict()
-            data['access_token'] = self.token
-        elif method == 'get':
-            if params is None:
-                params = dict()
-            params['access_token'] = self.token
+        headers = {
+            'Authorization': 'token {}'.format(self.token)
+        }
 
         if method == 'get':
-            r = get(endpoint, params=params)
+            r = get(endpoint, params=params, headers=headers)
         elif method == 'put':
-            r = put(endpoint, data=data)
+            r = put(endpoint, data=data, headers=headers)
         elif method == 'post':
-            r = post(endpoint, data=data)
+            r = post(endpoint, data=data, headers=headers)
+            print r.content
         else:
             raise Exception('Invalid request method ' + method)
         return r
@@ -67,6 +63,10 @@ class Host:
         # TODO modularize since this will be used for BB as well
         # TODO handle if change doc DNE
         changes = get_doc('file_changes', repo_hash).to_dict()
+
+        if changes is None:
+            return repo
+
         for raw_path, change in changes.items():
             # TODO modularize and ensure ; and : are safe to use
             full_path = raw_path.replace(';', '/').replace(':', '.')
@@ -112,9 +112,5 @@ class Host:
                         'repo_id': repo_hash
                     }
                     repo[dir_name] = content
-
-        for a, b in repo.items():
-            print a
-            print b
 
         return repo
