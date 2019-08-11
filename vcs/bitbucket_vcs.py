@@ -43,7 +43,7 @@ class BitbucketHost(Host):
             repos[raw_repo[u'full_name']] = repo
         return repos
 
-    def get_repo(self, owner, name, branch, path):
+    def fetch_raw_repo(self, owner, name, branch, path):
         requestBuild = 'https://api.bitbucket.org/2.0/repositories/' + owner + "/" + name + "/src/" + path
         temp = requestBuild.index('src/') + 4
         contents = dict()
@@ -53,8 +53,9 @@ class BitbucketHost(Host):
                                          params={'role': 'member', 'pagelen': '100'}).json()
             for raw_content in response[u'values']:
                 self.refresh(response)
+                type = 'file' if raw_content[u'type'] == 'commit_file' else 'dir'
                 content = {
-                    'type': raw_content[u'type'],
+                    'type': type,
                     'name': raw_content[u'path'].split("/")[-1],
                     'filepath': raw_content[u'path'],
                     'requestLink': raw_content[u'links'][u'self'][u'href'][temp:]

@@ -42,7 +42,7 @@ class GithubHost(Host):
         # for repo in g.get_user().get_repos():
         #     print(g.get_repo(repo.full_name))
 
-    def get_repo(self, owner, name, branch, path):
+    def fetch_raw_repo(self, owner, name, branch, path):
         # repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()

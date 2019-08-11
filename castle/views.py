@@ -24,6 +24,6 @@ def project(request, host, owner, repo, branch, path):
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
     items = accounts[host].get_repo(owner, repo, branch, path)
-    branches = accounts[host].get_branches(owner, repo)
+    # branches = accounts[host].get_branches(owner, repo)
     return render(request, 'castle/project.html',
                   {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch})

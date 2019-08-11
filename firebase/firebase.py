@@ -13,3 +13,9 @@ def update_doc(collection, doc_key, update):
     doc_ref = db.collection(collection.decode('utf-8')).document(doc_key.decode('utf-8'))
     # Update the firebase document reference with the update dict
     doc_ref.update(update)
+
+
+# TODO Handle error getting?
+def get_doc(collection, doc_key):
+    doc_ref = db.collection(collection.decode('utf-8')).document(doc_key.decode('utf-8'))
+    return doc_ref.get()

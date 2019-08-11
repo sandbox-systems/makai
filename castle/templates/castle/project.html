@@ -135,10 +135,10 @@
             {#subnode.id=i;#}
             var textnode = document.createTextNode('{{ content.name }}');
             var icon = document.createElement("i");
-            {% if content.type == "dir" or content.type == "commit_directory" %}
+            {% if content.type == "dir" %}
                 icon.className = "fas fa-folder-open";
                 node.setAttribute("data-entry-type", "folder");
-            {% elif content.type == "file" or content.type == "commit_file"%}
+            {% elif content.type == "file" %}
                 icon.className = "fas fa-file";
                 node.setAttribute("data-entry-type", "file");
             {% endif %}
