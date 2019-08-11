@@ -129,4 +129,19 @@ function shellEscape(text){
     return "'"+text.replace("'", "\\'")+"'";
 }
 
+//Parser
+var result = false;
+var dec = new TextDecoder();
+terminal.socket.addEventListener("message", parse);
+function parse(event){
+    var data = dec.decode(event.data);
+    if(result){
+        result = false;
+        data = data.substr(1, data.lastIndexOf("\n"));
+        console.log(data);
+    }else if(data === "0\r\n"){
+        result = true;
+    }
+}
+
 </script></body></html>
