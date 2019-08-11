@@ -1,5 +1,3 @@
-from github import Github
-
 from git import *
 from urlparse import parse_qs
 
@@ -35,7 +33,7 @@ class GithubHost(Host):
                 'updated_on': raw_repo[u'updated_at'],
                 'is_private': raw_repo[u'private'],
                 'size': raw_repo[u'size'],
-                'language': languageResponse.keys()[0],
+                # 'language': languageResponse.keys()[0],
                 'owner': raw_repo[u'full_name'].split('/')[0]
             }
             repos[raw_repo[u'full_name']] = repo
@@ -49,6 +47,7 @@ class GithubHost(Host):
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()
         contents = dict()
+        # print response
         for raw_content in response:
             # _path = path_concat(path, raw_content[u'name'])
             # full_path = path_concat(_path, branch, concat_before=True)
@@ -62,15 +61,10 @@ class GithubHost(Host):
 
     def get_branches(self, owner, name):
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/branches').json()
-        contents = dict()
+        branches = []
         for raw_content in response:
-            # _path = path_concat(path, raw_content[u'name'])
-            # full_path = path_concat(_path, branch, concat_before=True)
-            content = {
-                'name': raw_content[u'name']
-            }
-            contents[raw_content[u'name']] = content
-        return contents
+            branches.append(raw_content[u'name'])
+        return branches
     # def create_repo(self, ):
 
 # # or using an access token

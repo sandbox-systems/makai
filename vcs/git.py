@@ -33,9 +33,13 @@ class Host:
         return r
 
     def make_request(self, method, endpoint, data=None, params=None):
-        if data is not None:
+        if method == 'post':
+            if data is None:
+                data = dict()
             data['access_token'] = self.token
-        if params is not None:
+        elif method == 'get':
+            if params is None:
+                params = dict()
             params['access_token'] = self.token
 
         if method == 'get':
