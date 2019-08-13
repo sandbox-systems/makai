@@ -7,58 +7,63 @@ function debuggerPost(parameters){
     window.top.postMessage(parameters, "http://localhost:8000");
 }
 
+function socketSend(command){
+    terminal.socket.send("0" + command + "\n");
+}
+
 window.addEventListener("message", function(event){
     switch(event.data.action){
         case "download":
             download(event.data.path, event.data.code);
             break;
         case "run":
-            //terminal.socket.send("0"+"cd ../ && rm -rf src"+"\n");
+            //socketSend("cd ../ && rm -rf src");
             var ext = event.data.filename.substring(event.data.filename.lastIndexOf(".")+1)
             //extra for multiple files
-            terminal.socket.send("0"+"mkdir /src"+"\n");
-            terminal.socket.send("0"+"cd /src"+"\n");
+            socketSend("mkdir /src");
+            socketSend("cd /src");
             //extra for multiple files
-            //terminal.socket.send("0"+"mkdir src && cd src"+"\n");
-            //terminal.socket.send("0"+"echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename)+"\n");
-            terminal.socket.send("0"+"clear"+"\n");
+            //socketSend("mkdir src && cd src");
+            //socketSend("echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename));
+            socketSend("clear");
             switch(ext){
                 case "py":
-                    terminal.socket.send("0"+"python3 "+shellEscape(event.data.filename)+"\n");
+                    socketSend("python3 "+shellEscape(event.data.filename));
                     break;
                 case "java":
-                    terminal.socket.send("0"+"javac "+shellEscape(event.data.filename)+"\n");
-                    terminal.socket.send("0"+"clear"+"\n");
-                    terminal.socket.send("0"+"java "+shellEscape(event.data.filename.substring(0, event.data.filename.lastIndexOf(".")))+"\n");
+                    socketSend("javac "+shellEscape(event.data.filename));
+                    socketSend("clear");
+                    socketSend("java "+shellEscape(event.data.filename.substring(0, event.data.filename.lastIndexOf("."))));
                     break;
                 default:
-                    terminal.socket.send("0"+"bash "+shellEscape(event.data.filename)+"\n");
+                    socketSend("bash "+shellEscape(event.data.filename));
                     break;
             }
             break;
         case "debug":
-            terminal.socket.send("0"+"cd ../ && rm -rf src"+"\n");
+            socketSend("cd ../ && rm -rf src");
             var ext = event.data.filename.substring(event.data.filename.lastIndexOf(".")+1)
-            terminal.socket.send("0"+"mkdir src && cd src"+"\n");
-            terminal.socket.send("0"+"echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename)+"\n");
-            terminal.socket.send("0"+"clear"+"\n");
+            socketSend("mkdir src && cd src");
+            socketSend("echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename));
+            socketSend("clear");
             switch(ext){
                 case "py":
                     alert("Not possible currently");
                     break;
                 case "java":
                     debugLang = "java";
-                    terminal.socket.send("0"+"javac -g "+shellEscape(event.data.filename)+"\n");
-                    terminal.socket.send("0"+"clear"+"\n");
-                    terminal.socket.send("0"+"jdb "+shellEscape(event.data.filename.substring(0, event.data.filename.lastIndexOf(".")))+"\n");
+                    socketSend("javac -g "+shellEscape(event.data.filename));
+                    socketSend("clear");
+                    socketSend("jdb "+shellEscape(event.data.filename.substring(0, event.data.filename.lastIndexOf("."))));
                     event.data.breakpoints.forEach(function(value){
-                        terminal.socket.send("0"+"stop at "+event.data.filename.substring(0, event.data.filename.lastIndexOf("."))+":"+value+"\n");
+                        socketSend("stop at "+event.data.filename.substring(0, event.data.filename.lastIndexOf("."))+":"+value);
                     });
                     break;
                 default:
                     alert("Not possible currently");
                     break;
             }
+            terminal.socket.addEventListener("message", debugParse);
             break;
         case "start":
             console.log(debugLang);
@@ -82,47 +87,52 @@ window.addEventListener("message", function(event){
 }, false);
 
 function download(path, code){
-    terminal.socket.send("0"+"echo "+shellEscape(code)+" > "+shellEscape(path)+"\n");
+    socketSend("echo "+shellEscape(code)+" > "+shellEscape(path));
 }
 
 function start(lang){
     switch(lang){
         case "java":
-            terminal.socket.send("0"+"run"+"\n");
+            socketSend("run");
             break;
     }
+    updateDebugger();
 }
 
 function cont(lang){
     switch(lang){
             case "java":
-                terminal.socket.send("0"+"cont"+"\n");
+                socketSend("cont");
                 break;
     }
+    updateDebugger();
 }
 
 function stepOver(lang){
     switch(lang){
         case "java":
-            terminal.socket.send("0"+"step over"+"\n");
+            socketSend("step over");
             break;
     }
+    updateDebugger();
 }
 
 function stepInto(lang){
     switch(lang){
         case "java":
-            terminal.socket.send("0"+"step into"+"\n");
+            socketSend("step into");
             break;
     }
+    updateDebugger();
 }
 
 function stepOut(lang){
     switch(lang){
         case "java":
-            terminal.socket.send("0"+"step out"+"\n");
+            socketSend("step out");
             break;
     }
+    updateDebugger();
 }
 
 function shellEscape(text){
@@ -130,18 +140,66 @@ function shellEscape(text){
 }
 
 //Parser
-var result = false;
 var dec = new TextDecoder();
-terminal.socket.addEventListener("message", parse);
-function parse(event){
+var command = "";
+var update = {
+    action: "updateDebugger",
+    locals: "",
+    stack: ""
+}
+
+function debugParse(event){
     var data = dec.decode(event.data);
-    if(result){
-        result = false;
-        data = data.substr(1, data.lastIndexOf("\n"));
-        console.log(data);
-    }else if(data === "0\r\n"){
-        result = true;
+    if(data === "0\r\nThe application exited\r\n"){
+        console.log("Debugger Exited.");
+        return;
     }
+    switch(data){
+        case "0run\r\n":
+            command = "run";
+            break;
+        case "0cont\r\n":
+            command = "cont";
+            break;
+        case "0step over\r\n":
+            command = "step over";
+            break;
+        case "0step into\r\n":
+            command = "step into";
+            break;
+        case "0step out\r\n":
+            command = "step out";
+            break;
+        case "0locals\r\n":
+            command = "locals";
+            break;
+        case "0where\r\n":
+            command = "where";
+            break;
+        default:
+            data = data.substr(1, data.lastIndexOf("\n"));
+            switch(command){
+                case "locals":
+                    update.locals += data;
+                    break;
+                case "where":
+                    update.stack += data;
+                    console.log(update);
+                    debuggerPost(update);
+                    break;
+            }
+            break; 
+    }
+}
+
+function updateDebugger(){
+    update = {
+        action: "updateDebugger",
+        locals: "",
+        stack: ""
+    }
+    setTimeout(function(){socketSend("locals")}, 500);
+    setTimeout(function(){socketSend("where")}, 1000);
 }
 
 </script></body></html>

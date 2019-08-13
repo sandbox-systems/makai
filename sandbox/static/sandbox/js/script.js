@@ -365,6 +365,7 @@ function toggleDebug(){
 var debug = false;
 var breakpointAnchors = [];
 var breakpointList = [];
+var lineMarker = -1;
 $("#debugButton").click(function () {
     toggleDebug();
     debug = !debug;
@@ -480,9 +481,25 @@ function termPost(parameters){
 
 window.addEventListener("message", function(event){
     switch(event.data.action){
-
+        case "updateDebugger":
+            updateStack(event.data.stack);
+            updateLocals(event.data.locals);
+            break;
     }
 });
+
+
+function updateStack(stack){
+    console.log(stack);
+    var stackArr = stack.trim().split("\r\n  ");
+    var lineNum = parseInt(stackArr[0].match(/^\[\d\]\s[\w]+\.[\w]+\s\([\w]+\.[\w]+:([\d]+)\)$/m)[1]);
+    clearMarker(lineMarker);
+    lineMarker = setCurrentDebugLine(lineNum);
+}
+
+function updateLocals(locals){
+    
+}
 
 //Theme
 function changeTheme(theme) {
