@@ -490,15 +490,30 @@ window.addEventListener("message", function(event){
 
 
 function updateStack(stack){
-    console.log(stack);
     var stackArr = stack.trim().split("\r\n  ");
-    var lineNum = parseInt(stackArr[0].match(/^\[\d\]\s[\w]+\.[\w]+\s\([\w]+\.[\w]+:([\d]+)\)$/m)[1]);
     clearMarker(lineMarker);
-    lineMarker = setCurrentDebugLine(lineNum);
+    try{
+        var lineNum = parseInt(stackArr[0].match(/^\[\d\]\s[\w]+\.[\w]+\s\([\w]+\.[\w]+:([\d]+)\)$/m)[1]);
+        lineMarker = setCurrentDebugLine(lineNum);
+    }catch(err){
+        console.log("Debugger Finished.");
+    }
+    $("#stackTableBody").empty();
+    stackArr.forEach(function(element){
+        var elementArr = element.split(" ");
+        $("#stackTableBody").append("<tr><td>"+elementArr[0]+"</td><td>"+elementArr[1]+"</td><td>"+elementArr[2]+"</td></tr>");
+    });
 }
 
 function updateLocals(locals){
-    
+    var localsArr = locals.trim().split("\r\n");
+    localsArr.splice(0, 1);
+    localsArr.splice(localsArr.indexOf("Local variables:"), 1);
+    $("#variableTableBody").empty();
+    localsArr.forEach(function(element){
+        var elementArr = element.split(" = ");
+        $("#variableTableBody").append("<tr><td>"+elementArr[0]+"</td><td>"+elementArr[1]+"</td></tr>");
+    });
 }
 
 //Theme

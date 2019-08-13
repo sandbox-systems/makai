@@ -88,33 +88,28 @@
                     <button id="debugStepInto" class="btn toolbarbtn" title="Step Into"><i class="fas fa-forward"></i></button>
                     <button id="debugStepOut" class="btn toolbarbtn" title="Step Out"><i class="fas fa-fast-forward"></i></button>
                 </div>
-                <table class="table">
-                    <thead>
+                <table id="stackTable" class="table">
+                    <thead id="stackTableHead">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Function</th>
                             <th scope="col">File:Line</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <tbody id="stackTableBody">
                     </tbody>
                 </table>
-                <table class="table">
-                    <thead>
+                <table id="variableTable" class="table">
+                    <thead id="variableTableHead">
                         <tr>
                             <th scope="col">Variable</th>
                             <th scope="col">Value</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <td></td>
-                        <td></td>
+                    <tbody id="variableTableBody">
                     </tbody>
                 </table>
-                <table class="table">
+                <!---<table class="table">
                     <thead>
                         <tr>
                             <th scope="col">Expression</th>
@@ -137,7 +132,7 @@
                         <td></td>
                         <td></td>
                     </tbody>
-                </table>
+                </table>-->
             </div>
             <div id="terminal">
                 <iframe id="terminalFrame" src="http://localhost:7681"></iframe>
