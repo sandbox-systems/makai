@@ -347,7 +347,7 @@ function updateLiveData(){
 }
 
 //Debugger
-function toggleDebug(){
+function toggleDebug(){    
     if($("#editor").hasClass("liveview")) {
         toggleLive();
     }
@@ -355,12 +355,23 @@ function toggleDebug(){
     if($("#editor").hasClass("debugview")){
         $("#debug").css("display", "block");
         $("#editor").css("width", "50%");
+        debug = true;
     }else{
         $("#debug").css("display", "none");
         $("#editor").css("width", "100%");
+        clearMarker(lineMarker);
+        lineMarker = -1;
+        debug = false;
     }
 }
 
+function exitDebugger(){
+    if($("#editor").hasClass("debugview")) {
+        toggleDebug();
+    }
+    $("#stackTableBody").empty();
+    $("#variableTableBody").empty();
+}
 
 var debug = false;
 var breakpointAnchors = [];
@@ -368,7 +379,6 @@ var breakpointList = [];
 var lineMarker = -1;
 $("#debugButton").click(function () {
     toggleDebug();
-    debug = !debug;
 
     if(!debug)
         return;
@@ -484,6 +494,9 @@ window.addEventListener("message", function(event){
         case "updateDebugger":
             updateStack(event.data.stack);
             updateLocals(event.data.locals);
+            break;
+        case "exitDebugger":
+            exitDebugger();
             break;
     }
 });

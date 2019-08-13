@@ -152,9 +152,16 @@ function debugParse(event){
     var data = dec.decode(event.data);
     if(data === "0\r\nThe application exited\r\n"){
         console.log("Debugger Exited.");
+        debuggerPost({
+            action: "exitDebugger"
+        });
+        terminal.socket.removeEventListener("message", debugParse);
         return;
     }
+
     switch(data){
+        case "0clear\r\n":
+            command = "clear";
         case "0run\r\n":
             command = "run";
             break;
@@ -200,6 +207,7 @@ function updateDebugger(){
     }
     setTimeout(function(){socketSend("locals")}, 500);
     setTimeout(function(){socketSend("where")}, 1000);
+    setTimeout(function(){socketSend("clear")}, 1500);
 }
 
 </script></body></html>
