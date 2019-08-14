@@ -39,11 +39,11 @@ class BitbucketHost(Host):
                 'updated_on': raw_repo[u'updated_on'],
                 'is_private': raw_repo[u'is_private'],
                 'size': raw_repo[u'size'],
-                'language': raw_repo[u'language'],
+                # 'language': raw_repo[u'language'],
                 'owner': raw_repo[u'full_name'].split('/')[0]
-
             }
             repos[raw_repo[u'full_name']] = repo
+        print repos
         return repos
 
     def fetch_raw_repo(self, owner, name, branch, path):
@@ -69,3 +69,41 @@ class BitbucketHost(Host):
             else:
                 requestBuild = ""
         return contents
+
+    def get_branches(self, owner, name):
+        response = self.make_request('get',
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name + '/refs/branches',
+                                     params={'role': 'member', 'pagelen': '100'}).json()
+        branches = []
+        for raw_content in response[u'values']:
+            branches.append(raw_content[u'name'])
+        return branches
+
+    def create_repo(self, name, is_private):
+        response = self.make_request('post',
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
+                                     data={"is_private": is_private, 'role': 'member', 'pagelen': '100'}).json()
+        return
+
+    def delete_repo(self, name, owner):
+        response = self.make_request('delete',
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name).json()
+        return
+
+    def rename_repo(self, name, owner, newName):
+        response = self.make_request('put',
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
+                                     data={"name": newName}).json()
+        return
+
+    def edit_repo_des(self, name, owner, newDes):
+        response = self.make_request('put',
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
+                                     data={"description": newDes}).json()
+        return
+
+    def create_branch(self, name, currentBranch, owner, repoName):
+        response = self.make_request('post',
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + repoName + '/refs/branches',
+                                     data={'name': '', 'target.hash': ''}).json()
+        return

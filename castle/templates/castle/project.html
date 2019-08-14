@@ -48,7 +48,7 @@
                     </button>
                     <button class="btn" onClick="push()" type="button"><i class="fas fa-chevron-circle-up"></i> Push
                     </button>
-                    <button class="btn" onClick="newBranch()" type="button"><i class="fas fa-code-branch"></i> Branch
+                    <button class="btn" onClick="newBranch('{{ repoHost }}', '{{ repoOwner }}', '{{ repoName }}')" type="button"><i class="fas fa-code-branch"></i> Branch
                     </button>
                     <button class="btn" onClick="commit()" type="button"><i class="far fa-dot-circle"></i> Commit
                     </button>
@@ -56,12 +56,9 @@
                 <div class="dropdown mr-2">
                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
+                        master
                     </button>
                     <div class="dropdown-menu" id="branchesMenu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
                     </div>
                 </div>
                 <button class="btn" onClick="shareRepo('{{ repoName }}')" type="button"><i class="fas fa-share"></i>
@@ -97,9 +94,9 @@
             $(".card-columns").contextMenu({
                 selector: '.card',
                 callback: function (key, options) {
-                    if (key == "preview") {
-                        previewContents($(this).attr('id'));
-                    } else if (key == "rename") {
+                    {#if (key == "preview") {#}
+                    {#    previewContents($(this).attr('id'));#}
+                    {# else #}if (key == "rename") {
                         renameContents($(this).attr('id'));
                     } else if (key == "copy") {
                         copyRepo($(this).attr('id'));
@@ -108,7 +105,7 @@
                     }
                 },
                 items: {
-                    "preview": {name: "Preview", icon: "fas fa-eye"},
+                    {#"preview": {name: "Preview", icon: "fas fa-eye"},#}
                     "rename": {name: "Rename", icon: "fas fa-edit"},
                     "copy": {name: "Copy", icon: "fas fa-copy"},
                     "delete": {name: "Delete", icon: "fas fa-trash"},
@@ -121,7 +118,6 @@
             node.classList.add("card");
             node.id = "{{ content.name }}";
             node.setAttribute("data-entry-type", "{{ content.type }}");
-            {#node.setAttribute("data-entry-repoName", "{{ content.repoName }}");#}
             var bodynode = document.createElement("div");
             bodynode.className = "card-body";
             var link = document.createElement("a");
@@ -132,7 +128,6 @@
             {% endif %}
             var subnode = document.createElement("h5");
             subnode.className = "card-title";
-            {#subnode.id=i;#}
             var textnode = document.createTextNode('{{ content.name }}');
             var icon = document.createElement("i");
             {% if content.type == "dir" %}
@@ -171,21 +166,24 @@
                     position: 'top-end',
                     showConfirmButton: false,
                     type: 'success',
+                    timer: 3000,
                     title: 'Moved ' + ui.draggable.data("entry-name") + ' to ' + $(this).data("entry-name")
                 });
             }
         });
 
-        {% for name in branches.items %}
+        document.getElementById('dropdownMenuButton').innerText = '{{ repoBranch }}';
+        {% for name in branches %}
             var dropdown = document.getElementById('branchesMenu');
             var branchLink = document.createElement("a");
             branchLink.className = "dropdown-item";
             var textnode = document.createTextNode('{{ name }}');
             branchLink.appendChild(textnode);
-            {#branchLink.href = "{% url 'castle:Project' host=content.filehost repo=content.repoName owner=content.repoOwner branch=name path=content.filepath %}";#}
+            dropdown.appendChild(branchLink);
+            branchLink.href = '{% url 'castle:Project' host=repoHost repo=repoName owner=repoOwner branch=name path=filepath %}';
         {% endfor %}
     </script>
 
-    {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
-    {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
+    {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>  #}
+    {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>   #}
 {% endblock %}

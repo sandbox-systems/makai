@@ -1,5 +1,6 @@
 from git import *
 from urlparse import parse_qs
+import base64
 
 
 class GithubHost(Host):
@@ -47,15 +48,15 @@ class GithubHost(Host):
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()
         contents = dict()
-        # print response
         for raw_content in response:
             # _path = path_concat(path, raw_content[u'name'])
             # full_path = path_concat(_path, branch, concat_before=True)
             content = {
                 'type': raw_content[u'type'],
                 'name': raw_content[u'name'],
-                'filepath': raw_content[u'path']
+                'filepath': raw_content[u'path'],
             }
+
             contents[raw_content[u'name']] = content
         return contents
 
@@ -65,7 +66,30 @@ class GithubHost(Host):
         for raw_content in response:
             branches.append(raw_content[u'name'])
         return branches
-    # def create_repo(self, ):
+
+    def create_repo(self, name, is_private):
+        response = self.make_request('post', 'https://api.github.com/user/repos',
+                                     data={'private': is_private, 'name': name}).json()
+        return
+
+    def delete_repo(self, name, owner):
+        response = self.make_request('delete', 'https://api.github.com/repos/' + owner + '/' + name).json()
+        return
+
+    def rename_repo(self, owner, name, newName):
+        response = self.make_request('patch', 'https://api.github.com/repos/' + owner + '/' + name,
+                                     data={'name': newName}).json()
+        return
+
+    def edit_repo_des(self, name, owner, newDes):
+        response = self.make_request('patch', 'https://api.github.com/repos/' + owner + '/' + name,
+                                     data={'description': newDes}).json()
+        return
+
+    def create_branch(self, name, currentBranch, owner, repoName):
+        response = self.make_request('post', 'https://api.github.com/repos/' + owner + '/' + repoName + '/git/refs',
+                                     data={'ref': '','sha': ''}).json()
+        return
 
 # # or using an access token
 # g = Github("03e9927266b7d61aa86d823ed7fe2271d9d0975e")

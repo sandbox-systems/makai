@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from django.http import *
 from django.shortcuts import render, redirect
 from vcs.vcs import *
 
@@ -24,6 +24,81 @@ def project(request, host, owner, repo, branch, path):
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
     items = accounts[host].get_repo(owner, repo, branch, path)
-    # branches = accounts[host].get_branches(owner, repo)
+    branches = accounts[host].get_branches(owner, repo)
     return render(request, 'castle/project.html',
-                  {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch})
+                  {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch, 'branches': branches, 'filepath':path})
+
+
+def create_repo(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    is_private = request.GET['is_private']
+    host = request.GET['host']
+    name = request.GET['name']
+
+    accounts[host].create_repo(name, is_private)
+    return redirect(request, 'castle:Projects')
+
+
+def delete_repo(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    owner = request.GET['owner']
+
+    accounts[host].delete_repo(name, owner)
+
+    return redirect('castle:Projects')
+
+
+def rename_repo(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    owner = request.GET['owner']
+    newRepoName = request.GET['newName']
+
+    accounts[host].rename_repo(name, owner, newRepoName)
+    return redirect('castle:Projects')
+
+
+def edit_repo_des(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    owner = request.GET['owner']
+    newRepoDes = request.GET['newDes']
+
+    accounts[host].edit_repo_des(name, owner, newRepoDes)
+    return redirect('castle:Projects')
+
+
+def create_branch(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    currentBranch = request.GET['currentBranch']
+    owner = request.GET['repoOwner']
+    repoName = request.GET['repoName']
+
+    accounts[host].edit_repo_des(name, currentBranch, owner, repoName)
+    return redirect('castle:Project')
