@@ -7,8 +7,8 @@ from vcs.vcs import *
 from firebase.firebase import update_doc
 
 
-def login(request):
-    return render(request, 'account/login.html', {'config': config})
+def login(request, was_attempt_redirected=None):
+    return render(request, 'account/login.html', {'config': config, 'was_attempt_redirected': was_attempt_redirected})
 
 
 def login_callback(request):
@@ -17,6 +17,7 @@ def login_callback(request):
 
 
 def logout(request):
+    del request.session['uid']
     return render(request, 'account/logout.html', {'config': config})
 
 

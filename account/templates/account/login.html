@@ -71,6 +71,10 @@
     </script>
 </head>
 <body>
+    {% if was_attempt_redirected %}
+{#        TODO Alert user that they need to log in#}
+        You need to log in!
+    {% endif %}
     <form id="uidForm" method="post" action="../account/login/callback" style="display: none">
         {% csrf_token %}
         <input id="uidInput" type="text" name="uid">

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from account.decorators import require_login
 
 
 def index(request):
@@ -16,5 +17,6 @@ def pricing(request):
     return render(request, 'home/pricing.html')
 
 
+@require_login
 def home(request):
     return render(request, 'home/home.html')

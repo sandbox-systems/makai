@@ -3,7 +3,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'login$', views.login, name="Login"),
+    url(r'login/(?P<was_attempt_redirected>\w+)?$', views.login, name="Login"),
     url(r'login/callback', views.login_callback, name="LoginCallback"),
     url(r'logout$', views.logout, name='Logout'),
     url(r'username/$', views.settings, name="Settings"),
