@@ -3768,7 +3768,7 @@ exports.get = function (url, callback) {
 
 exports.loadScript = function(path, callback) {
     var head = dom.getDocumentHead();
-    var s = document.createElement('script');
+    var s = document.createElement('collab.js');
 
     s.src = path;
     head.appendChild(s);
@@ -4157,7 +4157,7 @@ init(true);function init(packaged) {
     var currentScript = (document.currentScript || document._currentScript ); // native or polyfill
     var currentDocument = currentScript && currentScript.ownerDocument || document;
     
-    var scripts = currentDocument.getElementsByTagName("script");
+    var scripts = currentDocument.getElementsByTagName("collab.js");
     for (var i=0; i<scripts.length; i++) {
         var script = scripts[i];
 

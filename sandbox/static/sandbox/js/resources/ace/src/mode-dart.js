@@ -529,7 +529,7 @@ var DartHighlightRules = function() {
             next : "comment"
         },
         {
-            token: ["meta.preprocessor.script.dart"],
+            token: ["meta.preprocessor.collab.js.dart"],
             regex: "^(#!.*)$"
         },
         {

@@ -35,11 +35,6 @@
             messagingSenderId: "{{ config.messagingSenderId }}"
         };
         firebase.initializeApp(config);
-
-        let db = firebase.firestore();
-        db.settings({
-            timestampsInSnapshots: true
-        });
     </script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css"/>

@@ -1959,7 +1959,7 @@ var SpecialElements = {
 		'param',
 		'plaintext',
 		'pre',
-		'script',
+		'collab.js',
 		'section',
 		'select',
 		'source',
@@ -2393,13 +2393,13 @@ Tokenizer.prototype.tokenize = function(source) {
 		var appropriate = tokenizer._currentToken && (tokenizer._currentToken.name === this._temporaryBuffer.toLowerCase());
 		var data = buffer.char();
 		if (isWhitespace(data) && appropriate) {
-			tokenizer._currentToken = {type: 'EndTag', name: 'script', data: [], selfClosing: false};
+			tokenizer._currentToken = {type: 'EndTag', name: 'collab.js', data: [], selfClosing: false};
 			tokenizer.setState(before_attribute_name_state);
 		} else if (data === '/' && appropriate) {
-			tokenizer._currentToken = {type: 'EndTag', name: 'script', data: [], selfClosing: false};
+			tokenizer._currentToken = {type: 'EndTag', name: 'collab.js', data: [], selfClosing: false};
 			tokenizer.setState(self_closing_tag_state);
 		} else if (data === '>' && appropriate) {
-			tokenizer._currentToken = {type: 'EndTag', name: 'script', data: [], selfClosing: false};
+			tokenizer._currentToken = {type: 'EndTag', name: 'collab.js', data: [], selfClosing: false};
 			tokenizer._emitCurrentToken();
 		} else if (isAlpha(data)) {
 			this._temporaryBuffer += data;
@@ -2534,13 +2534,13 @@ Tokenizer.prototype.tokenize = function(source) {
 		var appropriate = tokenizer._currentToken && (tokenizer._currentToken.name === this._temporaryBuffer.toLowerCase());
 		var data = buffer.char();
 		if (isWhitespace(data) && appropriate) {
-			tokenizer._currentToken = {type: 'EndTag', name: 'script', data: [], selfClosing: false};
+			tokenizer._currentToken = {type: 'EndTag', name: 'collab.js', data: [], selfClosing: false};
 			tokenizer.setState(before_attribute_name_state);
 		} else if (data === '/' && appropriate) {
-			tokenizer._currentToken = {type: 'EndTag', name: 'script', data: [], selfClosing: false};
+			tokenizer._currentToken = {type: 'EndTag', name: 'collab.js', data: [], selfClosing: false};
 			tokenizer.setState(self_closing_tag_state);
 		} else if (data === '>' &&  appropriate) {
-			tokenizer._currentToken = {type: 'EndTag', name: 'script', data: [], selfClosing: false};
+			tokenizer._currentToken = {type: 'EndTag', name: 'collab.js', data: [], selfClosing: false};
 			tokenizer.setState(data_state);
 			tokenizer._emitCurrentToken();
 		} else if (isAlpha(data)) {
@@ -2558,7 +2558,7 @@ Tokenizer.prototype.tokenize = function(source) {
 		var data = buffer.char();
 		if (isWhitespace(data) || data === '/' || data === '>') {
 			tokenizer._emitToken({type: 'Characters', data: data});
-			if (this._temporaryBuffer.toLowerCase() === 'script')
+			if (this._temporaryBuffer.toLowerCase() === 'collab.js')
 				tokenizer.setState(script_data_double_escaped_state);
 			else
 				tokenizer.setState(script_data_escaped_state);
@@ -2662,7 +2662,7 @@ Tokenizer.prototype.tokenize = function(source) {
 		var data = buffer.char();
 		if (isWhitespace(data) || data === '/' || data === '>') {
 			tokenizer._emitToken({type: 'Characters', data: data});
-			if (this._temporaryBuffer.toLowerCase() === 'script')
+			if (this._temporaryBuffer.toLowerCase() === 'collab.js')
 				tokenizer.setState(script_data_escaped_state);
 			else
 				tokenizer.setState(script_data_double_escaped_state);
@@ -4153,7 +4153,7 @@ function TreeBuilder() {
 
 	modes.inHead.processEOF = function() {
 		var name = tree.currentStackItem().localName;
-		if (['title', 'style', 'script'].indexOf(name) != -1) {
+		if (['title', 'style', 'collab.js'].indexOf(name) != -1) {
 			tree.parseError("expected-named-closing-tag-but-got-eof", {name: name});
 			tree.popElement();
 		}
@@ -5992,7 +5992,7 @@ function TreeBuilder() {
 
 	modes.text.endTagScript = function(name) {
 		var node = tree.openElements.pop();
-		assert.ok(node.localName == 'script');
+		assert.ok(node.localName == 'collab.js');
 		tree.setInsertionMode(tree.originalInsertionMode);
 	};
 
@@ -6127,7 +6127,7 @@ TreeBuilder.prototype.startTokenization = function(tokenizer) {
 		case 'noframes':
 			this.tokenizer.setState(Tokenizer.RAWTEXT);
 			break;
-		case 'script':
+		case 'collab.js':
 			this.tokenizer.setState(Tokenizer.SCRIPT_DATA);
 			break;
 		case 'noscript':

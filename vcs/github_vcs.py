@@ -5,6 +5,8 @@ from urlparse import parse_qs
 from hashlib import sha1
 from firebase.firebase import get_doc
 
+
+# TODO use str.format instead of concatenating strings
 class GithubHost(Host):
     def __init__(self, token_exists):
         # If token is not saved in session, let Host set up syncing link as instance variable
@@ -19,7 +21,7 @@ class GithubHost(Host):
         if 'error_description' in response:
             return False
         # When parsed, the access_token is mapped to an array only containing the token for some reason
-        return response['access_token'][0], None
+        return response['access_token'][0], ""
 
     def get_repos(self):
         response = self.make_request('get', 'https://api.github.com/user/repos', params={}).json()
@@ -44,23 +46,36 @@ class GithubHost(Host):
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()
         contents = dict()
+        # TODO handle error if repo not found at path
         for raw_content in response:
             _path = path_concat(path, raw_content[u'name'])
             full_path = path_concat(_path, branch, concat_before=True)
+            content_id = repo_hash + sha1(full_path).hexdigest()
             content = {
                 'type': raw_content[u'type'],
-                'name': raw_content[u'name']
+                'name': raw_content[u'name'],
+                'id': content_id,
+                'repo_id': repo_hash,
+                # File contents
             }
             contents[full_path] = content
 
+        # TODO modularize since this will be used for BB as well
+        # TODO handle if change doc DNE
         changes = get_doc('file_changes', repo_hash).to_dict()
-        for full_path, change in changes.items():
-            if change[u'branch_parent'] == branch + '_' + path:
+        for raw_path, change in changes.items():
+            # TODO modularize and ensure ; and : are safe to use
+            full_path = raw_path.replace(';', '/')
+            full_path = full_path.replace(':', '.')
+            if type(change) is dict and change[u'branch_parent'] == branch + '_' + path:
                 if change[u'type'] == 'del':
                     del contents[full_path]
                 elif change[u'type'] == 'add':
-                    contents[full_path] = {
+                    content = {
                         'type': 'file',
-                        'name': change[u'name']
+                        'name': change[u'name'],
+                        'id': repo_hash + sha1(full_path).hexdigest(),
+                        'repo_id': repo_hash
                     }
+                    contents[full_path] = content
         return contents

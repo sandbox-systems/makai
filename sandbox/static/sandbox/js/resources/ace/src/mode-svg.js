@@ -1463,7 +1463,7 @@ var XmlHighlightRules = require("./xml_highlight_rules").XmlHighlightRules;
 var SvgHighlightRules = function() {
     XmlHighlightRules.call(this);
 
-    this.embedTagRules(JavaScriptHighlightRules, "js-", "script");
+    this.embedTagRules(JavaScriptHighlightRules, "js-", "collab.js");
 
     this.normalizeRules();
 };

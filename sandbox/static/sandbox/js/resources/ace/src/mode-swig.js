@@ -902,7 +902,7 @@ var tagMap = lang.createMap({
     input       : 'form',
     label       : 'form',
     option      : 'form',
-    script      : 'script',
+    script      : 'collab.js',
     select      : 'form',
     textarea    : 'form',
     style       : 'style',
@@ -956,7 +956,7 @@ var HtmlHighlightRules = function() {
     });
 
     this.embedTagRules(CssHighlightRules, "css-", "style");
-    this.embedTagRules(new JavaScriptHighlightRules({noJSX: true}).getRules(), "js-", "script");
+    this.embedTagRules(new JavaScriptHighlightRules({noJSX: true}).getRules(), "js-", "collab.js");
 
     if (this.constructor === HtmlHighlightRules)
         this.normalizeRules();

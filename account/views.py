@@ -28,6 +28,7 @@ def settings(request):
 def sync(request):
     init_tokens(request)
     init_vcs()
+    # print(request.session['bitbucket_token'])
     # request.session.flush()
     return render(request, 'account/sync.html', {'accounts': accounts.items()})
 
@@ -43,6 +44,7 @@ def sync_callback(request, host):
             init_tokens(request)
             init_vcs()
 
+            # TODO Handle False return
             token, refresh_token = accounts[host].fetch_token(code)
 
             # Ensure there was no error fetching the token from the code (fetch_token should return False it there was)

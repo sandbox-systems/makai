@@ -62,7 +62,7 @@ var LiveScriptHighlightRules = function() {
                 next: 'pop' },
               { token: 'constant.character.escape.livescript',
                 regex: '\\\\(?:x[\\da-fA-F]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)' },
-              { defaultToken: 'string.quoted.script.livescript' } ] },
+              { defaultToken: 'string.quoted.collab.js.livescript' } ] },
          { token: 'string.array-literal.livescript',
            regex: '<\\[',
            push: 

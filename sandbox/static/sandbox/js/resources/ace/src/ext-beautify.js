@@ -167,10 +167,10 @@ exports.transform = function(iterator, maxPos, context) {
         else if( token.type == 'meta.tag.name.style' && context == 'css' ){
             context = 'html';
         }
-        else if( token.type == 'meta.tag.name.script' && context != 'js' ){
+        else if( token.type == 'meta.tag.name.collab.js' && context != 'js' ){
             context = 'js';
         }
-        else if( token.type == 'meta.tag.name.script' && context == 'js' ){
+        else if( token.type == 'meta.tag.name.collab.js' && context == 'js' ){
             context = 'html';
         }
 

@@ -16,12 +16,13 @@
     <script src="{% static 'sandbox/js/resources/treeview/src/js/bootstrap-treeview.js' %}"></script>
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <script
-  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-  crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 
@@ -29,17 +30,24 @@
     <div id="content">
         <div id="breadcrumbs">
             <nav aria-label="breadcrumb">
-              <ul class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Repository</li>
-              </ul>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">Repository</li>
+                </ul>
             </nav>
         </div>
         <div id="toolbar" style="background:rebeccapurple">
             <button id="runButton" class="btn toolbarbtn"><span class="glyphicon glyphicon-play"></span></button><!--
-            --><button id="debugButton" class="btn toolbarbtn"><span class="fas fa-bug" style="font-size:1.75rem"></span></button><!--
-            --><button class="btn toolbarbtn" data-toggle="modal" data-target="#myModal"><span class="fab fa-git" style="font-size:1.75rem"></span></button><!--
-            --><button class="btn dropdown toolbarbtn">
-        <a class="dropdown-toggle" data-toggle="dropdown" data-display="static"><span class="glyphicon glyphicon-tint"></span></a>
+            -->
+            <button id="debugButton" class="btn toolbarbtn"><span class="fas fa-bug" style="font-size:1.75rem"></span>
+            </button><!--
+            -->
+            <button class="btn toolbarbtn" data-toggle="modal" data-target="#myModal"><span class="fab fa-git"
+                                                                                            style="font-size:1.75rem"></span>
+            </button><!--
+            -->
+            <button class="btn dropdown toolbarbtn">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-display="static"><span
+                        class="glyphicon glyphicon-tint"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="javascript:changeTheme('chrome')">Chrome</a></li>
                     <li><a href="javascript:changeTheme('clouds')">Clouds</a></li>
@@ -66,45 +74,53 @@
                     <li><a href="javascript:changeTheme('twilight')">Twilight</a></li>
                     <li><a href="javascript:changeTheme('vibrant_ink')">Vibrant Ink</a></li>
                 </ul>
-        </button><!--
+            </button><!--
 {#            --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button><!--#}
-            --><button class="btn toolbarbtn" onclick="toggleLive()" title="Live Preview"><span class="fas fa-bolt" style="font-size:1.75rem"></span></button>
+            -->
+            <button class="btn toolbarbtn" onclick="toggleLive()" title="Live Preview"><span class="fas fa-bolt"
+                                                                                             style="font-size:1.75rem"></span>
+            </button>
         </div>
         <div id="treeview"></div>
         <div id="editorcol">
             <div id="tabbar">
                 <ul class="nav nav-tabs"></ul>
             </div>
-            <div id="editor"></div>
+            <div id="editorContainer"></div>
             <div id="livedisplay">
                 <iframe id="livedisplayFrame"></iframe>
             </div>
             <div id="debug">
                 <div id="debugbtncontainer">
                     <button id="debugStart" class="btn toolbarbtn" title="Start"><i class="fas fa-eject"></i></button>
-                    <button id="debugPause" class="btn toolbarbtn" title="Pause"><i class="fas fa-pause-circle"></i></button>
-                    <button id="debugCont" class="btn toolbarbtn" title="Continue"><i class="fas fa-play-circle"></i></button>
-                    <button id="debugStepOver" class="btn toolbarbtn" title="Step Over"><i class="fas fa-step-forward"></i></button>
-                    <button id="debugStepInto" class="btn toolbarbtn" title="Step Into"><i class="fas fa-forward"></i></button>
-                    <button id="debugStepOut" class="btn toolbarbtn" title="Step Out"><i class="fas fa-fast-forward"></i></button>
+                    <button id="debugPause" class="btn toolbarbtn" title="Pause"><i class="fas fa-pause-circle"></i>
+                    </button>
+                    <button id="debugCont" class="btn toolbarbtn" title="Continue"><i class="fas fa-play-circle"></i>
+                    </button>
+                    <button id="debugStepOver" class="btn toolbarbtn" title="Step Over"><i
+                            class="fas fa-step-forward"></i></button>
+                    <button id="debugStepInto" class="btn toolbarbtn" title="Step Into"><i class="fas fa-forward"></i>
+                    </button>
+                    <button id="debugStepOut" class="btn toolbarbtn" title="Step Out"><i
+                            class="fas fa-fast-forward"></i></button>
                 </div>
                 <table id="stackTable" class="table">
                     <thead id="stackTableHead">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Function</th>
-                            <th scope="col">File:Line</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Function</th>
+                        <th scope="col">File:Line</th>
+                    </tr>
                     </thead>
                     <tbody id="stackTableBody">
                     </tbody>
                 </table>
                 <table id="variableTable" class="table">
                     <thead id="variableTableHead">
-                        <tr>
-                            <th scope="col">Variable</th>
-                            <th scope="col">Value</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Variable</th>
+                        <th scope="col">Value</th>
+                    </tr>
                     </thead>
                     <tbody id="variableTableBody">
                     </tbody>
@@ -140,25 +156,49 @@
         </div>
     </div>
     <div class="modal" id="myModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Version Control System</h5>
-{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#              <span aria-hidden="true">&times;</span>#}
-{#            </button>#}
-          </div>
-          <div class="modal-body" style="text-align: center; font-size: 30px;">
-            <button type="button" class="btn btn-primary"><i class="far fa-circle"></i>Commit</button>
-            <button type="button" class="btn btn-primary"><i class="fas fa-cloud-upload-alt"></i>Push</button>
-            <button type="button" class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i>Pull</button>
-          </div>
-          <div class="modal-footer">
-{#            <button type="button" class="btn btn-primary">Done</button>#}
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Version Control System</h5>
+                    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+                    {#              <span aria-hidden="true">&times;</span>#}
+                    {#            </button>#}
+                </div>
+                <div class="modal-body" style="text-align: center; font-size: 30px;">
+                    <button id="commitButton" type="button" class="btn btn-primary"><i class="far fa-circle"></i>Commit</button>
+                    <button type="button" class="btn btn-primary"><i class="fas fa-cloud-upload-alt"></i>Push</button>
+                    <button type="button" class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i>Pull</button>
+                </div>
+                <div class="modal-footer">
+                    {#            <button type="button" class="btn btn-primary">Done</button>#}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <script src="{% static 'sandbox/js/script.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <!--TODO Is css needed?-->
+    <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css"/>
+    <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "{{ config.apiKey }}",
+            authDomain: "{{ config.authDomain }}",
+            databaseURL: "{{ config.databaseURL }}",
+            projectId: "{{ config.projectId }}",
+            storageBucket: "{{ config.storageBucket }}",
+            messagingSenderId: "{{ config.messagingSenderId }}"
+        };
+    </script>
+    <script src="{% static 'sandbox/js/config.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'sandbox/js/compile.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'sandbox/js/vcs.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'sandbox/js/helper.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'sandbox/js/collab.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
