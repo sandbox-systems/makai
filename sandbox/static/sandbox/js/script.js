@@ -356,12 +356,17 @@ function toggleDebug(){
         $("#debug").css("display", "block");
         $("#editor").css("width", "50%");
         debug = true;
+        $("#terminalFrame").hide("slow", "swing", function(){
+            $("#editor").css("height", "100%").css("height", "-=84px");
+        });
     }else{
         $("#debug").css("display", "none");
         $("#editor").css("width", "100%");
         clearMarker(lineMarker);
         lineMarker = -1;
         debug = false;
+        $("#editor").css("height", "65%");
+        $("#terminalFrame").show("slow", "swing",);
     }
 }
 
