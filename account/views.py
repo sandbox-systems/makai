@@ -16,6 +16,10 @@ def login_callback(request):
     return redirect('home:Home')
 
 
+def logout(request):
+    return render(request, 'account/logout.html', {'config': config})
+
+
 def settings(request):
     return render(request, 'account/settings.html')
 

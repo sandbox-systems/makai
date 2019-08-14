@@ -1,6 +1,4 @@
 from git import *
-from pybitbucket.bitbucket import *
-from pybitbucket.auth import *
 
 
 class BitbucketHost(Host):
