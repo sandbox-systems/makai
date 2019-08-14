@@ -48,7 +48,7 @@ class GithubHost(Host):
         #     print(g.get_repo(repo.full_name))
 
     def fetch_raw_repo(self, owner, name, branch, path):
-        # repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
+        repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()
         contents = dict()
@@ -64,6 +64,7 @@ class GithubHost(Host):
                 'repo_id': repo_hash,
                 'filepath': raw_content[u'path'],
             }
+            contents[full_path] = content
 
         # TODO modularize since this will be used for BB as well
         # TODO handle if change doc DNE
