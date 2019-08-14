@@ -21,29 +21,34 @@ class BitbucketHost(Host):
         # if response[u'type'] == u'error' and 'refresh' in response[u'error'][u'message']:
         #     self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
 
-    def make_request(self, method, endpoint, auth_pattern='Bearer {}', data=None, params=None):
-        return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params)
+    def make_request(self, method, endpoint, auth_pattern='Bearer {}', data=None, params=None, json=None):
+        return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params, json=json)
 
     def get_repos(self):
-        response = self.make_request('get', 'https://api.bitbucket.org/2.0/repositories',
+        requestBuild = 'https://api.bitbucket.org/2.0/repositories'
+        response = self.make_request('get', requestBuild,
                                      params={'role': 'member', 'pagelen': '100'}).json()
-        # TODO Pagination
+
         self.refresh(response)
-        # print(response)
+
         repos = dict()
-        for raw_repo in response[u'values']:
-            repo = {
-                'host': 'bitbucket',
-                'name': raw_repo[u'name'],
-                'description': raw_repo[u'description'],
-                'updated_on': raw_repo[u'updated_on'],
-                'is_private': raw_repo[u'is_private'],
-                'size': raw_repo[u'size'],
-                # 'language': raw_repo[u'language'],
-                'owner': raw_repo[u'full_name'].split('/')[0]
-            }
-            repos[raw_repo[u'full_name']] = repo
-        print repos
+        while requestBuild != "":
+            for raw_repo in response[u'values']:
+                repo = {
+                    'host': 'bitbucket',
+                    'name': raw_repo[u'name'],
+                    'description': raw_repo[u'description'],
+                    'updated_on': raw_repo[u'updated_on'],
+                    'is_private': raw_repo[u'is_private'],
+                    'size': raw_repo[u'size'],
+                    # 'language': raw_repo[u'language'],
+                    'owner': raw_repo[u'full_name'].split('/')[0]
+                }
+                repos[raw_repo[u'full_name']] = repo
+            if 'next' in response.keys():
+                requestBuild = response[u'next']
+            else:
+                requestBuild = ""
         return repos
 
     def fetch_raw_repo(self, owner, name, branch, path):
@@ -79,6 +84,7 @@ class BitbucketHost(Host):
             branches.append(raw_content[u'name'])
         return branches
 
+    # Owner is not defined
     def create_repo(self, name, is_private):
         response = self.make_request('post',
                                      'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
@@ -87,21 +93,23 @@ class BitbucketHost(Host):
 
     def delete_repo(self, name, owner):
         response = self.make_request('delete',
-                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name).json()
+                                     'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
+                                     data={'role': 'member'}).json()
         return
 
     def rename_repo(self, name, owner, newName):
         response = self.make_request('put',
                                      'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
-                                     data={"name": newName}).json()
+                                     data={'role': 'member', "name": newName}).json()
         return
 
     def edit_repo_des(self, name, owner, newDes):
         response = self.make_request('put',
                                      'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + name,
-                                     data={"description": newDes}).json()
+                                     data={'role': 'member', "description": newDes}).json()
         return
 
+    # TODO Implement
     def create_branch(self, name, currentBranch, owner, repoName):
         response = self.make_request('post',
                                      'https://api.bitbucket.org/2.0/repositories/' + owner + '/' + repoName + '/refs/branches',

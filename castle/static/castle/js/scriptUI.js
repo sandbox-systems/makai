@@ -18,6 +18,7 @@ function search() {
     }
 }
 
+//TODO Change Date for Bitbucket
 async function previewRepo(id) {
 
     //Repository Details
@@ -75,7 +76,7 @@ async function renameRepo(id) {
         $.ajax({
             type: 'GET',
             url: '/castle/editRepoName',
-            dataType: "json",
+            dataType: "text",
             data: {
                 'name': id,
                 'host': document.getElementById(id).getAttribute("data-host"),
@@ -87,7 +88,15 @@ async function renameRepo(id) {
                     title: 'Renamed!',
                     text: 'The Repository has been renamed to ' + name,
                     type: 'success',
-                    confirmButtonColor: '#663399'
+                    toast: true
+                });
+            },
+            error: function (request, status, error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "Please try again",
+                    type: 'error',
+                    toast: true
                 });
             }
         });
@@ -96,7 +105,7 @@ async function renameRepo(id) {
             title: 'Rename Cancelled!',
             text: 'The Repository has not been renamed',
             type: 'error',
-            confirmButtonColor: '#663399'
+            toast: true
         });
     }
 }
@@ -120,7 +129,7 @@ async function editRepoDescription(id) {
         $.ajax({
             type: 'GET',
             url: '/castle/editRepoDes',
-            dataType: "json",
+            dataType: "text",
             data: {
                 'name': id,
                 'host': document.getElementById(id).getAttribute("data-host"),
@@ -128,11 +137,20 @@ async function editRepoDescription(id) {
                 'newDes': description
             },
             success: function (data) {
+                document.getElementById(id).setAttribute('data-description', description);
                 Swal.fire({
-                    title: 'Renamed!',
-                    text: 'The Repository has been renamed to ' + name,
+                    title: 'Changed!',
+                    text: id + "'s description has been changed",
                     type: 'success',
-                    confirmButtonColor: '#663399'
+                    toast: true
+                });
+            },
+            error: function (request, status, error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "Please try again",
+                    type: 'error',
+                    toast: true
                 });
             }
         });
@@ -141,7 +159,7 @@ async function editRepoDescription(id) {
             title: 'Rename Cancelled!',
             text: id + ' has not been renamed',
             type: 'error',
-            confirmButtonColor: '#663399'
+            toast: true
         });
     }
 }
@@ -233,39 +251,37 @@ async function deleteRepo(id) {
                 $.ajax({
                     type: 'GET',
                     url: '/castle/deleteRepo',
-                    dataType: "json",
+                    dataType: "text",
                     data: {
                         'name': id,
                         'host': document.getElementById(id).getAttribute("data-host"),
                         'owner': document.getElementById(id).getAttribute("data-owner")
                     },
                     success: function (data) {
-                        if (data.code != 204) {
-                            Swal.fire(
-                                {
-                                    title: 'Deleted!',
-                                    text: 'The Repository has been deleted.',
-                                    type: 'success',
-                                    confirmButtonColor: '#663399'
-                                });
-                        } else {
-                            Swal.fire(
-                                {
-                                    title: 'Delete Cancelled!',
-                                    text: 'The Repository has not been deleted',
-                                    type: 'error',
-                                    confirmButtonColor: '#663399'
-                                });
-                        }
+                        Swal.fire(
+                            {
+                                title: 'Deleted!',
+                                text: id + ' has been deleted',
+                                type: 'success',
+                                toast: true
+                            });
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: "Please try again",
+                            type: 'error',
+                            toast: true
+                        });
                     }
                 });
             } else {
                 Swal.fire(
                     {
                         title: 'Delete Cancelled!',
-                        text: 'The Repository has not been deleted',
+                        text: id + ' has not been deleted',
                         type: 'error',
-                        confirmButtonColor: '#663399'
+                        toast: true
                     });
             }
         }

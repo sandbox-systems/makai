@@ -19,6 +19,9 @@ class GithubHost(Host):
         # When parsed, the access_token is mapped to an array only containing the token for some reason
         return response['access_token'][0], None
 
+    def make_request(self, method, endpoint, auth_pattern='token {}', data=None, params=None, json=None):
+        return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params, json=json)
+
     def get_repos(self):
         response = self.make_request('get', 'https://api.github.com/user/repos', params={}).json()
         # TODO Pagination
@@ -69,21 +72,23 @@ class GithubHost(Host):
 
     def create_repo(self, name, is_private):
         response = self.make_request('post', 'https://api.github.com/user/repos',
-                                     data={'private': is_private, 'name': name}).json()
+                                     json={'private': is_private, 'name': name, 'auto_init': True}).json()
         return
 
     def delete_repo(self, name, owner):
         response = self.make_request('delete', 'https://api.github.com/repos/' + owner + '/' + name).json()
         return
 
+    # TODO Not working
     def rename_repo(self, owner, name, newName):
         response = self.make_request('patch', 'https://api.github.com/repos/' + owner + '/' + name,
-                                     data={'name': newName}).json()
+                                     json={'name': newName}).json()
+        print response
         return
 
     def edit_repo_des(self, name, owner, newDes):
         response = self.make_request('patch', 'https://api.github.com/repos/' + owner + '/' + name,
-                                     data={'description': newDes}).json()
+                                     json={'description': newDes}).json()
         return
 
     def create_branch(self, name, currentBranch, owner, repoName):

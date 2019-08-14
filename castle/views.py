@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import *
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from vcs.vcs import *
 
@@ -13,8 +14,8 @@ def projects(request):
     # request.session.flush()
     # repos = dict()
     # repos = merge_dicts(accounts['bitbucket'].get_repos(),accounts['github'].get_repos())
-    repos = accounts['bitbucket'].get_repos()
-    # print request.session['github_token']
+    repos = accounts['github'].get_repos()
+    # print request.session['bitbucket_token']
     return render(request, 'castle/projects.html', {'repos': repos})
 
 
@@ -26,7 +27,8 @@ def project(request, host, owner, repo, branch, path):
     items = accounts[host].get_repo(owner, repo, branch, path)
     branches = accounts[host].get_branches(owner, repo)
     return render(request, 'castle/project.html',
-                  {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch, 'branches': branches, 'filepath':path})
+                  {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch,
+                   'branches': branches, 'filepath': path})
 
 
 def create_repo(request):
@@ -40,7 +42,8 @@ def create_repo(request):
     name = request.GET['name']
 
     accounts[host].create_repo(name, is_private)
-    return redirect(request, 'castle:Projects')
+
+    return HttpResponse()
 
 
 def delete_repo(request):
@@ -55,7 +58,7 @@ def delete_repo(request):
 
     accounts[host].delete_repo(name, owner)
 
-    return redirect('castle:Projects')
+    return HttpResponse()
 
 
 def rename_repo(request):
@@ -70,7 +73,7 @@ def rename_repo(request):
     newRepoName = request.GET['newName']
 
     accounts[host].rename_repo(name, owner, newRepoName)
-    return redirect('castle:Projects')
+    return HttpResponse()
 
 
 def edit_repo_des(request):
@@ -85,7 +88,7 @@ def edit_repo_des(request):
     newRepoDes = request.GET['newDes']
 
     accounts[host].edit_repo_des(name, owner, newRepoDes)
-    return redirect('castle:Projects')
+    return HttpResponse()
 
 
 def create_branch(request):
@@ -101,4 +104,5 @@ def create_branch(request):
     repoName = request.GET['repoName']
 
     accounts[host].edit_repo_des(name, currentBranch, owner, repoName)
-    return redirect('castle:Project')
+    return HttpResponse()
+

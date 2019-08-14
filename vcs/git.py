@@ -1,5 +1,5 @@
 from credentials import *
-from requests import post, get, put
+from requests import post, get, put, delete, patch
 from firebase.firebase import get_doc
 from hashlib import sha1
 
@@ -34,18 +34,21 @@ class Host:
                        'grant_type': 'refresh_token'})
         return r
 
-    def make_request(self, method, endpoint, auth_pattern, data=None, params=None):
+    def make_request(self, method, endpoint, auth_pattern, data=None, params=None, json=None):
         headers = {
             'Authorization': auth_pattern.format(self.token)
         }
 
         if method == 'get':
-            r = get(endpoint, params=params, headers=headers)
+            r = get(endpoint, params=params, headers=headers, json=json)
         elif method == 'put':
-            r = put(endpoint, data=data, headers=headers)
+            r = put(endpoint, data=data, headers=headers, json=json)
         elif method == 'post':
-            r = post(endpoint, data=data, headers=headers)
-            print r.content
+            r = post(endpoint, data=data, headers=headers, json=json)
+        elif method == 'delete':
+            r = delete(endpoint, data=data, headers=headers, json=json)
+        elif method == 'patch':
+            r = patch(endpoint, data=data, headers=headers, json=json)
         else:
             raise Exception('Invalid request method ' + method)
         return r
