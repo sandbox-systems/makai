@@ -13,7 +13,7 @@ def projects(request):
     # request.session.flush()
     # repos = dict()
     # repos = merge_dicts(accounts['bitbucket'].get_repos(),accounts['github'].get_repos())
-    repos = accounts['github'].get_repos()
+    repos = accounts['bitbucket'].get_repos()
     # print request.session['github_token']
     return render(request, 'castle/projects.html', {'repos': repos})
 

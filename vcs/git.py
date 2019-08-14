@@ -34,9 +34,9 @@ class Host:
                        'grant_type': 'refresh_token'})
         return r
 
-    def make_request(self, method, endpoint, data=None, params=None):
+    def make_request(self, method, endpoint, auth_pattern, data=None, params=None):
         headers = {
-            'Authorization': 'token {}'.format(self.token)
+            'Authorization': auth_pattern.format(self.token)
         }
 
         if method == 'get':

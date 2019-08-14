@@ -21,6 +21,9 @@ class BitbucketHost(Host):
         # if response[u'type'] == u'error' and 'refresh' in response[u'error'][u'message']:
         #     self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
 
+    def make_request(self, method, endpoint, auth_pattern='Bearer {}', data=None, params=None):
+        return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params)
+
     def get_repos(self):
         response = self.make_request('get', 'https://api.bitbucket.org/2.0/repositories',
                                      params={'role': 'member', 'pagelen': '100'}).json()
