@@ -2,7 +2,6 @@ from git import *
 from urlparse import parse_qs
 import base64
 
-
 class GithubHost(Host):
     def __init__(self, token_exists):
         # If token is not saved in session, let Host set up syncing link as instance variable
