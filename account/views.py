@@ -17,7 +17,7 @@ def login_callback(request):
 
 
 def logout(request):
-    del request.session['uid']
+    request.session.flush()
     return render(request, 'account/logout.html', {'config': config})
 
 
