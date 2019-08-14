@@ -3,6 +3,9 @@
 <script>
 var debugLang = "";
 
+//Container Management
+window.onbeforeunload = null;
+
 function debuggerPost(parameters){
     window.top.postMessage(parameters, "http://localhost:8000");
 }
@@ -82,6 +85,9 @@ window.addEventListener("message", function(event){
             break;
         case "debugStepOut":
             stepOut(debugLang);
+            break;
+        case "exitTerminal":
+            socketSend("exit");
             break;
     }
 }, false);
@@ -209,5 +215,4 @@ function updateDebugger(){
     setTimeout(function(){socketSend("where")}, 1000);
     setTimeout(function(){socketSend("clear")}, 1500);
 }
-
 </script></body></html>

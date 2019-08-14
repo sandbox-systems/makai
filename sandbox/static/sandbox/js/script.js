@@ -529,6 +529,14 @@ function updateLocals(locals){
     });
 }
 
+//Container Management
+window.onbeforeunload = function(){
+    termPost({
+        action: "exitTerminal"
+    });
+    return undefined;
+}
+
 //Theme
 function changeTheme(theme) {
     var lightThemes = ["chrome", "clouds", "crimson_editor", "dawn", "eclipse", "solarized_light", "tommorow", "textmate"];
