@@ -7,13 +7,18 @@ from vcs.vcs import *
 from firebase.firebase import update_doc
 
 
-def login(request):
-    return render(request, 'account/login.html', {'config': config})
+def login(request, was_attempt_redirected=None):
+    return render(request, 'account/login.html', {'config': config, 'was_attempt_redirected': was_attempt_redirected})
 
 
 def login_callback(request):
     request.session['uid'] = request.POST.get('uid')
     return redirect('home:Home')
+
+
+def logout(request):
+    request.session.flush()
+    return render(request, 'account/logout.html', {'config': config})
 
 
 def settings(request):

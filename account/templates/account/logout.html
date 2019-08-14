@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        let config = {
+            apiKey: "{{ config.apiKey }}",
+            authDomain: "{{ config.authDomain }}",
+            databaseURL: "{{ config.databaseURL }}",
+            projectId: "{{ config.projectId }}",
+            storageBucket: "{{ config.storageBucket }}",
+            messagingSenderId: "{{ config.messagingSenderId }}"
+        };
+        firebase.initializeApp(config);
+
+        var didLogout = false;
+
+        function requestLogout() {
+            return new Promise(resolve => {
+                firebase.auth().signOut().then(function() {
+                    resolve(true);
+                }).catch(function(error) {
+                    resolve(false);
+                });
+            })
+        }
+
+        async function logout() {
+            didLogout = await requestLogout();
+        }
+    </script>
+</head>
+<body>
+
+<div id="successful">
+    Successful
+    <a href="{% url 'account:Login' %}">Back to login</a>
+</div>
+<div id="unsuccessful">
+    Unsuccessful
+    <a href="{% url 'account:Logout' %}">Try again</a>
+</div>
+
+<script>
+    (async () => {
+        $('#successful').hide();
+        $('#unsuccessful').hide();
+
+        await logout();
+
+        if (didLogout) {
+            $('#successful').show();
+        } else {
+            $('#unsuccessful').show();
+        }
+    })();
+</script>
+</body>
+</html>

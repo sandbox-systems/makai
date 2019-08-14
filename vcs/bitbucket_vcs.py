@@ -1,6 +1,4 @@
 from git import *
-from pybitbucket.bitbucket import *
-from pybitbucket.auth import *
 
 
 class BitbucketHost(Host):
@@ -19,15 +17,18 @@ class BitbucketHost(Host):
         return response['access_token'], response['refresh_token']
 
     def refresh(self, response):
-        pass
-        # if response[u'type'] == u'error' and 'refresh' in response[u'error'][u'message']:
-        #     self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
+        if response[u'type'] == u'error' and 'refresh' in response[u'error'][u'message']:
+            print 'Refresh'
+        else:
+            # TODO handle unexpected error, take back to sync page?
+            pass
+            # self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
 
     def get_repos(self):
         response = self.make_request('get', 'https://api.bitbucket.org/2.0/repositories',
                                      params={'role': 'member', 'pagelen': '30'}).json()
-        # TODO Pagination
         self.refresh(response)
+        # TODO Pagination
         # print(response)
         repos = dict()
         for raw_repo in response[u'values']:
