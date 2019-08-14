@@ -114,3 +114,18 @@ class Host:
                     repo[dir_name] = content
 
         return repo
+
+    def create_repo(self, name, is_private):
+        pass
+
+    def delete_repo(self, name, owner):
+        pass
+
+    def rename_repo(self, name, owner, newName):
+        pass
+
+    def edit_repo_des(self, name, owner, newDes):
+        pass
+
+    def create_branch(self, name, currentBranch, owner, repoName):
+        pass

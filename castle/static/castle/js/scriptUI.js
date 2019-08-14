@@ -56,7 +56,6 @@ async function previewRepo(id) {
     });
 }
 
-// TODO Rename Function
 async function renameRepo(id) {
     const {value: name} = await Swal.fire({
         title: 'Rename ' + id + '',
@@ -71,14 +70,26 @@ async function renameRepo(id) {
         confirmButtonText: "Rename",
         cancelButtonText: "Cancel",
         confirmButtonColor: '#663399'
-    })
+    });
     if (name) {
-        // TODO Server Side Renaming
-        Swal.fire({
-            title: 'Renamed!',
-            text: 'The Repository has been renamed to ' + name,
-            type: 'success',
-            confirmButtonColor: '#663399'
+        $.ajax({
+            type: 'GET',
+            url: '/castle/editRepoName',
+            dataType: "json",
+            data: {
+                'name': id,
+                'host': document.getElementById(id).getAttribute("data-host"),
+                'owner': document.getElementById(id).getAttribute("data-owner"),
+                'newName': name
+            },
+            success: function (data) {
+                Swal.fire({
+                    title: 'Renamed!',
+                    text: 'The Repository has been renamed to ' + name,
+                    type: 'success',
+                    confirmButtonColor: '#663399'
+                });
+            }
         });
     } else {
         Swal.fire({
@@ -90,14 +101,12 @@ async function renameRepo(id) {
     }
 }
 
-// TODO Edit Description Function
 async function editRepoDescription(id) {
-    const {value: name} = await Swal.fire({
+    const {value: description} = await Swal.fire({
         title: 'Edit Description',
         text: 'Enter the new description below',
         input: 'textarea',
-        // TODO Former Description?
-        inputPlaceholder: 'Description...',
+        inputPlaceholder: document.getElementById(id).getAttribute('data-description'),
         inputAttributes: {
             autocapitalize: 'off',
             autocorrect: 'off'
@@ -107,17 +116,30 @@ async function editRepoDescription(id) {
         cancelButtonText: "Cancel",
         confirmButtonColor: '#663399'
     });
-    if (name) {
-        Swal.fire({
-            title: 'Description Changed!',
-            text: "The Repository's description has been changed",
-            type: 'success',
-            confirmButtonColor: '#663399'
+    if (description) {
+        $.ajax({
+            type: 'GET',
+            url: '/castle/editRepoDes',
+            dataType: "json",
+            data: {
+                'name': id,
+                'host': document.getElementById(id).getAttribute("data-host"),
+                'owner': document.getElementById(id).getAttribute("data-owner"),
+                'newDes': description
+            },
+            success: function (data) {
+                Swal.fire({
+                    title: 'Renamed!',
+                    text: 'The Repository has been renamed to ' + name,
+                    type: 'success',
+                    confirmButtonColor: '#663399'
+                });
+            }
         });
     } else {
         Swal.fire({
-            title: 'Description Unchanged!',
-            text: "The Repository's description has not been changed",
+            title: 'Rename Cancelled!',
+            text: id + ' has not been renamed',
             type: 'error',
             confirmButtonColor: '#663399'
         });
@@ -196,8 +218,6 @@ async function shareRepo(id) {
     });
 }
 
-
-// TODO Delete Function
 async function deleteRepo(id) {
     Swal.fire({
         title: 'Confirm Deletion',
@@ -208,25 +228,48 @@ async function deleteRepo(id) {
         cancelButtonText: "Cancel",
         confirmButtonColor: '#663399'
     }).then((result) => {
-        if (result.value) {
-            // TODO Server side deletion
-            Swal.fire(
-                {
-                    title: 'Deleted!',
-                    text: 'The Repository has been deleted.',
-                    type: 'success',
-                    confirmButtonColor: '#663399'
+            if (result.value) {
+                // TODO Server side deletion
+                $.ajax({
+                    type: 'GET',
+                    url: '/castle/deleteRepo',
+                    dataType: "json",
+                    data: {
+                        'name': id,
+                        'host': document.getElementById(id).getAttribute("data-host"),
+                        'owner': document.getElementById(id).getAttribute("data-owner")
+                    },
+                    success: function (data) {
+                        if (data.code != 204) {
+                            Swal.fire(
+                                {
+                                    title: 'Deleted!',
+                                    text: 'The Repository has been deleted.',
+                                    type: 'success',
+                                    confirmButtonColor: '#663399'
+                                });
+                        } else {
+                            Swal.fire(
+                                {
+                                    title: 'Delete Cancelled!',
+                                    text: 'The Repository has not been deleted',
+                                    type: 'error',
+                                    confirmButtonColor: '#663399'
+                                });
+                        }
+                    }
                 });
-        } else {
-            Swal.fire(
-                {
-                    title: 'Delete Cancelled!',
-                    text: 'The Repository has not been deleted',
-                    type: 'error',
-                    confirmButtonColor: '#663399'
-                });
+            } else {
+                Swal.fire(
+                    {
+                        title: 'Delete Cancelled!',
+                        text: 'The Repository has not been deleted',
+                        type: 'error',
+                        confirmButtonColor: '#663399'
+                    });
+            }
         }
-    });
+    );
 }
 
 //TODO
@@ -235,9 +278,8 @@ async function previewContents(id) {
 
     } else if (document.getElementById(id).getAttribute("data-entry-type") == "file") {
         Swal.fire({
-            // title: window.entries[id].name,
+            title: id,
             html: "<div id='editor'></div>",
-            // type: "info",
             showCloseButton: true,
             closeButtonAriaLabel: "Close Repository Details",
             showConfirmButton: false
@@ -267,14 +309,14 @@ async function renameContents(id) {
         // TODO Server Side Renaming
         Swal.fire({
             title: 'Renamed!',
-            text: 'The Repository has been renamed to ' + name,
+            text: id + ' has been renamed to ' + name,
             type: 'success',
             confirmButtonColor: '#663399'
         });
     } else {
         Swal.fire({
             title: 'Rename Cancelled!',
-            text: 'The Repository has not been renamed',
+            text: id + ' has not been renamed',
             type: 'error',
             confirmButtonColor: '#663399'
         });
@@ -374,14 +416,32 @@ async function newRepo() {
         confirmButtonColor: '#663399',
         focusConfirm: false,
         preConfirm: () => {
+            var is_private = !($('#lockspan').hasClass('unlocked'));
             return [
                 document.getElementById('newRepoName').value,
-                document.getElementById('newRepoAccount').value
+                document.getElementById('newRepoAccount').value,
+                is_private
             ]
         }
     });
-
-    console.log(formValues);
+    $.ajax({
+        type: 'GET',
+        url: '/castle/createRepo',
+        dataType: "json",
+        data: {
+            'name': formValues[0],
+            'host': formValues[1],
+            'is_private': formValues[2],
+        },
+        success: function (data) {
+            Swal.fire({
+                title: 'Created!',
+                text: formValues[0] + ' has been created',
+                type: 'success',
+                confirmButtonColor: '#663399'
+            });
+        }
+    });
 }
 
 async function uploadRepo() {
@@ -411,7 +471,12 @@ async function uploadRepo() {
 }
 
 async function pull() {
-
+    // document.location.reload(false);
+    Swal.fire(
+        'Reload to Pull',
+        "It's that easy!",
+        'info'
+    );
 }
 
 async function commit() {
@@ -422,6 +487,39 @@ async function push() {
 
 }
 
-async function newBranch() {
-
+async function newBranch(host, repoOwner, repoName) {
+    const {value: branchName} = await Swal.fire({
+        title: 'Branch off of ' + document.getElementById("dropdownMenuButton").innerText,
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: "Create",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: '#663399',
+        inputPlaceholder: 'New Branch Name',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'You need to write something!'
+            }
+        }
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/castle/newBranch',
+        dataType: "json",
+        data: {
+            'name': branchName,
+            'currentBranch': document.getElementById("dropdownMenuButton").innerText,
+            'host': host,
+            'owner': repoOwner,
+            'repoName': repoName
+        },
+        success: function (data) {
+            Swal.fire({
+                title: 'Created!',
+                text: branchName + ' has been created',
+                type: 'success',
+                confirmButtonColor: '#663399'
+            });
+        }
+    });
 }
