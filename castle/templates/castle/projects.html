@@ -1,150 +1,125 @@
-
 {% extends 'home/nav.html' %}
 {% load static %}
 
 {% block content %}
-    <title>Projects</title>
+    <!DOCTYPE html>
+    <title>Makai</title>
 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'castle/css/style.css' %}">
-
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script src="https://d3js.org/d3-time.v1.min.js"></script>
     <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
     <script src="{% static 'castle/js/scriptUI.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"
+            integrity="sha256-412FxT7SHXk39AYYNe8+6YGQAhZhlKhthDw2Z3qp/B0=" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 
     <div class="wrapper-castle">
-        {# TODO Breadcrumbs #}
         <nav class="navbar navbar-light bg-light breadcrumb-nav">
-          <a class="navbar-brand">Castle</a>
-          <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-          </form>
+            <a class="navbar-brand" href="{% url 'account:Sync' %}">Sync</a>
+            <div class="btn-group mr-2">
+                <button class="btn" onClick="newRepo()" type="button"><i class="fas fa-book"></i> New Repo</button>
+                <button class="btn" onClick="uploadRepo()" type="button"><i class="fas fa-upload"></i> Upload Repo
+                </button>
+            </div>
+            <div class="input-group" style="width: 17%">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+                </div>
+                <input class="form-control" type="search" placeholder="Search..." onInput="search()" id="searchBar"
+                       aria-label="Search">
+            </div>
         </nav>
 
-        <nav class="navbar navbar-light bg-light tool-nav">
-          <a class="navbar-brand">Tools</a>
-        </nav>
+        {#                <nav class="navbar navbar-light bg-light tool-nav">#}
+        {#                  TODO Breadcrumbs#}
+        {#                </nav>#}
 
-        <div class="draggable-window">
-            <div class="container-fluid">
-                <ul class="row" id="card-list">
-                </ul>
+        <div class="container-fluid">
+            <div class="card-columns" id="card-list">
             </div>
         </div>
 
-      {# Right Click Menu on Repository Hub #}
-      <nav id="context-menu" class="context-menu">
-        <ul class="context-menu__items">
-          <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Open"><i class="fa fa-eye"></i> Open</a>
-          </li>
-           <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Details"><i class="fas fa-info-circle"></i> Details</a>
-          </li>
-          <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Edit Description"><i class="fa fa-edit"></i> Edit Description</a>
-          </li>
-          <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
-          </li>
-          <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Share"><i class="fas fa-share"></i> Share</a>
-          </li>
-          <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
-          </li>
-        </ul>
-      </nav>
-
-       {# Right Click Menu on Repository Hub Container #}
-      <nav id="container-context-menu" class="container-context-menu">
-        <ul class="container-context-menu__items">
-          <li class="container-context-menu__item">
-            <a href="#" class="container-context-menu__link" data-action="New Repository"><i class="fas fa-plus"></i> New Repository</a>
-          </li>
-          <li class="container-context-menu__item">
-            <a href="#" class="container-context-menu__link" data-action="New Folder"><i class="fas fa-upload"></i> Upload Existing</a>
-          </li>
-        </ul>
-      </nav>
-
-        {# Right Click Menu INSIDE Repository #}
-      <nav id="repository-context-menu" class="repository-context-menu">
-        <ul class="repository-context-menu__items">
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
-          </li>
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
-          </li>
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
-          </li>
-          <li class="repository-context-menu__item">
-            <a href="#" class="repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
-          </li>
-        </ul>
-      </nav>
-
-    {# Right Click Menu INSIDE Repository #}
-      <nav id="container-repository-context-menu" class="container-repository-context-menu">
-        <ul class="container-repository-context-menu__items">
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Preview"><i class="fa fa-eye"></i> Preview</a>
-          </li>
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Edit Metadata"><i class="fa fa-edit"></i> Edit</a>
-          </li>
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Rename"><i class="fas fa-i-cursor"></i> Rename</a>
-          </li>
-          <li class="container-repository-context-menu__item">
-            <a href="#" class="container-repository-context-menu__link" data-action="Delete"><i class="fa fa-times"></i> Delete</a>
-          </li>
-        </ul>
-      </nav>
     </div>
-
-
-    <script src="{% static 'castle/js/contextMenuScript.js' %}"></script>
-    <script src="{% static 'castle/js/containerContextMenuScript.js' %}"></script>
-
     <script>
-        window.repos = [];
-        var i = 0;
+        function lock() {
+            $("#lockspan").toggleClass('unlocked');
+            $("#repostatus").text($("#repostatus").text() == 'Public Repo' ? 'Private Repo' : 'Public Repo');
+        }
+
+        $(function () {
+            $.contextMenu({
+                selector: 'body',
+                callback: function (key, options) {
+                    if (key == "repo") {
+                        newRepo();
+                    } else if (key == "upload") {
+                        uploadRepo();
+                    }
+                },
+                items: {
+                    "repo": {name: "New Repository", icon: "fas fa-book"},
+                    "upload": {name: "Upload", icon: "fas fa-upload"}
+                }
+            });
+            $(".card-columns").contextMenu({
+                selector: '.card',
+                callback: function (key, options) {
+                    if (key == "preview") {
+                        previewRepo($(this).attr('id'));
+                    } else if (key == "rename") {
+                        renameRepo($(this).attr('id'));
+                    } else if (key == "share") {
+                        shareRepo($(this).attr('id'));
+                    } else if (key == "delete") {
+                        deleteRepo($(this).attr('id'));
+                    } else if (key == "description") {
+                        editRepoDescription($(this).attr('id'));
+                    }
+                },
+                items: {
+                    "preview": {name: "Preview", icon: "fas fa-eye"},
+                    "rename": {name: "Rename", icon: "fas fa-edit"},
+                    "description": {name: "Edit Description", icon: "fas fa-edit"},
+                    "share": {name: "Share", icon: "fas fa-share"},
+                    "delete": {name: "Delete", icon: "fas fa-trash"},
+                }
+            });
+        });
+
+
         {% for full_name, repo in repos.items %}
             var owner = "{{ full_name }}";
             owner = owner.split("/")[0];
-            window.repos.push({"updated_on": "{{ repo.updated_on }}",
-            "host": "{{ repo.host }}",
-            "name": "{{ repo.name }}",
-            "is_private": "{{ repo.is_private }}",
-            "description": "{{ repo.description }}",
-            "owner": owner});
-
-            var node = document.createElement("li");
-            node.className = "card";
-            node.id = i;
+            var node = document.createElement("div");
+            node.classList.add("card");
+            node.id = "{{ repo.name }}";
+            node.setAttribute("data-updated-on", "{{ repo.updated_on }}");
+            node.setAttribute("data-host", "{{ repo.host }}");
+            node.setAttribute("data-size", "{{ repo.size }}");
+            node.setAttribute("data-owner", owner);
+            node.setAttribute("data-is-private", "{{ repo.is_private }}");
+            node.setAttribute("data-language", "{{ repo.language }}");
+            node.setAttribute("data-description", "{{ repo.description }}");
             var bodynode = document.createElement("div");
             bodynode.className = "card-body";
-            bodynode.id = i;
+            var link = document.createElement("a");
+            link.href = '{% url 'castle:Project' host=repo.host repo=repo.name owner=repo.owner branch='master' path=''%}';
             var subnode = document.createElement("h5");
             subnode.className = "card-title";
-            subnode.id = i;
             var textnode = document.createTextNode('{{ repo.name }}');
             subnode.appendChild(textnode);
             bodynode.appendChild(subnode);
             node.appendChild(bodynode);
+            link.appendChild(node);
 
-            document.getElementById('card-list').appendChild(node);
-            i++;
+            document.getElementById('card-list').appendChild(link);
+            {#i++;#}
         {% endfor %}
     </script>
 
-{#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
-{#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
+    {#    <a href="https://bitbucket.org/site/oauth2/authorize?client_id=QjQ49apJFL26jg8gzY&response_type=code">Go</a>#}
+    {#    <a href="https://github.com/login/oauth/authorize?scope=repo delete_repo&client_id=cfcb9d0319f6d921ae8d">Go</a>#}
 {% endblock %}

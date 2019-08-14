@@ -12,8 +12,11 @@ def projects(request):
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
-    repos = merge_dicts(accounts['github'].get_repos(), accounts['bitbucket'].get_repos())
-    print(repos);
+    # request.session.flush()
+    # repos = dict()
+    # repos = merge_dicts(accounts['bitbucket'].get_repos(),accounts['github'].get_repos())
+    repos = accounts['github'].get_repos()
+    # print request.session['bitbucket_token']
     return render(request, 'castle/projects.html', {'repos': repos})
 
 
@@ -22,8 +25,88 @@ def project(request, host, owner, repo, branch, path):
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
-    contents = accounts[host].get_repo(owner, repo, branch, path)
-    return render(request, 'castle/project.html', {'contents': contents})
+    items = accounts[host].get_repo(owner, repo, branch, path)
+    branches = accounts[host].get_branches(owner, repo)
+    return render(request, 'castle/project.html',
+                  {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch,
+                   'branches': branches, 'filepath': path})
+
+
+def create_repo(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    is_private = request.GET['is_private']
+    host = request.GET['host']
+    name = request.GET['name']
+
+    accounts[host].create_repo(name, is_private)
+
+    return HttpResponse()
+
+
+def delete_repo(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    owner = request.GET['owner']
+
+    accounts[host].delete_repo(name, owner)
+
+    return HttpResponse()
+
+
+def rename_repo(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    owner = request.GET['owner']
+    newRepoName = request.GET['newName']
+
+    accounts[host].rename_repo(name, owner, newRepoName)
+    return HttpResponse()
+
+
+def edit_repo_des(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    owner = request.GET['owner']
+    newRepoDes = request.GET['newDes']
+
+    accounts[host].edit_repo_des(name, owner, newRepoDes)
+    return HttpResponse()
+
+
+def create_branch(request):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    host = request.GET['host']
+    name = request.GET['name']
+    currentBranch = request.GET['currentBranch']
+    owner = request.GET['repoOwner']
+    repoName = request.GET['repoName']
+
+    accounts[host].edit_repo_des(name, currentBranch, owner, repoName)
+    return HttpResponse()
+
 
 
 # Used as endpoint, so returns HttpResponse
