@@ -1,5 +1,6 @@
 from credentials import *
 from requests import post, get, put, delete, patch
+from requests.exceptions import HTTPError
 from firebase.firebase import get_doc
 from hashlib import sha1
 
@@ -62,7 +63,13 @@ class Host:
             r = patch(endpoint, data=data, headers=headers, json=json)
         else:
             raise Exception('Invalid request method ' + method)
-        return r
+        try:
+            r.raise_for_status()
+            return r
+        except HTTPError as err:
+            print err
+            # TODO handle error every time make_request is invoked or generalize handling here
+            return r
 
     def get_repos(self):
         return []

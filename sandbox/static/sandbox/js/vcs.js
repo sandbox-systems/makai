@@ -1,3 +1,32 @@
+function getAllRepos() {
+    return new Promise(resolve => {
+        $.ajax({
+            type: "POST",
+            url: "/castle/",
+            data: {},
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            success: function (data, status, xhttp) {
+                let repos = [];
+
+                Object.values(data).forEach(repoDatum => {
+                    let repo = new Repository(repoDatum.name, repoDatum.owner, repoDatum.host, repoDatum.repo_hash);
+                    repos.push(repo);
+                });
+
+                resolve(repos);
+            }, error: function (data) {
+                // TODO handle error
+                console.log(data);
+            },
+            dataType: "json"
+        });
+    });
+}
+
 let Firebase = {
     firebasePathEncode: function (path) {
         /**
@@ -353,5 +382,17 @@ function Bitbucket(accessToken) {
             console.log("Error committing: {0}".format(err));
             // TODO Handle error "Uh oh! We had some trouble committing your changes. Please try again"
         }
+    }
+}
+
+function Repository(name, owner, hostName, repoID) {
+    this.name = name;
+    this.owner = owner;
+    this.hostName = hostName;
+    this.repoID = repoID;
+    this.branch = "master";
+
+    this.setHost = function (host) {
+        this.host = host;
     }
 }

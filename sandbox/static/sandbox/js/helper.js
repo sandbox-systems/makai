@@ -1,6 +1,6 @@
 let tabs = {};
 let tabPaths = {};
-let activeRepo = {};
+let activeRepo = null;
 let activePath = null;
 let collab = {
     online: [],
@@ -15,14 +15,13 @@ function getFilenameFromPath(path) {
     return nodes.pop();
 }
 
-function populateFiles(owner, repo, branch) {
+function populateFiles(repo) {
     return new Promise(resolve => {
         // Send request to castle endpoints so python handles loading and processing saved changes to repo
         // TODO axios
         $.ajax({
             type: "POST",
-            url: "/castle/bitbucket/Shriggs/makai-test/master",
-            // url: "/castle/github/makaide/test/master/",
+            url: "/castle/{0}/{1}/{2}/{3}".format(repo.hostName, repo.owner, repo.name, repo.branch),
             data: {},
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

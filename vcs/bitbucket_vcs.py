@@ -49,15 +49,19 @@ class BitbucketHost(Host):
         repos = dict()
         while request_build != "":
             for raw_repo in response[u'values']:
+                owner = raw_repo[u'full_name'].split('/')[0]
+                name = raw_repo[u'name']
+                repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
                 repo = {
                     'host': 'bitbucket',
-                    'name': raw_repo[u'name'],
+                    'name': name,
                     'description': raw_repo[u'description'],
                     'updated_on': raw_repo[u'updated_on'],
                     'is_private': raw_repo[u'is_private'],
                     'size': raw_repo[u'size'],
                     # 'language': raw_repo[u'language'],
-                    'owner': raw_repo[u'full_name'].split('/')[0]
+                    'owner': owner,
+                    'repo_hash': repo_hash
                 }
                 repos[raw_repo[u'full_name']] = repo
             if 'next' in response.keys():

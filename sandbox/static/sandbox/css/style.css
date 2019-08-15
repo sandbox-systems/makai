@@ -258,3 +258,14 @@ body {
 .powered-by-firepad{
     display: none !important;
 }
+
+#openRepo {
+    display: none;
+}
+
+#noRepoSelectedOverlay {
+    background: black;
+    color: white;
+    width: 100%;
+    height: calc(100% - 41px); /* 41px is total height of breadcrumbs/toolbar */
+}

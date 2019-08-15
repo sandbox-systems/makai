@@ -13,11 +13,23 @@ def projects(request):
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
     # request.session.flush()
-    # repos = dict()
-    # repos = merge_dicts(accounts['bitbucket'].get_repos(),accounts['github'].get_repos())
+    # repos = merge_dicts(accounts['bitbucket'].get_repos(), accounts['github'].get_repos())
     repos = accounts['github'].get_repos()
-    # print request.session['bitbucket_token']
-    return render(request, 'castle/projects.html', {'repos': repos})
+    if request.method == 'GET':
+        return render(request, 'castle/projects.html', {'repos': repos})
+    else:
+        return HttpResponse(json_dump(repos), 'application/json')
+
+
+# Used as endpoint, so returns HttpResponse
+def full_project(request, host, owner, repo, branch):
+    if not init_tokens(request):
+        # TODO determine better way to deal with unsynced since this is an endpoint
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+    contents = accounts[host].get_full_repo(owner, repo, branch)
+    return HttpResponse(json_dump(contents), 'application/json')
 
 
 def project(request, host, owner, repo, branch, path):
@@ -106,15 +118,3 @@ def create_branch(request):
 
     accounts[host].edit_repo_des(name, currentBranch, owner, repoName)
     return HttpResponse()
-
-
-
-# Used as endpoint, so returns HttpResponse
-def full_project(request, host, owner, repo, branch):
-    if not init_tokens(request):
-        # TODO determine better way to deal with unsynced since this is an endpoint
-        return redirect('account:Sync')
-    init_vcs(exclude_unsynced=True)
-    auth_vcs(request)
-    contents = accounts[host].get_full_repo(owner, repo, branch)
-    return HttpResponse(json_dump(contents), 'application/json')

@@ -37,15 +37,12 @@
         </div>
         <div id="toolbar" style="background:rebeccapurple">
             <button id="runButton" class="btn toolbarbtn"><span class="glyphicon glyphicon-play"></span></button><!--
-            -->
-            <button id="debugButton" class="btn toolbarbtn"><span class="fas fa-bug" style="font-size:1.75rem"></span>
+            --><button id="debugButton" class="btn toolbarbtn"><span class="fas fa-bug" style="font-size:1.75rem"></span>
             </button><!--
-            -->
-            <button class="btn toolbarbtn" data-toggle="modal" data-target="#myModal"><span class="fab fa-git"
+            --><button class="btn toolbarbtn" data-toggle="modal" data-target="#myModal"><span class="fab fa-git"
                                                                                             style="font-size:1.75rem"></span>
             </button><!--
-            -->
-            <button class="btn dropdown toolbarbtn">
+            --><button class="btn dropdown toolbarbtn">
                 <a class="dropdown-toggle" data-toggle="dropdown" data-display="static"><span
                         class="glyphicon glyphicon-tint"></span></a>
                 <ul class="dropdown-menu">
@@ -75,84 +72,87 @@
                     <li><a href="javascript:changeTheme('vibrant_ink')">Vibrant Ink</a></li>
                 </ul>
             </button><!--
-{#            --><button class="btn toolbarbtn"><span class="glyphicon glyphicon-th-list"></span></button><!--#}
-            -->
-            <button class="btn toolbarbtn" onclick="toggleLive()" title="Live Preview"><span class="fas fa-bolt"
-                                                                                             style="font-size:1.75rem"></span>
+            --><button class="btn toolbarbtn" onclick="toggleLive()" title="Live Preview">
+                <span class="fas fa-bolt" style="font-size:1.75rem"></span>
             </button>
         </div>
-        <div id="treeview"></div>
-        <div id="editorcol">
-            <div id="tabbar">
-                <ul class="nav nav-tabs"></ul>
-            </div>
-            <div id="editorContainer"></div>
-            <div id="livedisplay">
-                <iframe id="livedisplayFrame"></iframe>
-            </div>
-            <div id="debug">
-                <div id="debugbtncontainer">
-                    <button id="debugStart" class="btn toolbarbtn" title="Start"><i class="fas fa-eject"></i></button>
-                    <button id="debugPause" class="btn toolbarbtn" title="Pause"><i class="fas fa-pause-circle"></i>
-                    </button>
-                    <button id="debugCont" class="btn toolbarbtn" title="Continue"><i class="fas fa-play-circle"></i>
-                    </button>
-                    <button id="debugStepOver" class="btn toolbarbtn" title="Step Over"><i
-                            class="fas fa-step-forward"></i></button>
-                    <button id="debugStepInto" class="btn toolbarbtn" title="Step Into"><i class="fas fa-forward"></i>
-                    </button>
-                    <button id="debugStepOut" class="btn toolbarbtn" title="Step Out"><i
-                            class="fas fa-fast-forward"></i></button>
+        <div id="openRepo">
+            <div id="treeview"></div>
+            <div id="editorcol">
+                <div id="tabbar">
+                    <ul class="nav nav-tabs"></ul>
                 </div>
-                <table id="stackTable" class="table">
-                    <thead id="stackTableHead">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Function</th>
-                        <th scope="col">File:Line</th>
-                    </tr>
-                    </thead>
-                    <tbody id="stackTableBody">
-                    </tbody>
-                </table>
-                <table id="variableTable" class="table">
-                    <thead id="variableTableHead">
-                    <tr>
-                        <th scope="col">Variable</th>
-                        <th scope="col">Value</th>
-                    </tr>
-                    </thead>
-                    <tbody id="variableTableBody">
-                    </tbody>
-                </table>
-                <!---<table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Expression</th>
-                            <th scope="col">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <td></td>
-                        <td></td>
-                    </tbody>
-                </table>
-                <table class="table">
-                    <thead>
+                <div id="editorContainer"></div>
+                <div id="livedisplay">
+                    <iframe id="livedisplayFrame"></iframe>
+                </div>
+                <div id="debug">
+                    <div id="debugbtncontainer">
+                        <button id="debugStart" class="btn toolbarbtn" title="Start"><i class="fas fa-eject"></i></button>
+                        <button id="debugPause" class="btn toolbarbtn" title="Pause"><i class="fas fa-pause-circle"></i>
+                        </button>
+                        <button id="debugCont" class="btn toolbarbtn" title="Continue"><i class="fas fa-play-circle"></i>
+                        </button>
+                        <button id="debugStepOver" class="btn toolbarbtn" title="Step Over"><i
+                                class="fas fa-step-forward"></i></button>
+                        <button id="debugStepInto" class="btn toolbarbtn" title="Step Into"><i class="fas fa-forward"></i>
+                        </button>
+                        <button id="debugStepOut" class="btn toolbarbtn" title="Step Out"><i
+                                class="fas fa-fast-forward"></i></button>
+                    </div>
+                    <table id="stackTable" class="table">
+                        <thead id="stackTableHead">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">Function</th>
+                            <th scope="col">File:Line</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <td></td>
-                        <td></td>
-                    </tbody>
-                </table>-->
+                        </thead>
+                        <tbody id="stackTableBody">
+                        </tbody>
+                    </table>
+                    <table id="variableTable" class="table">
+                        <thead id="variableTableHead">
+                        <tr>
+                            <th scope="col">Variable</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody id="variableTableBody">
+                        </tbody>
+                    </table>
+                    <!---<table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Expression</th>
+                                <th scope="col">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td></td>
+                            <td></td>
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td></td>
+                            <td></td>
+                        </tbody>
+                    </table>-->
+                </div>
+                <div id="terminal">
+                    <iframe id="terminalFrame" src="http://localhost:7681"></iframe>
+                </div>
             </div>
-            <div id="terminal">
-                <iframe id="terminalFrame" src="http://localhost:7681"></iframe>
-            </div>
+        </div>
+        <div id="noRepoSelectedOverlay">
+            Please select a repository
         </div>
     </div>
     <div class="modal" id="myModal" tabindex="-1" role="dialog">
@@ -197,7 +197,7 @@
         };
     </script>
     <script src="{% static 'sandbox/js/config.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'sandbox/js/compile.js' %}" type="text/javascript" charset="utf-8"></script>
+{#    <script src="{% static 'sandbox/js/compile.js' %}" type="text/javascript" charset="utf-8"></script>#}
     <script src="{% static 'sandbox/js/vcs.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'sandbox/js/helper.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'sandbox/js/collab.js' %}" type="text/javascript" charset="utf-8"></script>

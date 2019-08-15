@@ -59,61 +59,24 @@
 //Tree View
 var data = {files: {}};
 let tree = [];
+let hosts;
+let repos;
 
 async function load() {
     await init();
+    console.log("Initialized");
 
-    let github = new Github(tokens['github']);
-    let bitbucket = new Bitbucket(tokens['bitbucket']);
+    hosts = {
+        github: new Github(tokens['github']),
+        bitbucket: new Github(tokens['github'])
+    }
+    console.log("Set up hosts");
 
-    await populateFiles();
+    repos = await getAllRepos();
+    console.log("Fetched all repos");
+}
 
-    let tabNum = 0;
-    Object.keys(files).forEach(pathStr => {
-        let pathArr = pathStr.split('/');
-        let filename = pathArr.pop();
-        // Parse array of full paths to recursive tree contained in data
-        addFile(filename, files[pathStr], pathArr, data);
-
-        let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
-        htmlObj.find("a").click(function (e) {
-            e.preventDefault();
-            // Ensure tab was clicked, not close button
-            if ($(e.target).prop('nodeName') === "A") {
-                let tabFileID = $(this).parent().attr("data-fileid");
-                if (tabPaths[tabFileID] !== activePath) {
-                    switchToTab(tabFileID);
-                }
-                return false;
-                // // Activate tab
-                // $(this).tab('show');
-                // // Set activePath
-                // let tabFileID = $(this).parent().attr("data-fileid");
-                // activePath = tabPaths[tabFileID];
-            }
-        });
-        tabs[pathStr] = {
-            id: files[pathStr].id,
-            repo_id: files[pathStr].repo_id,
-            contents: files[pathStr].contents,
-            isOpen: false,
-            isSaving: false,
-            htmlObj: htmlObj
-        };
-        tabPaths[files[pathStr].id] = pathStr;
-    });
-
-    bindFileChanges();
-
-    treeify(data, tree);
-
-    $('#treeview').treeview({
-        data: tree,
-        levels: 1,
-        expandIcon: "glyphicon glyphicon-chevron-down",
-        collapseIcon: "glyphicon glyphicon-chevron-up"
-    });
-
+async function setupEventHandlers() {
     $('#treeview').on('nodeSelected', function (event, data) {
         setBreadcrumb(data);
     });
@@ -174,4 +137,79 @@ async function load() {
     });
 }
 
-load();
+async function initRepo(repo) {
+    repo.setHost(hosts[repo.hostName]);
+    activeRepo = repo;
+
+    await populateFiles(repo);
+
+    let tabNum = 0;
+    Object.keys(files).forEach(pathStr => {
+        let pathArr = pathStr.split('/');
+        let filename = pathArr.pop();
+        // Parse array of full paths to recursive tree contained in data
+        addFile(filename, files[pathStr], pathArr, data);
+
+        let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
+        htmlObj.find("a").click(function (e) {
+            e.preventDefault();
+            // Ensure tab was clicked, not close button
+            if ($(e.target).prop('nodeName') === "A") {
+                let tabFileID = $(this).parent().attr("data-fileid");
+                if (tabPaths[tabFileID] !== activePath) {
+                    switchToTab(tabFileID);
+                }
+                return false;
+                // // Activate tab
+                // $(this).tab('show');
+                // // Set activePath
+                // let tabFileID = $(this).parent().attr("data-fileid");
+                // activePath = tabPaths[tabFileID];
+            }
+        });
+        tabs[pathStr] = {
+            id: files[pathStr].id,
+            repo_id: files[pathStr].repo_id,
+            contents: files[pathStr].contents,
+            isOpen: false,
+            isSaving: false,
+            htmlObj: htmlObj
+        };
+        tabPaths[files[pathStr].id] = pathStr;
+    });
+
+    bindFileChanges();
+
+    treeify(data, tree);
+
+    $('#treeview').treeview({
+        data: tree,
+        levels: 1,
+        expandIcon: "glyphicon glyphicon-chevron-down",
+        collapseIcon: "glyphicon glyphicon-chevron-up"
+    });
+}
+
+(async () => {
+    await load();
+    console.log("Sandbox loaded");
+
+    // TODO better way of displaying all repos and allowing user to pick one
+    repos.forEach(repo => {
+        let noRepoSelectedOverlay = $('#noRepoSelectedOverlay');
+        let openRepoContainer = $('#openRepo');
+
+        let selectRepoBtn = $('<button>');
+        selectRepoBtn.text(repo.name);
+        selectRepoBtn.click(async () => {
+            noRepoSelectedOverlay.hide();
+            openRepoContainer.show();
+            // TODO add x-ing out of repo so hiding of these containers must be switched
+            await initRepo(repo);
+            console.log("Initialized repo");
+            await setupEventHandlers();
+            console.log("Set up event handlers");
+        });
+        noRepoSelectedOverlay.append(selectRepoBtn);
+    });
+})();

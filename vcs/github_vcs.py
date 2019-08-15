@@ -30,16 +30,20 @@ class GithubHost(Host):
         for raw_repo in response:
             languageResponse = self.make_request('get',
                                                  raw_repo[u'languages_url']).json()
+            name = raw_repo[u'name']
+            owner = raw_repo[u'full_name'].split('/')[0]
+            repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
             # print languageResponse
             repo = {
                 'host': 'github',
-                'name': raw_repo[u'name'],
+                'name': name,
                 'description': raw_repo[u'description'],
                 'updated_on': raw_repo[u'updated_at'],
                 'is_private': raw_repo[u'private'],
                 'size': raw_repo[u'size'],
                 # 'language': languageResponse.keys()[0],
-                'owner': raw_repo[u'full_name'].split('/')[0]
+                'owner': owner,
+                'repo_hash': repo_hash
             }
             repos[raw_repo[u'full_name']] = repo
         return repos
@@ -84,6 +88,64 @@ class GithubHost(Host):
                         'repo_id': repo_hash
                     }
                     contents[full_path] = content
+        return contents
+
+    def get_repo(self, owner, name, branch, path):
+        repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
+        response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
+                                     params={'ref': branch}).json()
+        contents = dict()
+        directories = list()
+
+        # TODO handle error if repo not found at path
+        for raw_content in response:
+            if raw_content[u'type'] == 'dir':
+                dir_name = raw_content[u'name']
+                dir_path = "{}/{}".format(path, dir_name) if path != '' else dir_name
+                directories.append(dir_path)
+            else:
+                _path = path_concat(path, raw_content[u'name'])
+                full_path = path_concat(_path, branch, concat_before=True)
+                content_id = repo_hash + sha1(full_path).hexdigest()
+                content = {
+                    'type': raw_content[u'type'],
+                    'name': raw_content[u'name'],
+                    'id': content_id,
+                    'repo_id': repo_hash,
+                    'filepath': raw_content[u'path'],
+                }
+                contents[full_path] = content
+
+        # TODO modularize since this will be used for BB as well
+        # TODO handle if change doc DNE
+        # changes = get_doc('file_changes', repo_hash).to_dict()
+        # for raw_path, change in changes.items():
+        #     # TODO modularize and ensure ; and : are safe to use
+        #     full_path = raw_path.replace(';', '/')
+        #     full_path = full_path.replace(':', '.')
+        #     if type(change) is dict and change[u'branch_parent'] == branch + '_' + path:
+        #         if change[u'type'] == 'del':
+        #             del contents[full_path]
+        #         elif change[u'type'] == 'add':
+        #             content = {
+        #                 'type': 'file',
+        #                 'name': change[u'name'],
+        #                 'id': repo_hash + sha1(full_path).hexdigest(),
+        #                 'repo_id': repo_hash
+        #             }
+        #             contents[full_path] = content
+        return contents, directories
+
+    def fill_full_repo(self, owner, name, branch, path, out_content):
+        files, directories = self.get_repo(owner, name, branch, path)
+        out_content.update(files)
+
+        for directory in directories:
+            self.fill_full_repo(owner, name, branch, directory, out_content)
+
+    def get_full_repo(self, owner, name, branch):
+        contents = dict()
+        self.fill_full_repo(owner, name, branch, '', contents)
         return contents
 
     def get_branches(self, owner, name):
