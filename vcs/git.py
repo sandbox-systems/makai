@@ -17,18 +17,23 @@ def path_concat(orig_path, to_concat, concat_before=False):
 
 
 class Host:
-    def __init__(self, session_key, sync_link, client_id, client_secret):
+    def __init__(self, session_key, refresh_session_key, sync_link, client_id, client_secret):
         self.token = None
+        self.refresh_token = None
         # OAuth credentials
         self.client_id = client_id
         self.client_secret = client_secret
         # Name of token mapping key for this host in session
         self.session_key = session_key
+        self.refresh_session_key = refresh_session_key
         # If the token for this host is not saved in session, define a syncing link as not None
         self.sync_link = sync_link
 
     def authenticate(self, request):
         token = request.session.get(self.session_key)
+        refresh_token = request.session.get(self.refresh_session_key)
+        if refresh_token is not None:
+            self.refresh_token = refresh_token
         if token is not None:
             self.token = token
             return True
@@ -40,7 +45,8 @@ class Host:
                                  'grant_type': 'authorization_code'})
         return r
 
-    def refresh_token(self, refresh_token, endpoint):
+    # This just returns the response object
+    def fetch_refreshed_token(self, refresh_token, endpoint):
         r = post(endpoint,
                  data={'client_id': self.client_id, 'client_secret': self.client_secret, 'refresh_token': refresh_token,
                        'grant_type': 'refresh_token'})

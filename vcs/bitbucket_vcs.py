@@ -1,5 +1,6 @@
 from git import *
 from hashlib import sha1
+from requests import get
 
 
 # TODO use str.format instead of concatenating strings
@@ -16,7 +17,7 @@ class BitbucketHost(Host):
 
     def __init__(self, token_exists):
         # If token is not saved in session, let Host set up syncing link as instance variable
-        Host.__init__(self, 'bitbucket_token',
+        Host.__init__(self, 'bitbucket_token', 'bitbucket_refresh_token',
                       None if token_exists else 'https://bitbucket.org/site/oauth2/authorize?response_type=code&client_id=' +
                                                 bitbucket_config['client_id'], bitbucket_config['client_id'],
                       bitbucket_config['client_secret'])
@@ -32,11 +33,21 @@ class BitbucketHost(Host):
         # TODO use .get instead of [] more for any dictionary access? Avoids potential error
         if response.get(u'type') == u'error':
             if 'refresh' in response[u'error'][u'message']:
-                print 'Refresh'
+                # TODO ensure has refresh token
+                response = Host.fetch_refreshed_token(self, self.refresh_token,
+                                                      'https://bitbucket.org/site/oauth2/access_token').json()
+                if 'error_description' in response or 'access_token' not in response:
+                    return False
+
+                token = response['access_token']
+                refresh_token = response.get('refresh_token')
+
+                get('{}/{}?token={}&refresh_token={}'.format(
+                    reversed('account:UpdateTokens'), 'bitbucket', token, refresh_token))
             else:
                 # TODO handle unexpected error, take back to sync page?
-                pass
-                # self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
+                return False
+        return True
 
     def make_request(self, method, endpoint, auth_pattern='Bearer {}', data=None, params=None, json=None):
         return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params, json=json)
@@ -46,9 +57,11 @@ class BitbucketHost(Host):
         response = self.make_request('get', request_build,
                                      params={'role': 'member', 'pagelen': '100'}).json()
 
-        self.refresh(response)
-
         repos = dict()
+
+        if not self.refresh(response):
+            return repos
+
         while request_build != "":
             for raw_repo in response[u'values']:
                 owner = raw_repo[u'full_name'].split('/')[0]

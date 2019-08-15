@@ -64,8 +64,24 @@ def sync_callback(request, host):
                 update_doc('priv_user', request.session.get('uid'), doc_update)
 
                 # TODO Handle error updating doc?
-                print("Hello")
                 return render(request, 'account/syncCallback.html')
     # If there was an error anywhere in the process
     return render(request, 'account/syncCallbackErrored.html')
 
+
+def update_tokens(request, host):
+    token = request.GET.get('token')
+    refresh_token = request.GET.get('refresh_token')
+
+    request.session[host + '_token'] = token
+    request.session[host + '_refresh_token'] = refresh_token
+
+    # Create an updated mapping of host_token to the fetched token
+    doc_update = dict()
+    if token:
+        doc_update[(host + '_token').decode('utf-8')] = token.decode('utf-8')
+    if refresh_token:
+        doc_update[(host + '_refresh_token').decode('utf-8')] = refresh_token.decode('utf-8')
+
+    # Update the firebase document reference with the new token
+    update_doc('priv_user', request.session.get('uid'), doc_update)
