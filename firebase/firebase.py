@@ -7,6 +7,12 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
+# TODO Handle error creating?
+def create_empty_doc(collection, doc_key):
+    # Create document with empty body
+    db.collection(collection).document(doc_key).set({})
+
+
 # TODO Handle error updating?
 def update_doc(collection, doc_key, update):
     # Ref doc_key in collection

@@ -72,22 +72,22 @@ class GithubHost(Host):
 
         # TODO modularize since this will be used for BB as well
         # TODO handle if change doc DNE
-        changes = get_doc('file_changes', repo_hash).to_dict()
-        for raw_path, change in changes.items():
-            # TODO modularize and ensure ; and : are safe to use
-            full_path = raw_path.replace(';', '/')
-            full_path = full_path.replace(':', '.')
-            if type(change) is dict and change[u'branch_parent'] == branch + '_' + path:
-                if change[u'type'] == 'del':
-                    del contents[full_path]
-                elif change[u'type'] == 'add':
-                    content = {
-                        'type': 'file',
-                        'name': change[u'name'],
-                        'id': repo_hash + sha1(full_path).hexdigest(),
-                        'repo_id': repo_hash
-                    }
-                    contents[full_path] = content
+        # changes = get_doc('file_changes', repo_hash).to_dict()
+        # for raw_path, change in changes.items():
+        #     # TODO modularize and ensure ; and : are safe to use
+        #     full_path = raw_path.replace(';', '/')
+        #     full_path = full_path.replace(':', '.')
+        #     if type(change) is dict and change[u'branch_parent'] == branch + '_' + path:
+        #         if change[u'type'] == 'del':
+        #             del contents[full_path]
+        #         elif change[u'type'] == 'add':
+        #             content = {
+        #                 'type': 'file',
+        #                 'name': change[u'name'],
+        #                 'id': repo_hash + sha1(full_path).hexdigest(),
+        #                 'repo_id': repo_hash
+        #             }
+        #             contents[full_path] = content
         return contents
 
     def get_repo_at_path(self, owner, name, branch, path):

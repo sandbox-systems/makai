@@ -13,7 +13,9 @@ def projects(request):
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
     # request.session.flush()
-    repos = merge_dicts(accounts['bitbucket'].get_repos(), accounts['github'].get_repos())
+    repos = dict()
+    for host, account in accounts.items():
+        repos = merge_dicts(repos, account.get_repos())
     if request.method == 'GET':
         return render(request, 'castle/projects.html', {'repos': repos})
     else:

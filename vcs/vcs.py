@@ -12,7 +12,6 @@ def init_tokens(request, require_host=None):
     token_exists = False
 
     # Check to see if a token exists in the session for each available host and store each in tokens
-    print request.session.items()
     for host in vcs_hosts:
         if require_host is not None and host != require_host:
             continue

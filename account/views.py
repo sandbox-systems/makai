@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from firebase.web_credentials import config
 from vcs.vcs import *
-from firebase.firebase import update_doc
+from firebase.firebase import update_doc, get_doc, create_empty_doc
 
 
 def login(request, was_attempt_redirected=None):
@@ -12,7 +12,14 @@ def login(request, was_attempt_redirected=None):
 
 
 def login_callback(request):
-    request.session['uid'] = request.POST.get('uid')
+    uid = request.POST.get('uid')
+    request.session['uid'] = uid
+
+    # Create priv_user document for user if does not exist already
+    priv_user_doc = get_doc('priv_user', uid).to_dict()
+    if not priv_user_doc:
+        create_empty_doc('priv_user', uid)
+
     return redirect('home:Home')
 
 
@@ -30,7 +37,6 @@ def sync(request):
     init_vcs()
     # print(request.session['bitbucket_token'])
     # request.session.flush()
-    print accounts
 
     return render(request, 'account/sync.html', {'accounts': accounts.items()})
 
