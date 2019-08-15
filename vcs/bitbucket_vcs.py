@@ -29,12 +29,14 @@ class BitbucketHost(Host):
         return response['access_token'], response['refresh_token']
 
     def refresh(self, response):
-        if response[u'type'] == u'error' and 'refresh' in response[u'error'][u'message']:
-            print 'Refresh'
-        else:
-            # TODO handle unexpected error, take back to sync page?
-            pass
-            # self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
+        # TODO use .get instead of [] more for any dictionary access? Avoids potential error
+        if response.get(u'type') == u'error':
+            if 'refresh' in response[u'error'][u'message']:
+                print 'Refresh'
+            else:
+                # TODO handle unexpected error, take back to sync page?
+                pass
+                # self.refresh_token('', 'https://bitbucket.org/site/oauth2/access_token')
 
     def make_request(self, method, endpoint, auth_pattern='Bearer {}', data=None, params=None, json=None):
         return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params, json=json)
@@ -70,7 +72,7 @@ class BitbucketHost(Host):
                 request_build = ""
         return repos
 
-    def get_repo(self, owner, name, branch, path):
+    def get_repo_at_path(self, owner, name, branch, path):
         repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
         response = self.make_request(
             'get',
@@ -79,6 +81,8 @@ class BitbucketHost(Host):
         ).json()
         contents = dict()
         directories = list()
+
+        self.refresh(response)
 
         # TODO handle error if repo not found at path
         for raw_content in response[u'values']:
@@ -119,7 +123,7 @@ class BitbucketHost(Host):
         return contents, directories
 
     def fill_full_repo(self, owner, name, branch, path, out_content):
-        files, directories = self.get_repo(owner, name, branch, path)
+        files, directories = self.get_repo_at_path(owner, name, branch, path)
         out_content.update(files)
 
         for directory in directories:

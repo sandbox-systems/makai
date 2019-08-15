@@ -90,7 +90,7 @@ class GithubHost(Host):
                     contents[full_path] = content
         return contents
 
-    def get_repo(self, owner, name, branch, path):
+    def get_repo_at_path(self, owner, name, branch, path):
         repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
         response = self.make_request('get', 'https://api.github.com/repos/' + owner + '/' + name + '/contents/' + path,
                                      params={'ref': branch}).json()
@@ -137,7 +137,7 @@ class GithubHost(Host):
         return contents, directories
 
     def fill_full_repo(self, owner, name, branch, path, out_content):
-        files, directories = self.get_repo(owner, name, branch, path)
+        files, directories = self.get_repo_at_path(owner, name, branch, path)
         out_content.update(files)
 
         for directory in directories:

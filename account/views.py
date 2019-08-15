@@ -30,6 +30,8 @@ def sync(request):
     init_vcs()
     # print(request.session['bitbucket_token'])
     # request.session.flush()
+    print accounts
+
     return render(request, 'account/sync.html', {'accounts': accounts.items()})
 
 
@@ -53,8 +55,10 @@ def sync_callback(request, host):
 
                 # Create an updated mapping of host_token to the fetched token
                 doc_update = dict()
-                doc_update[(host + '_token').decode('utf-8')] = token.decode('utf-8')
-                # doc_update[(host + '_refresh_token').decode('utf-8')] = refresh_token.decode('utf-8')
+                if token:
+                    doc_update[(host + '_token').decode('utf-8')] = token.decode('utf-8')
+                if refresh_token:
+                    doc_update[(host + '_refresh_token').decode('utf-8')] = refresh_token.decode('utf-8')
 
                 # Update the firebase document reference with the new token
                 update_doc('priv_user', request.session.get('uid'), doc_update)

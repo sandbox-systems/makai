@@ -33,7 +33,9 @@ def full_project(request, host, owner, repo, branch):
 
 
 def project(request, host, owner, repo, branch, path):
-    if not init_tokens(request):
+    # TODO make into decorator
+    if not init_tokens(request, require_host=host):
+        # TODO display message in sync page saying you need to sync before trying whatever action was attempted?
         return redirect('account:Sync')
     init_vcs(exclude_unsynced=True)
     auth_vcs(request)
