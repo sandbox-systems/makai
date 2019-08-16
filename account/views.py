@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
+
 from firebase.web_credentials import config
 from vcs.vcs import *
 from firebase.firebase import update_doc, get_doc, create_empty_doc

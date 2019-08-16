@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from git import *
 from hashlib import sha1
 from requests import get
@@ -42,12 +44,17 @@ class BitbucketHost(Host):
                 token = response['access_token']
                 refresh_token = response.get('refresh_token')
 
-                get('{}/{}?token={}&refresh_token={}'.format(
-                    reversed('account:UpdateTokens'), 'bitbucket', token, refresh_token))
+                # TODO check if this works in production
+                get('http://localhost:8000{}?token={}&refresh_token={}'.format(
+                    reverse('account:UpdateTokens', args=['bitbucket']), token, refresh_token))
+                self.token = token
+                self.refresh_token = refresh_token
+
+                return True
             else:
                 # TODO handle unexpected error, take back to sync page?
                 return False
-        return True
+        return None
 
     def make_request(self, method, endpoint, auth_pattern='Bearer {}', data=None, params=None, json=None):
         return Host.make_request(self, method, endpoint, auth_pattern, data=data, params=params, json=json)
@@ -59,8 +66,14 @@ class BitbucketHost(Host):
 
         repos = dict()
 
-        if not self.refresh(response):
+        refresh = self.refresh(response)
+        if refresh is None:
+            pass
+        elif not refresh:
             return repos
+        else:
+            response = self.make_request('get', request_build,
+                                         params={'role': 'member', 'pagelen': '100'}).json()
 
         while request_build != "":
             for raw_repo in response[u'values']:
