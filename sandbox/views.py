@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from firebase.credentials import config
+from firebase.web_credentials import config
 
 
 def sandbox(request):

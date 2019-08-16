@@ -120,12 +120,13 @@ async function setupEventHandlers() {
     });
 
     //Toolbar
-    $("#runButton").click(function () {
+    //TODO delete if everything runs fine without this
+    /*$("#runButton").click(function () {
         document.getElementById("terminalFrame").contentWindow.postMessage({
             filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
             code: editor.getValue()
         }, "http://127.0.0.1:7681");
-    });
+    });*/
 
     $(window).on("beforeunload", function () {
         leaveAndSaveCurrentCollabSession();
@@ -140,6 +141,9 @@ async function setupEventHandlers() {
 async function initRepo(repo) {
     repo.setHost(hosts[repo.hostName]);
     activeRepo = repo;
+
+    //Set repo for breadcrumbs
+    $("#breadcrumbs ul li").first().text(repo.name);
 
     await populateFiles(repo);
 
