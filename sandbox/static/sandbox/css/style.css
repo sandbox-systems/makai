@@ -139,6 +139,7 @@ body {
 
 #tabbar .active > a {
     margin: 0px;
+    color: #007BFF !important;
 }
 
 #tabbar .nav-tabs {
