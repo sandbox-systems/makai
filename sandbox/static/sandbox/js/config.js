@@ -1,4 +1,8 @@
 //ACE Editor
+let Range = ace.require('ace/range').Range;
+let modelist = ace.require('ace/ext/modelist');
+let languageTools = ace.require('ace/ext/language_tools');
+
 var editor;
 var editorOptions = {
     // editor options
@@ -35,6 +39,7 @@ var editorOptions = {
     scrollPastEnd: 0, // number -> !maxLines: if positive, user can scroll pass the last line and go n * editorHeight more distance
     fixedWidthGutter: false, // boolean: true if the gutter should be fixed width
     theme: 'ace/theme/textmate', // theme string from ace/theme or custom?
+    mode: 'ace/mode/text',
 
     // mouseHandler options
     scrollSpeed: 2, // number: the scroll speed index

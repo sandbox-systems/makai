@@ -6,8 +6,6 @@ let collab = {
     online: [],
     canSave: false
 };
-let modelist = ace.require('ace/ext/modelist');
-let languageTools = ace.require('ace/ext/language_tools');
 
 /**
  * Extract filename from path (should be rightmost node)
@@ -180,6 +178,10 @@ async function handleFileDC(id) {
 function openTab(id) {
     // Find tab ref by id
     let tab = tabs[tabPaths[id]];
+    console.log(tab);
+    //MBA make a session on file open
+    tab.session = (tab.session == undefined)?ace.createEditSession("", modelist.getModeForPath(tabPaths[id]).mode):tab.session;
+
     tab.isOpen = true;
     // Make sure it's not active
     tab.htmlObj.removeClass("active");
@@ -208,6 +210,7 @@ function getNextTab(baseTab) {
 
 async function closeTab(id) {
     let tab = tabs[tabPaths[id]];
+
     // Switch to next closest tab
     if (tabPaths[id] === activePath) {
         let nextTab = getNextTab(tab.htmlObj[0]);
@@ -238,6 +241,9 @@ async function switchToTab(id) {
     newActiveTab.htmlObj.find("a").addClass("active");
 
     newActiveTab.contents = await getFileContents(activePath);
+
+    //MBA: set session to correct tab value
+    newActiveTab.session.setValue(newActiveTab.contents);
 
     let wasCollabSessionCreated = !(await doesCollabSessionExist(id));
     /*Join collab session*/
@@ -355,7 +361,6 @@ function setupEditor() {
     editorDiv.attr('id', 'editor');
     editor = ace.edit("editor");
     editor.setOptions(editorOptions);
-    setSessionMode(editor.session, activePath);
     bindEditorBreakpoints();
 }
 
@@ -373,10 +378,12 @@ function joinCollabSession(id, shouldCreate) {
     // });
     // Bind editor to firepad
     Firepad.fromACE(ref, editor, {userId: uid});
+    
     // Set editor text to file contents
     if (shouldCreate) {
         editor.setValue(tabs[activePath].contents, -1);
     }
+
     // Update online list with added or removed children
     ref.child("users").on("child_added", childSnapshot => {
         // Push added child to online list as appropriate

@@ -21,7 +21,7 @@ $("#runButton").click(function(){
 
     termPost({
         action: "run",
-        filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
+        filename: getFilenameFromPath(activePath),
         code: editor.getValue(),
         breakpoints: breakpointList.map(function(value){return value+1})
     });
@@ -97,7 +97,7 @@ $("#debugButton").click(function () {
 
     termPost({
         action: "debug",
-        filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
+        filename: getFilenameFromPath(activePath),
         code: editor.getValue(),
         breakpoints: breakpointList.map(function(value){return value+1})
     });
@@ -185,8 +185,6 @@ function bindEditorBreakpoints(){
         e.stop();
     });
 }
-
-var Range = ace.require('ace/range').Range;
 
 function setCurrentDebugLine(num){
     if(!debug) return;
