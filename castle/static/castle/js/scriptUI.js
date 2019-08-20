@@ -18,6 +18,95 @@ function search() {
     }
 }
 
+
+async function newRepo() {
+    const {value: formValues} = await Swal.fire({
+        title: 'Create new Repo',
+        html:
+            '<input id="newRepoName" class="swal2-input">' +
+            '<select id="newRepoAccount" class="swal2-input">\n' +
+            '  <option value="github">Github</option>\n' +
+            '  <option value="bitbucket">Bitbucket</option>\n' +
+            '</select>\n' +
+            "<div class='container-lock'>\n" +
+            "  <span class='lock unlocked' id='lockspan' onclick='lock()'></span><div id='repostatus'>Public Repo</div>\n" +
+            "</div>",
+        showCancelButton: true,
+        confirmButtonText: "Create",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: '#663399',
+        focusConfirm: false,
+        preConfirm: () => {
+            var is_private = !($('#lockspan').hasClass('unlocked'));
+            return [
+                document.getElementById('newRepoName').value,
+                document.getElementById('newRepoAccount').value,
+                is_private
+            ]
+        }
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/castle/createRepo',
+        dataType: "text",
+        data: {
+            'name': formValues[0],
+            'host': formValues[1],
+            'is_private': formValues[2],
+        },
+        success: function (data) {
+            document.location.reload(false);
+            // Swal.fire({
+            //     title: 'Created!',
+            //     text: formValues[0] + ' has been created',
+            //     type: 'success',
+            //     toast: true,
+            //     timer: 3000,
+            //     position: 'top-end',
+            //     showConfirmButton: false
+            // });
+        },
+        error: function (request, status, error) {
+            Swal.fire({
+                title: 'Error!',
+                text: "Please try again",
+                type: 'error',
+                toast: true,
+                timer: 3000,
+                position: 'top-end',
+                showConfirmButton: false
+            });
+        }
+    });
+}
+
+//TODO Server side
+async function uploadRepo() {
+    const {value: formValues} = await Swal.fire({
+        title: 'Upload new Repo',
+        html:
+            '<input id="newRepoName" type="file" webkitdirectory mozdirectory class="swal2-input">' +
+            '<select id="newRepoAccount" class="swal2-input">\n' +
+            '  <option value="github">Github</option>\n' +
+            '  <option value="bitbucket">Bitbucket</option>\n' +
+            '</select>\n' +
+            "<div class='container-lock'>\n" +
+            "  <span class='lock unlocked' id='lockspan' onclick='lock()'></span><div id='repostatus'>Public Repo</div>\n" +
+            "</div>",
+        showCancelButton: true,
+        confirmButtonText: "Create",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: '#663399',
+        focusConfirm: false,
+        preConfirm: () => {
+            return [
+                document.getElementById('newRepoName').value,
+                document.getElementById('newRepoAccount').value
+            ]
+        }
+    });
+}
+
 //TODO Change Date for Bitbucket
 async function previewRepo(id) {
 
@@ -84,28 +173,34 @@ async function renameRepo(id) {
                 'newName': name
             },
             success: function (data) {
-                Swal.fire({
-                    title: 'Renamed!',
-                    text: 'The Repository has been renamed to ' + name,
-                    type: 'success',
-                    toast: true
-                });
+                document.location.reload(false);
+                // Swal.fire({
+                //     title: 'Renamed!',
+                //     text: 'The Repository has been renamed to ' + name,
+                //     type: 'success',
+                //     toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
+                // });
             },
             error: function (request, status, error) {
                 Swal.fire({
                     title: 'Error!',
                     text: "Please try again",
                     type: 'error',
-                    toast: true
+                    toast: true,
+                    timer: 3000,
+                    position: 'top-end',
+                    showConfirmButton: false
                 });
             }
         });
     } else {
         Swal.fire({
             title: 'Rename Cancelled!',
-            text: 'The Repository has not been renamed',
             type: 'error',
-            toast: true
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
         });
     }
 }
@@ -139,27 +234,31 @@ async function editRepoDescription(id) {
             success: function (data) {
                 document.getElementById(id).setAttribute('data-description', description);
                 Swal.fire({
-                    title: 'Changed!',
-                    text: id + "'s description has been changed",
+                    title: 'Changed Description!',
                     type: 'success',
-                    toast: true
+                    toast: true,
+                    timer: 3000,
+                    position: 'top-end',
+                    showConfirmButton: false
                 });
             },
             error: function (request, status, error) {
                 Swal.fire({
                     title: 'Error!',
-                    text: "Please try again",
                     type: 'error',
-                    toast: true
+                    toast: true,
+                    timer: 3000,
+                    position: 'top-end',
+                    showConfirmButton: false
                 });
             }
         });
     } else {
         Swal.fire({
-            title: 'Rename Cancelled!',
-            text: id + ' has not been renamed',
+            title: 'Edit Cancelled!',
+            text: id + "'s description has not been changed",
             type: 'error',
-            toast: true
+            toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
         });
     }
 }
@@ -239,7 +338,7 @@ async function shareRepo(id) {
 async function deleteRepo(id) {
     Swal.fire({
         title: 'Confirm Deletion',
-        html: 'Are you sure you want to delete <strong>' + id + '</strong>',
+        text: 'Are you sure you want to delete ' + id,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: "Delete",
@@ -247,7 +346,6 @@ async function deleteRepo(id) {
         confirmButtonColor: '#663399'
     }).then((result) => {
             if (result.value) {
-                // TODO Server side deletion
                 $.ajax({
                     type: 'GET',
                     url: '/castle/deleteRepo',
@@ -258,12 +356,17 @@ async function deleteRepo(id) {
                         'owner': document.getElementById(id).getAttribute("data-owner")
                     },
                     success: function (data) {
+                        var element = document.getElementById(id);
+                        element.parentNode.removeChild(element);
+
                         Swal.fire(
                             {
                                 title: 'Deleted!',
                                 text: id + ' has been deleted',
                                 type: 'success',
-                                toast: true
+                                toast: true,
+                                timer: 3000,
+                                position: 'top-end'
                             });
                     },
                     error: function (request, status, error) {
@@ -271,7 +374,9 @@ async function deleteRepo(id) {
                             title: 'Error!',
                             text: "Please try again",
                             type: 'error',
-                            toast: true
+                            toast: true,
+                            timer: 3000,
+                            position: 'top-end'
                         });
                     }
                 });
@@ -281,14 +386,16 @@ async function deleteRepo(id) {
                         title: 'Delete Cancelled!',
                         text: id + ' has not been deleted',
                         type: 'error',
-                        toast: true
+                        toast: true,
+                        timer: 3000,
+                        position: 'top-end'
                     });
             }
         }
     );
 }
 
-//TODO
+//TODO Later (Not Priority)
 async function previewContents(id) {
     if (document.getElementById(id).getAttribute("data-entry-type") == "dir") {
 
@@ -306,6 +413,7 @@ async function previewContents(id) {
     }
 }
 
+// TODO Server Side Renaming
 async function renameContents(id) {
     const {value: name} = await Swal.fire({
         title: 'Rename ' + id + '',
@@ -322,27 +430,25 @@ async function renameContents(id) {
         confirmButtonColor: '#663399'
     })
     if (name) {
-        // TODO Server Side Renaming
         Swal.fire({
-            title: 'Renamed!',
-            text: id + ' has been renamed to ' + name,
+            title: 'Renamed to ' + name + '!',
             type: 'success',
-            confirmButtonColor: '#663399'
+            toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
         });
     } else {
         Swal.fire({
             title: 'Rename Cancelled!',
-            text: id + ' has not been renamed',
             type: 'error',
-            confirmButtonColor: '#663399'
+            toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
         });
     }
 }
 
+// TODO Server side deletion
 async function deleteContents(id) {
     Swal.fire({
         title: 'Confirm Deletion',
-        html: 'Are you sure you want to delete <strong>' + id + '</strong>',
+        html: 'Are you sure you want to delete ' + id,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: "Delete",
@@ -350,13 +456,12 @@ async function deleteContents(id) {
         confirmButtonColor: '#663399'
     }).then((result) => {
         if (result.value) {
-            // TODO Server side deletion
             Swal.fire(
                 {
                     title: 'Deleted!',
-                    text: id + ' has been deleted.',
+                    text: id + ' has been deleted',
                     type: 'success',
-                    confirmButtonColor: '#663399'
+                    toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
                 });
         } else {
             Swal.fire(
@@ -364,7 +469,7 @@ async function deleteContents(id) {
                     title: 'Delete Cancelled!',
                     text: id + ' has not been deleted',
                     type: 'error',
-                    confirmButtonColor: '#663399'
+                    toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
                 });
         }
     });
@@ -372,10 +477,12 @@ async function deleteContents(id) {
 
 }
 
+//TODO Implement
 async function copyContents(id) {
 
 }
 
+//TODO Server side
 async function newFile() {
     const {value: fileName} = await Swal.fire({
         title: 'Create new File',
@@ -393,6 +500,7 @@ async function newFile() {
     });
 }
 
+//TODO Server side
 async function newFolder() {
     const {value: folderName} = await Swal.fire({
         title: 'Create new Folder',
@@ -410,82 +518,12 @@ async function newFolder() {
     });
 }
 
+//TODO Implement
 async function uploadItem() {
 
 }
 
-async function newRepo() {
-    const {value: formValues} = await Swal.fire({
-        title: 'Create new Repo',
-        html:
-            '<input id="newRepoName" class="swal2-input">' +
-            '<select id="newRepoAccount" class="swal2-input">\n' +
-            '  <option value="github">Github</option>\n' +
-            '  <option value="bitbucket">Bitbucket</option>\n' +
-            '</select>\n' +
-            "<div class='container-lock'>\n" +
-            "  <span class='lock unlocked' id='lockspan' onclick='lock()'></span><div id='repostatus'>Public Repo</div>\n" +
-            "</div>",
-        showCancelButton: true,
-        confirmButtonText: "Create",
-        cancelButtonText: "Cancel",
-        confirmButtonColor: '#663399',
-        focusConfirm: false,
-        preConfirm: () => {
-            var is_private = !($('#lockspan').hasClass('unlocked'));
-            return [
-                document.getElementById('newRepoName').value,
-                document.getElementById('newRepoAccount').value,
-                is_private
-            ]
-        }
-    });
-    $.ajax({
-        type: 'GET',
-        url: '/castle/createRepo',
-        dataType: "json",
-        data: {
-            'name': formValues[0],
-            'host': formValues[1],
-            'is_private': formValues[2],
-        },
-        success: function (data) {
-            Swal.fire({
-                title: 'Created!',
-                text: formValues[0] + ' has been created',
-                type: 'success',
-                confirmButtonColor: '#663399'
-            });
-        }
-    });
-}
-
-async function uploadRepo() {
-    const {value: formValues} = await Swal.fire({
-        title: 'Upload new Repo',
-        html:
-            '<input id="newRepoName" type="file" webkitdirectory mozdirectory class="swal2-input">' +
-            '<select id="newRepoAccount" class="swal2-input">\n' +
-            '  <option value="github">Github</option>\n' +
-            '  <option value="bitbucket">Bitbucket</option>\n' +
-            '</select>\n' +
-            "<div class='container-lock'>\n" +
-            "  <span class='lock unlocked' id='lockspan' onclick='lock()'></span><div id='repostatus'>Public Repo</div>\n" +
-            "</div>",
-        showCancelButton: true,
-        confirmButtonText: "Create",
-        cancelButtonText: "Cancel",
-        confirmButtonColor: '#663399',
-        focusConfirm: false,
-        preConfirm: () => {
-            return [
-                document.getElementById('newRepoName').value,
-                document.getElementById('newRepoAccount').value
-            ]
-        }
-    });
-}
-
+//TODO Server side
 async function pull() {
     // document.location.reload(false);
     Swal.fire(
@@ -495,14 +533,17 @@ async function pull() {
     );
 }
 
+//TODO Implement
 async function commit() {
 
 }
 
+//TODO Implement
 async function push() {
 
 }
 
+// TODO Server side
 async function newBranch(host, repoOwner, repoName) {
     const {value: branchName} = await Swal.fire({
         title: 'Branch off of ' + document.getElementById("dropdownMenuButton").innerText,
@@ -521,7 +562,7 @@ async function newBranch(host, repoOwner, repoName) {
     $.ajax({
         type: 'GET',
         url: '/castle/newBranch',
-        dataType: "json",
+        dataType: "text",
         data: {
             'name': branchName,
             'currentBranch': document.getElementById("dropdownMenuButton").innerText,
@@ -530,11 +571,24 @@ async function newBranch(host, repoOwner, repoName) {
             'repoName': repoName
         },
         success: function (data) {
+            document.location.reload(false)
+            // Swal.fire({
+            //     title: 'Created ' + branchName + '!',
+            //     type: 'success',
+            //     toast: true,
+            //     timer: 3000,
+            //     position: 'top-end',
+            //     showConfirmButton: false
+            // });
+        },
+        error: function (request, status, error) {
             Swal.fire({
-                title: 'Created!',
-                text: branchName + ' has been created',
-                type: 'success',
-                confirmButtonColor: '#663399'
+                title: 'Error!',
+                type: 'error',
+                toast: true,
+                timer: 3000,
+                position: 'top-end',
+                showConfirmButton: false
             });
         }
     });

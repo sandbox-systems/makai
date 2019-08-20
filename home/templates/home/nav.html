@@ -82,9 +82,10 @@
                            id="sbxx" autocomplete="off"
                            required="required" class="sbx-custom__input">
                     <button type="submit" title="Submit your search query." class="sbx-custom__submit">
-                        <svg role="img" aria-label="Search">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-search-22"></use>
-                        </svg>
+{#                        <svg role="img" aria-label="Search">#}
+{#                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-search-22"></use>#}
+{#                        </svg>#}
+                        <i id="searchIcon" class="fas fa-search fa-2x"></i>
                     </button>
                     <button type="reset" title="Clear the search query." class="sbx-custom__reset"
                             style="display: none;">
@@ -118,6 +119,7 @@
         document.getElementById("go").style.display = "none";
         $('#sbxx').val("");
         $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
+        document.getElementById("oc").style.top = "46%";
     }
 
     $('#myOverlay').click(function (event) {
@@ -149,9 +151,10 @@
             document.getElementById("so").className = "searchoptions animated bounceOut";
             document.getElementById("go").className = "searchoptions animated bounceOut";
         }
-        document.getElementById("oc").style.top = "20%";
     };
-
+        document.getElementById("sbxx").onkeypress = function () {
+            document.getElementById("oc").style.top = "20%";
+        }
 </script>
 {#    <a href="{% url 'home:Landing' %}">Landing</a>#}
 {#    <a href="{% url 'account:Settings' %}">Settings</a>#}

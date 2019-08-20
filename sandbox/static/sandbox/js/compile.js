@@ -37,14 +37,14 @@ function toggleLive(){
     }else {
         $("#editor").toggleClass("liveview");
         if ($("#editor").hasClass("liveview")) {
-            $("#livedisplay").css("display", "block");
+            $("#livedisplay").css("display", "inline-block");
+            $("#editorContainer").css("width", "50%");
             editor.addEventListener("change", updateLiveData);
             updateLiveData();
-            $("#editor").css("width", "50%");
         } else {
             $("#livedisplay").css("display", "none");
             editor.removeEventListener("change", updateLiveData);
-            $("#editor").css("width", "100%");
+            $("#editorContainer").css("width", "100%");
         }
     }
 }
@@ -60,19 +60,20 @@ function toggleDebug(){
     }
     $("#editor").toggleClass("debugview");
     if($("#editor").hasClass("debugview")){
-        $("#debug").css("display", "block");
-        $("#editor").css("width", "50%");
+        $("#debug").css("display", "inline-block");
+        $("#editorContainer").css("width", "50%");
         debug = true;
         $("#terminalFrame").hide("slow", "swing", function(){
-            $("#editor").css("height", "100%").css("height", "-=84px");
+            $("#editorContainer").css("height", "65vh");
+                // .css("height", "-=84px");
         });
     }else{
         $("#debug").css("display", "none");
-        $("#editor").css("width", "100%");
+        $("#editorContainer").css("width", "100%");
         clearMarker(lineMarker);
         lineMarker = -1;
         debug = false;
-        $("#editor").css("height", "65%");
+        $("#editorContainer").css("height", "65vh");
         $("#terminalFrame").show("slow", "swing",);
     }
 }
@@ -266,7 +267,7 @@ $(document).ready(function () {
     $("#editorcol").resizable({
         handles: 'w',
         resize: function(e,ui){
-            $("#treeview").width(($(window).width() - 70) - $("#editorcol").width());
+            $("#treeviewcontainer").width(($(window).width() - 70) - $("#editorcol").width());
         }
     });
     $("#livedisplay").resizable({
@@ -277,7 +278,7 @@ $(document).ready(function () {
         },
         resize: function(e,ui){
             var temp = ($("#editorcol").width() - $("#livedisplay").width()-2);
-            $("#editor").css('width', temp, 'important');
+            $("#editorContainer").css('width', temp, 'important');
             $("#livedisplay").css("display", "inline-block");
         }, stop: function(e, ui){
             $("#livedisplay").css("pointer-events", "auto");
@@ -292,9 +293,10 @@ $(document).ready(function () {
         },
         resize: function(e,ui){
             var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
-            document.getElementById("editor").style.height = nheight;
-            document.getElementById("livedisplay").style.height = nheight;
-            document.getElementById("debug").style.height = nheight;
+            console.log(nheight);
+            $("#editorContainer").css('height', nheight);
+            $("#livedisplay").css('height', nheight);
+            $("#debug").css('height', nheight);
         },
         stop: function(e, ui){
             $("#terminalframe").css("pointer-events", "auto");

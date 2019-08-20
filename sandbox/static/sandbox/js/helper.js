@@ -133,16 +133,16 @@ function treeify(dataRef, treeRef) {
                 treeRef.push({
                     id: dataRef[key][filename].id,
                     text: filename,
-                    icon: "glyphicon glyphicon-file",
-                    color: "#000000",
-                    backColor: "#C4C4C4"
+                    icon: "fas fa-file",
+                    color: "black",
+                    backColor: "ghostwhite"
                 });
             })
         } else {
             let folder = {
                 text: key,
-                color: "#000000",
-                backColor: "#C4C4C4",
+                color: "black",
+                backColor: "ghostwhite",
                 nodes: []
             };
             treeRef.push(folder);
@@ -504,3 +504,15 @@ function setCollabSessionOwner(id, setToCurrentUser) {
         }
     }
 }
+
+//TODO Moving Tabs
+//
+// $(function () {
+//     let tabs = $("#tabar").tabs();
+//     tabs.find(".ui-tabs-nav").sortable({
+//         axis: "x",
+//         stop: function () {
+//             tabs.tabs("refresh");
+//         }
+//     });
+// });
