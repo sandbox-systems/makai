@@ -976,8 +976,13 @@ header a {
     margin: auto;
 }
 
-.overlay-content:focus-within {
-    top: 20%;
+/*.overlay-content:focus-within {*/
+    /*top: 20%;*/
+/*}*/
+
+#searchIcon{
+    color: rebeccapurple;
+    vertical-align: middle;
 }
 
 .overlay .closebtn {

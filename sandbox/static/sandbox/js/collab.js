@@ -1,8 +1,8 @@
-/*$(function(){
+$(function () {
     $('#treeview').contextMenu({
         selector: '.node-treeview',
-        zIndex:10,
-        callback: function(key, options) {
+        zIndex: 10,
+        callback: function (key, options) {
             // var m = "clicked: " + key + " on " + $(this).text();
             // window.console && console.log(m) || alert(m);
         },
@@ -10,19 +10,19 @@
             "new": {
                 name: "New",
                 icon: "fas fa-plus",
-                disabled: function(){
-                    return !($(this).context.innerHTML.includes("chevron-down"));
+                disabled: function () {
+                    // return !($(this).context.innerHTML.includes("chevron-down"));
                 },
-                items:{
+                items: {
                     "newfile": {
                         name: "New File",
-                        icon:'fas fa-file',
-                        items:{
-                            "filename":{
+                        icon: 'fas fa-file',
+                        items: {
+                            "filename": {
                                 name: "Filename",
                                 type: 'text',
-                                events:{
-                                    keyup: function(e){
+                                events: {
+                                    keyup: function (e) {
                                         //FUNCTION TO CREATE NEW FILE
                                     }
                                 }
@@ -32,12 +32,12 @@
                     "newfolder": {
                         name: "New Folder",
                         icon: "fas fa-folder",
-                        items:{
-                            "foldername":{
+                        items: {
+                            "foldername": {
                                 name: "Foldername",
                                 type: 'text',
-                                events:{
-                                    keyup: function(e){
+                                events: {
+                                    keyup: function (e) {
                                         //FUNCTION TO CREATE NEW FOLDER
                                     }
                                 }
@@ -45,16 +45,16 @@
                         }
                     }
                 }
-                }
-                ,
-            "rename ": {name: "Rename", icon: "edit"},
-            "duplicate": {name: "Duplicate", icon: "copy"},
-            "delete": {name: "Delete", icon: "delete"},
+            }
+            ,
+            "rename ": {name: "Rename", icon: "fas fa-edit"},
+            "duplicate": {name: "Duplicate", icon: "fas fa-copy"},
+            "delete": {name: "Delete", icon: "fas fa-trash"},
             // "sep1": "---------",
             // "quit": {name: "Quit", icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
         }
     });
-});*/
+});
 
 //Tree View
 var data = {files: {}};
@@ -120,12 +120,13 @@ async function setupEventHandlers() {
     });
 
     //Toolbar
-    $("#runButton").click(function () {
+    //TODO delete if everything runs fine without this
+    /*$("#runButton").click(function () {
         document.getElementById("terminalFrame").contentWindow.postMessage({
             filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
             code: editor.getValue()
         }, "http://127.0.0.1:7681");
-    });
+    });*/
 
     $(window).on("beforeunload", function () {
         leaveAndSaveCurrentCollabSession();
@@ -141,6 +142,9 @@ async function initRepo(repo) {
     repo.setHost(hosts[repo.hostName]);
     activeRepo = repo;
 
+    //Set repo for breadcrumbs
+    $("#breadcrumbs ul li").first().text(repo.name);
+
     await populateFiles(repo);
 
     let tabNum = 0;
@@ -150,7 +154,7 @@ async function initRepo(repo) {
         // Parse array of full paths to recursive tree contained in data
         addFile(filename, files[pathStr], pathArr, data);
 
-        let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
+        let htmlObj = $('<li class="fileTab" data-fileid="' + files[pathStr].id + '"><a href="#tab' + (++tabNum) + '" data-toggle="tab" class="nav-link">' + filename + '<span class="close">&nbsp;&nbsp;×</span></a></li>');
         htmlObj.find("a").click(function (e) {
             e.preventDefault();
             // Ensure tab was clicked, not close button
@@ -185,8 +189,10 @@ async function initRepo(repo) {
     $('#treeview').treeview({
         data: tree,
         levels: 1,
-        expandIcon: "glyphicon glyphicon-chevron-down",
-        collapseIcon: "glyphicon glyphicon-chevron-up"
+        expandIcon: "fas fa-folder",
+        collapseIcon: "fas fa-folder-open",
+        selectedBackColor: "rebeccapurple",
+        showBorder: false
     });
 }
 
@@ -194,12 +200,12 @@ async function initRepo(repo) {
     await load();
     console.log("Sandbox loaded");
 
-    // TODO better way of displaying all repos and allowing user to pick one
     repos.forEach(repo => {
         let noRepoSelectedOverlay = $('#noRepoSelectedOverlay');
+        let repoList = $('#repoList');
         let openRepoContainer = $('#openRepo');
 
-        let selectRepoBtn = $('<button>');
+        let selectRepoBtn = $('<li>');
         selectRepoBtn.text(repo.name);
         selectRepoBtn.click(async () => {
             noRepoSelectedOverlay.hide();
@@ -210,6 +216,6 @@ async function initRepo(repo) {
             await setupEventHandlers();
             console.log("Set up event handlers");
         });
-        noRepoSelectedOverlay.append(selectRepoBtn);
+        repoList.append(selectRepoBtn);
     });
 })();

@@ -53,7 +53,6 @@ var editorOptions = {
     wrap: false, // boolean | string | number: true/'free' means wrap instead of horizontal scroll, false/'off' means horizontal scroll instead of wrap, and number means number of column before wrap. -1 means wrap at print margin
     indentedSoftWrap: true, // boolean
     foldStyle: 'markbegin', // enum: 'manual'/'markbegin'/'markbeginend'.
-    mode: 'ace/mode/java', // string: path to language mode
 
     // code snippets
     enableBasicAutocompletion: true,

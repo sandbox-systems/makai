@@ -74,6 +74,10 @@ body {
     /*text-decoration: none;*/
 }
 
+.context-menu-icon.context-menu-icon--fa5 i, .context-menu-icon.context-menu-icon--fa5 svg {
+    color: rebeccapurple !important;
+}
+
 .card i {
     float: left;
 }
@@ -88,10 +92,6 @@ body {
     background: rebeccapurple;
     color: ghostwhite;
     /*font-size: 1.2rem;*/
-}
-
-.context-menu-icon.context-menu-icon--fa5 i, .context-menu-icon.context-menu-icon--fa5 svg {
-    color: rebeccapurple !important;
 }
 
 #editor {
@@ -196,4 +196,71 @@ z-index: 10000!important;
 
 .expand{
     background: rgba(0,0,0,0.2);
+}
+
+#breadcrumbs {
+    width: 100%;
+    /*height: 40px;*/
+     bottom: 0;
+    /*display: inline-block; !* The menu will have width as needed, not 100% *!*/
+    position: fixed;
+    font-family: Raleway;
+    /*font-size: 14px;*/
+     /*line-height: 1em;*/
+     border-radius: 2px; /* Little curvature in the borders */
+     overflow-x: auto;
+    /*overflow-y: scroll; !* Hide everything that overflows, like shadows *!*/
+}
+
+/* Icons */
+#breadcrumbs i {
+    transform: scale(1.4);
+}
+
+/* Menu */
+#breadcrumbs ul {
+    /*background: var(--color-four);*/
+    display: flex;
+     /*flex-direction: row-reverse; !* Reverse the items *!*/
+    /* Reset styles, overwrite browser defaults */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#breadcrumbs ul li {
+    margin: 0;
+}
+
+#breadcrumbs ul li {
+    display: inline-block;
+    font-family: Raleway;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding: 12px 30px; /* Adjusting padding to get the proper space */
+    margin-left: -20px; /* Pull the items to the left, so the rounded right side will get over them */
+    color: white;
+    background-color: var(--secondary-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 0 100px 100px 0; /* Get the right side rounded */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4); /* Apply the shadow */
+}
+
+#breadcrumbs ul li:hover {
+    background-color: mediumpurple;
+}
+
+.breadcrumb > li + li:before, .breadcrumb-item + .breadcrumb-item::before {
+    content: "";
+}
+
+/* Active item is a bit different */
+#breadcrumbs ul li.active {
+    color: mediumpurple;
+    background-color: var(--color-four);
+}
+
+.breadcrumb {
+    border-radius: 0px;
 }

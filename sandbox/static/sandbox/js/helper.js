@@ -6,6 +6,8 @@ let collab = {
     online: [],
     canSave: false
 };
+let modelist = ace.require('ace/ext/modelist');
+let languageTools = ace.require('ace/ext/language_tools');
 
 /**
  * Extract filename from path (should be rightmost node)
@@ -94,7 +96,7 @@ function setBreadcrumb(data) {
         crumbArray.push(data.text);
         data = $("#treeview").treeview("getParent", data.nodeId)
     }
-    crumbArray.push("Repository");
+    crumbArray.push($("#breadcrumbs ul li").first().text());
     crumbArray.reverse();
 
     $("#breadcrumbs .breadcrumb").empty();
@@ -131,16 +133,16 @@ function treeify(dataRef, treeRef) {
                 treeRef.push({
                     id: dataRef[key][filename].id,
                     text: filename,
-                    icon: "glyphicon glyphicon-file",
-                    color: "#000000",
-                    backColor: "#C4C4C4"
+                    icon: "fas fa-file",
+                    color: "black",
+                    backColor: "ghostwhite"
                 });
             })
         } else {
             let folder = {
                 text: key,
-                color: "#000000",
-                backColor: "#C4C4C4",
+                color: "black",
+                backColor: "ghostwhite",
                 nodes: []
             };
             treeRef.push(folder);
@@ -353,6 +355,12 @@ function setupEditor() {
     editorDiv.attr('id', 'editor');
     editor = ace.edit("editor");
     editor.setOptions(editorOptions);
+    setSessionMode(editor.session, activePath);
+    bindEditorBreakpoints();
+}
+
+function setSessionMode(session, filepath){
+    session.setMode(modelist.getModeForPath(filepath).mode);
 }
 
 function joinCollabSession(id, shouldCreate) {
@@ -496,3 +504,15 @@ function setCollabSessionOwner(id, setToCurrentUser) {
         }
     }
 }
+
+//TODO Moving Tabs
+//
+// $(function () {
+//     let tabs = $("#tabar").tabs();
+//     tabs.find(".ui-tabs-nav").sortable({
+//         axis: "x",
+//         stop: function () {
+//             tabs.tabs("refresh");
+//         }
+//     });
+// });
