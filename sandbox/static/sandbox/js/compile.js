@@ -9,19 +9,21 @@ var folderDownloaded = "";
 //Toolbar
 $("#runButton").click(function(){
     if(folderDownloaded==""){
+        // TODO populate changedFiles here from firebase (only type: upd)
+
         //download current folder
         changedFiles.forEach(function(file){
             termPost({
                 action: "download",
                 path: "/src/"+file,
-                code: sessions[file].getValue(),
+                code: sessions[file].getValue(), // TODO set to contents of updated files from firebase
             });
         });
     }
 
     termPost({
         action: "run",
-        filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
+        filename: getFilenameFromPath(activePath),
         code: editor.getValue(),
         breakpoints: breakpointList.map(function(value){return value+1})
     });
@@ -98,7 +100,7 @@ $("#debugButton").click(function () {
 
     termPost({
         action: "debug",
-        filename: $('#tabbar .show.active')[0].innerHTML.split("<")[0],
+        filename: getFilenameFromPath(activePath),
         code: editor.getValue(),
         breakpoints: breakpointList.map(function(value){return value+1})
     });

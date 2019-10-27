@@ -275,11 +275,15 @@ body {
     display: block;
 }
 
-
 .firepad {
     margin-top: 42px !important;
     width: auto !important;
-    height: auto !important;
+    height: 250px !important;
+    /*height: auto !important;*/
+}
+
+#editor {
+    height: 400px !important;
 }
 
 .powered-by-firepad{
@@ -324,6 +328,7 @@ body {
 
 #repoList li:hover:not(.header) {
   background-color: #eee;
+    cursor: pointer;
 }
 
 #repoSelectContainer {

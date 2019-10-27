@@ -27,7 +27,7 @@ window.addEventListener("message", function(event){
             socketSend("cd /src");
             //extra for multiple files
             //socketSend("mkdir src && cd src");
-            //socketSend("echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename));
+            socketSend("echo "+shellEscape(event.data.code)+" > "+shellEscape(event.data.filename));
             socketSend("clear");
             switch(ext){
                 case "py":
