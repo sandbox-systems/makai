@@ -2750,9 +2750,9 @@ input[type=radio] + label:before {
 .icon:before {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    font-family: FontAwesome;
+    /*font-family: FontAwesome;*/
     font-style: normal;
-    font-weight: 400;
+    /*font-weight: 400;*/
     text-transform: none !important
 }
 
@@ -2769,7 +2769,7 @@ input[type=radio] + label:before {
     color: #312450;
     text-align: center;
     line-height: 2.5em;
-    margin: 0 0 1.3 0
+    /*margin: 0 0 1.3 0;*/
 }
 
 .icon.major:before {
