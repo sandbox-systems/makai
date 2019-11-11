@@ -300,7 +300,9 @@ function saveCurrentFile() {
 }
 
 function fetchOriginalContents(path) {
-    return "filler";
+    return new Promise(async resolve => {
+        resolve(await hosts.github.getFileContents(activeRepo.owner, activeRepo.name, path))
+    });
 }
 
 function getFileContents(path) {
@@ -316,7 +318,7 @@ function getFileContents(path) {
                     break;
             }
         } else {
-            resolve(fetchOriginalContents(path));
+            resolve(await fetchOriginalContents(path));
         }
     });
 }
