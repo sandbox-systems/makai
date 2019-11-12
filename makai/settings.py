@@ -25,7 +25,7 @@ SECRET_KEY = 'ouv)gc!)$0(lxc+ad7c$$nbr-@!a1+%*#ap*ud5h54eygs_58a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'makaide.com']
 
 
 # Application definition

@@ -45,7 +45,7 @@ class BitbucketHost(Host):
                 refresh_token = response.get('refresh_token')
 
                 # TODO check if this works in production
-                get('http://localhost:8000{}?token={}&refresh_token={}'.format(
+                get('http://makaide.com{}?token={}&refresh_token={}'.format(
                     reverse('account:UpdateTokens', args=['bitbucket']), token, refresh_token))
                 self.token = token
                 self.refresh_token = refresh_token

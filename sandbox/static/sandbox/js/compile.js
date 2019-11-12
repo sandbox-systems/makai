@@ -203,7 +203,7 @@ function clearMarker(marker){
 //Terminal Communications
 
 function termPost(parameters){
-    document.getElementById("terminalFrame").contentWindow.postMessage(parameters, "http://localhost:7681");
+    document.getElementById("terminalFrame").contentWindow.postMessage(parameters, "http://makaide.com:7681");
 }
 
 window.addEventListener("message", function(event){
