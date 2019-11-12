@@ -170,7 +170,7 @@ body {
     display: inline-block;
 }
 
-#editorContainer .debugview {
+.debugeditorcont {
     width: 50% !important;
 }
 
@@ -276,14 +276,14 @@ body {
 }
 
 .firepad {
-    margin-top: 42px !important;
+    /*margin-top: 42px !important;*/
     width: auto !important;
     height: 250px !important;
     /*height: auto !important;*/
 }
 
 #editor {
-    height: 400px !important;
+    height: 400px;
 }
 
 .powered-by-firepad{

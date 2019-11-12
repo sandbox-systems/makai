@@ -256,7 +256,6 @@ async function editRepoDescription(id) {
     } else {
         Swal.fire({
             title: 'Edit Cancelled!',
-            text: id + "'s description has not been changed",
             type: 'error',
             toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
         });
@@ -362,7 +361,6 @@ async function deleteRepo(id) {
                         Swal.fire(
                             {
                                 title: 'Deleted!',
-                                text: id + ' has been deleted',
                                 type: 'success',
                                 toast: true,
                                 timer: 3000,
@@ -384,7 +382,6 @@ async function deleteRepo(id) {
                 Swal.fire(
                     {
                         title: 'Delete Cancelled!',
-                        text: id + ' has not been deleted',
                         type: 'error',
                         toast: true,
                         timer: 3000,
@@ -459,7 +456,6 @@ async function deleteContents(id) {
             Swal.fire(
                 {
                     title: 'Deleted!',
-                    text: id + ' has been deleted',
                     type: 'success',
                     toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
                 });
@@ -467,7 +463,6 @@ async function deleteContents(id) {
             Swal.fire(
                 {
                     title: 'Delete Cancelled!',
-                    text: id + ' has not been deleted',
                     type: 'error',
                     toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
                 });
@@ -479,7 +474,9 @@ async function deleteContents(id) {
 
 //TODO Implement
 async function copyContents(id) {
-
+    Swal.fire({
+        title: 'Not Available'
+    });
 }
 
 //TODO Server side
@@ -520,7 +517,9 @@ async function newFolder() {
 
 //TODO Implement
 async function uploadItem() {
-
+   Swal.fire({
+        title: 'Not Available'
+    });
 }
 
 //TODO Server side
