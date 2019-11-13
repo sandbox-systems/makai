@@ -7,7 +7,7 @@ var debugLang = "";
 window.onbeforeunload = null;
 
 function debuggerPost(parameters){
-    window.top.postMessage(parameters, "http://makaide.com");
+    window.top.postMessage(parameters, "http://makaide.com/sandbox");
 }
 
 function socketSend(command){
