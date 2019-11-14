@@ -15,6 +15,14 @@
           integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"
             integrity="sha256-412FxT7SHXk39AYYNe8+6YGQAhZhlKhthDw2Z3qp/B0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+        const repoName = "{{ repoName }}";
+        const repoBranch = "{{ repoBranch }}";
+        const repoHost = "{{ repoHost }}";
+        const repoOwner = "{{ repoOwner }}";
+        const filepath = "{{ filepath }}";
+    </script>
     <script src="{% static 'castle/js/scriptUI.js' %}"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">

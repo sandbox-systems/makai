@@ -17,6 +17,12 @@ def create_empty_doc(collection, doc_key):
 def update_doc(collection, doc_key, update):
     # Ref doc_key in collection
     doc_ref = db.collection(collection.decode('utf-8')).document(doc_key.decode('utf-8'))
+
+    # Ensure all keys in update are valid
+    for key, val in update.items():
+        update[db.field_path(key)] = val
+        del update[key]
+
     # Update the firebase document reference with the update dict
     doc_ref.update(update)
 

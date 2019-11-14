@@ -1,7 +1,7 @@
 from credentials import *
 from github_vcs import *
 from bitbucket_vcs import *
-from firebase.firebase import get_doc
+from firebase.firebase import get_doc, update_doc
 import re
 
 tokens = dict()
@@ -63,3 +63,25 @@ def merge_dicts(a, b):
     c = a.copy()
     c.update(b)
     return c
+
+
+def create_file(host, owner, repo, branch, path, name):
+    repo_hash = sha1(owner).hexdigest() + sha1(repo).hexdigest()
+
+    cur_changes = get_doc('file_changes', repo_hash).to_dict()
+
+    _path = path_concat(path, name)
+    full_path = path_concat(_path, branch, concat_before=True)
+    content_id = repo_hash + sha1(full_path).hexdigest()
+    new_file = {
+        'branch_parent': '{}_{}'.format(branch, path).decode('utf-8'),
+        'name': name.decode('utf-8'),
+        'file_id': content_id.decode('utf-8'),
+        'type': u'add'
+    }
+
+    cleansed_path = full_path.replace('/', ';')
+    cleansed_path = cleansed_path.replace('.', ':')
+    cur_changes[cleansed_path.decode('utf-8')] = new_file
+
+    update_doc('file_changes', repo_hash, cur_changes)
