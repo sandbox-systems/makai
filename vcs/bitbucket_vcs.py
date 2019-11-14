@@ -87,7 +87,7 @@ class BitbucketHost(Host):
                     'updated_on': raw_repo[u'updated_on'],
                     'is_private': raw_repo[u'is_private'],
                     'size': raw_repo[u'size'],
-                    # 'language': raw_repo[u'language'],
+                    'language': raw_repo[u'language'],
                     'owner': owner,
                     'repo_hash': repo_hash
                 }

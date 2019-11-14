@@ -28,12 +28,15 @@ class GithubHost(Host):
         # TODO Pagination
         repos = dict()
         for raw_repo in response:
-            languageResponse = self.make_request('get',
-                                                 raw_repo[u'languages_url']).json()
+            # language_response = self.make_request('get',
+            #                                      raw_repo[u'languages_url']).json()
             name = raw_repo[u'name']
             owner = raw_repo[u'full_name'].split('/')[0]
             repo_hash = sha1(owner).hexdigest() + sha1(name).hexdigest()
             # print languageResponse
+            # if language_response:
+            #     language = language_response.keys()[0]
+
             repo = {
                 'host': 'github',
                 'name': name,
@@ -41,7 +44,7 @@ class GithubHost(Host):
                 'updated_on': raw_repo[u'updated_at'],
                 'is_private': raw_repo[u'private'],
                 'size': raw_repo[u'size'],
-                # 'language': languageResponse.keys()[0],
+                # 'language': language,
                 'owner': owner,
                 'repo_hash': repo_hash
             }
@@ -168,7 +171,6 @@ class GithubHost(Host):
     def rename_repo(self, owner, name, newName):
         response = self.make_request('patch', 'https://api.github.com/repos/' + owner + '/' + name,
                                      json={'name': newName}).json()
-        print response
         return
 
     def edit_repo_des(self, name, owner, newDes):

@@ -15,6 +15,14 @@
           integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"
             integrity="sha256-412FxT7SHXk39AYYNe8+6YGQAhZhlKhthDw2Z3qp/B0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+        const repoName = "{{ repoName }}";
+        const repoBranch = "{{ repoBranch }}";
+        const repoHost = "{{ repoHost }}";
+        const repoOwner = "{{ repoOwner }}";
+        const filepath = "{{ filepath }}";
+    </script>
     <script src="{% static 'castle/js/scriptUI.js' %}"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
@@ -72,8 +80,30 @@
             <div class="card-columns" id="card-list">
             </div>
         </div>
+{#        <div id="breadcrumbs">#}
+{#            <nav aria-label="breadcrumb">#}
+{#                <ul class="breadcrumb">#}
+{#                    <li class="breadcrumb-item active" aria-current="page">{{ repoName }}#}
+{#                </ul>#}
+{#            </nav>#}
+{#        </div>#}
     </div>
     <script>
+{#        var crumbArray = [];#}
+{#        {%  if repo %}#}
+{#        while (!$(data).is($("#treeview"))) {#}
+{#            crumbArray.push(data.text);#}
+{#            data = $("#treeview").treeview("getParent", data.nodeId)#}
+{#        }#}
+{#        crumbArray.push($("#breadcrumbs ul li").first().text());#}
+{#        crumbArray.reverse();#}
+{##}
+{#        $("#breadcrumbs .breadcrumb").empty();#}
+{#        var i = 0;#}
+{#        for (i; i < crumbArray.length - 1; i++) {#}
+{#            $("#breadcrumbs .breadcrumb").append('<li class="breadcrumb-item">' + crumbArray[i] + '</li>');#}
+{#        }#}
+{#        $("#breadcrumbs .breadcrumb").append('<li class="breadcrumb-item active">' + crumbArray[i] + '</li>');#}
         $(function () {
             $.contextMenu({
                 selector: 'body',
@@ -168,7 +198,7 @@
                     showConfirmButton: false,
                     type: 'success',
                     timer: 3000,
-                    title: 'Moved ' + ui.draggable.data("entry-name") + ' to ' + $(this).data("entry-name")
+                    title: 'Moved ' + ui.draggable.attr("id")+ ' to ' + $(this).attr("id")
                 });
             }
         });

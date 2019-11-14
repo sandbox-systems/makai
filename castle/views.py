@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
 from vcs.vcs import *
 from json import dumps as json_dump
@@ -45,6 +45,38 @@ def project(request, host, owner, repo, branch, path):
     return render(request, 'castle/project.html',
                   {'entries': items, 'repoName': repo, 'repoHost': host, 'repoOwner': owner, 'repoBranch': branch,
                    'branches': branches, 'filepath': path})
+
+
+def vcs_action(request, action):
+    if not init_tokens(request):
+        return redirect('account:Sync')
+    init_vcs(exclude_unsynced=True)
+    auth_vcs(request)
+
+    data = request.POST
+
+    host = data[u'host']
+    owner = data[u'owner']
+    repo = data[u'repo']
+    branch = data[u'branch']
+    uid = request.session.get('uid')
+
+    if action == 'newfile':
+        path = data[u'path']
+        filename = data[u'name']
+        create_file(host, owner, repo, branch, path, filename)
+    elif action == 'newfolder':
+        path = data[u'path']
+        folder_name = data[u'name']
+        print(folder_name)
+    elif action == 'newrepo':
+        repo_name = data[u'name']
+        # TODO handle
+    elif action == 'commit':
+        commit_msg = data[u'message']
+        print(commit_msg)
+
+    return HttpResponse()
 
 
 def create_repo(request):

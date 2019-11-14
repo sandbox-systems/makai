@@ -8,6 +8,7 @@ urlpatterns = [
         name="Project"),
     url(r'(?P<host>[a-z]+)/(?P<owner>[^\/]+)/(?P<repo>[^\/]+)/(?P<branch>[^\/]+)$', views.full_project,
         name="FullProject"),
+    url(r'^vcsaction/(?P<action>[a-z]+)$', views.vcs_action),
     url(r'^createRepo$', views.create_repo),
     url(r'^deleteRepo$', views.delete_repo),
     url(r'^editRepoName$', views.rename_repo),

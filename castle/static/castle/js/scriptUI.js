@@ -1,3 +1,38 @@
+// Required for making same-domain requests
+var csrftoken = Cookies.get('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+``
+/**
+ * @params Based on what is needed in Django endpoint (see castle/views.py)
+ *
+ * @return Was or wasn't successful?
+ */
+function makeVCSAction(action, data) {
+    return new Promise(resolve => {
+        $.ajax({
+            type: "POST",
+            url: "/castle/vcsaction/" + action,
+            data: data,
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            success: function (data, status, xhttp) {
+                resolve(true);
+            }, error: function (data) {
+                console.log(data);
+                resolve(false);
+            },
+            dataType: 'text'
+        });
+    });
+}
+
 function search() {
     // Declare variables
     var input, filter, ul, li, a, i, txtValue;
@@ -45,39 +80,39 @@ async function newRepo() {
             ]
         }
     });
-    $.ajax({
-        type: 'GET',
-        url: '/castle/createRepo',
-        dataType: "text",
-        data: {
-            'name': formValues[0],
-            'host': formValues[1],
-            'is_private': formValues[2],
-        },
-        success: function (data) {
-            document.location.reload(false);
-            // Swal.fire({
-            //     title: 'Created!',
-            //     text: formValues[0] + ' has been created',
-            //     type: 'success',
-            //     toast: true,
-            //     timer: 3000,
-            //     position: 'top-end',
-            //     showConfirmButton: false
-            // });
-        },
-        error: function (request, status, error) {
-            Swal.fire({
-                title: 'Error!',
-                text: "Please try again",
-                type: 'error',
-                toast: true,
-                timer: 3000,
-                position: 'top-end',
-                showConfirmButton: false
-            });
-        }
+
+    let name = formValues[0];
+    let host = formValues[1];
+    let isPrivate = formValues[2];
+
+    let wasActionSuccessful = await makeVCSAction('newrepo', {
+        'repo': name,
+        'host': host,
+        'is_private': isPrivate,
     });
+
+    if (wasActionSuccessful) {
+        await Swal.fire({
+            title: 'Success!',
+            text: "Successfully created " + (isPrivate ? "private" : "public")+ " " + host + " repository " + name,
+            type: 'success',
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+        document.location.reload(false);
+    } else {
+        Swal.fire({
+            title: 'Error!',
+            text: "Please try again",
+            type: 'error',
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    }
 }
 
 //TODO Server side
@@ -256,7 +291,6 @@ async function editRepoDescription(id) {
     } else {
         Swal.fire({
             title: 'Edit Cancelled!',
-            text: id + "'s description has not been changed",
             type: 'error',
             toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
         });
@@ -362,7 +396,6 @@ async function deleteRepo(id) {
                         Swal.fire(
                             {
                                 title: 'Deleted!',
-                                text: id + ' has been deleted',
                                 type: 'success',
                                 toast: true,
                                 timer: 3000,
@@ -384,7 +417,6 @@ async function deleteRepo(id) {
                 Swal.fire(
                     {
                         title: 'Delete Cancelled!',
-                        text: id + ' has not been deleted',
                         type: 'error',
                         toast: true,
                         timer: 3000,
@@ -459,7 +491,6 @@ async function deleteContents(id) {
             Swal.fire(
                 {
                     title: 'Deleted!',
-                    text: id + ' has been deleted',
                     type: 'success',
                     toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
                 });
@@ -467,7 +498,6 @@ async function deleteContents(id) {
             Swal.fire(
                 {
                     title: 'Delete Cancelled!',
-                    text: id + ' has not been deleted',
                     type: 'error',
                     toast: true, timer: 3000, position: 'top-end', showConfirmButton: false
                 });
@@ -479,11 +509,15 @@ async function deleteContents(id) {
 
 //TODO Implement
 async function copyContents(id) {
-
+    Swal.fire({
+        title: 'Not Available'
+    });
 }
 
 //TODO Server side
 async function newFile() {
+    let wasActionSuccessful, name;
+
     const {value: fileName} = await Swal.fire({
         title: 'Create new File',
         input: 'text',
@@ -492,16 +526,51 @@ async function newFile() {
         cancelButtonText: "Cancel",
         confirmButtonColor: '#663399',
         focusConfirm: false,
-        inputValidator: (value) => {
+        inputValidator: async (value) => {
             if (!value) {
                 return 'You need to write something!'
+            } else {
+                name = value;
+                wasActionSuccessful = await makeVCSAction('newfile', {
+                    'name': value,
+                    'host': repoHost,
+                    'owner': repoOwner,
+                    'repo': repoName,
+                    'branch': repoBranch,
+                    'path': filepath
+                });
             }
         }
     });
+
+    if (wasActionSuccessful) {
+        await Swal.fire({
+            title: 'Success!',
+            text: "Successfully created file " + name,
+            type: 'success',
+            toast: true,
+            timer: 1500,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+        document.location.reload(false)
+    } else {
+        Swal.fire({
+            title: 'Error!',
+            text: "Please try again",
+            type: 'error',
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    }
 }
 
 //TODO Server side
 async function newFolder() {
+    let wasActionSuccessful, name;
+
     const {value: folderName} = await Swal.fire({
         title: 'Create new Folder',
         input: 'text',
@@ -510,17 +579,52 @@ async function newFolder() {
         cancelButtonText: "Cancel",
         confirmButtonColor: '#663399',
         focusConfirm: false,
-        inputValidator: (value) => {
+        inputValidator: async (value) => {
             if (!value) {
                 return 'You need to write something!'
+            } else {
+                name = value;
+                wasActionSuccessful = await makeVCSAction('newfolder', {
+                    'name': value,
+                    'host': repoHost,
+                    'owner': repoOwner,
+                    'repo': repoName,
+                    'branch': repoBranch,
+                    'path': filepath
+                });
             }
         }
     });
+
+    if (wasActionSuccessful) {
+        await Swal.fire({
+            title: 'Success!',
+            text: "Successfully created folder " + name,
+            type: 'success',
+            toast: true,
+            timer: 1500,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+        document.location.reload(false)
+    } else {
+        Swal.fire({
+            title: 'Error!',
+            text: "Please try again",
+            type: 'error',
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    }
 }
 
 //TODO Implement
 async function uploadItem() {
-
+   Swal.fire({
+        title: 'Not Available'
+    });
 }
 
 //TODO Server side
@@ -540,7 +644,53 @@ async function commit() {
 
 //TODO Implement
 async function push() {
+    let wasActionSuccessful;
 
+    await Swal.fire({
+        title: 'Commit and Push Changes',
+        text: "Please enter a commit message",
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: "Commit",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: '#663399',
+        focusConfirm: false,
+        inputValidator: async (value) => {
+            if (!value) {
+                return 'You need to write something!'
+            } else {
+                wasActionSuccessful = await makeVCSAction('commit', {
+                    'host': repoHost,
+                    'owner': repoOwner,
+                    'repo': repoName,
+                    'branch': repoBranch,
+                    'message': value
+                });
+            }
+        }
+    });
+
+    if (wasActionSuccessful) {
+        await Swal.fire({
+            title: 'Success!',
+            text: "Successfully committed changes",
+            type: 'success',
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    } else {
+        Swal.fire({
+            title: 'Error!',
+            text: "Please try again",
+            type: 'error',
+            toast: true,
+            timer: 3000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    }
 }
 
 // TODO Server side

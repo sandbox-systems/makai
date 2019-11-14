@@ -54,7 +54,8 @@
         await logout();
 
         if (didLogout) {
-            $('#successful').show();
+            {#$('#successful').show();#}
+            window.location.replace("{% url 'home:Landing' %}");
         } else {
             $('#unsuccessful').show();
         }

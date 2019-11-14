@@ -230,6 +230,23 @@ function Github(accessToken) {
     };
 
     /**
+     * Fetch encoded contents of a file at a path
+     *
+     * @return string of file contents
+     */
+    this.getFileContents = async function (owner, repo, path) {
+        return new Promise(resolve => {
+            this.reqBuilder.get('/repos/{0}/{1}/contents/{2}'.format(owner, repo, path))
+                .then(function (response) {
+                    resolve(atob(response.data.content));
+                })
+                .catch(function (error) {
+                    throw("Error fetching contents of file at path {0}: {1}".format(path, error));
+                });
+        });
+    };
+
+    /**
      * Fetch sha associated with a tree object
      *
      * @param tree          Array of nodes constituting the tree's deep hierarchy

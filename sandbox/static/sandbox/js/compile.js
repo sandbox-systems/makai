@@ -63,14 +63,14 @@ function toggleDebug(){
     $("#editor").toggleClass("debugview");
     if($("#editor").hasClass("debugview")){
         $("#debug").css("display", "inline-block");
-        $("#editorContainer").css("width", "50%");
         debug = true;
         $("#terminalFrame").hide("slow", "swing", function(){
             $("#editorContainer").css("height", "65vh");
-                // .css("height", "-=84px");
+            $("#editorContainer").addClass('debugeditorcont');
         });
     }else{
         $("#debug").css("display", "none");
+        $("#editorContainer").removeClass('debugeditorcont');
         $("#editorContainer").css("width", "100%");
         clearMarker(lineMarker);
         lineMarker = -1;
@@ -297,6 +297,7 @@ $(document).ready(function () {
             var nheight = $(window).height() - $("#terminal").height() - $("#tabbar").height();
             console.log(nheight);
             $("#editorContainer").css('height', nheight);
+            $("#editor").css('height', nheight);
             $("#livedisplay").css('height', nheight);
             $("#debug").css('height', nheight);
         },
