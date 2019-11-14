@@ -40,8 +40,8 @@
                     <button class="btn" onClick="newFile()" type="button"><i class="fas fa-file"></i> New File</button>
                     <button class="btn" onClick="newFolder()" type="button"><i class="fas fa-folder"></i> New Folder
                     </button>
-                    <button class="btn" onClick="uploadItem()" type="button"><i class="fas fa-upload"></i> Upload
-                    </button>
+{#                    <button class="btn" onClick="uploadItem()" type="button"><i class="fas fa-upload"></i> Upload#}
+{#                    </button>#}
                 </div>
                 <div class="btn-group mr-2" role="group" aria-label="Basic example">
                     <button class="btn" onClick="pull()" type="button"><i class="fas fa-chevron-circle-down"></i> Pull
@@ -62,9 +62,9 @@
                     <div class="dropdown-menu" id="branchesMenu" aria-labelledby="dropdownMenuButton">
                     </div>
                 </div>
-                <button class="btn" onClick="shareRepo('{{ repoName }}')" type="button"><i class="fas fa-share"></i>
-                    Share Repo
-                </button>
+{#                <button class="btn" onClick="shareRepo('{{ repoName }}')" type="button"><i class="fas fa-share"></i>#}
+{#                    Share Repo#}
+{#                </button>#}
             </div>
         </nav>
 
@@ -89,7 +89,7 @@
                 items: {
                     "file": {name: "New File", icon: "fas fa-file"},
                     "folder": {name: "New Folder", icon: "fas fa-folder-open"},
-                    "upload": {name: "Upload", icon: "fas fa-upload"}
+                    {#"upload": {name: "Upload", icon: "fas fa-upload"}#}
                 }
             });
             $(".card-columns").contextMenu({
@@ -100,7 +100,7 @@
                     {# else #}if (key == "rename") {
                         renameContents($(this).attr('id'));
                     } else if (key == "copy") {
-                        copyRepo($(this).attr('id'));
+                        copyContents($(this).attr('id'));
                     } else if (key == "delete") {
                         deleteContents($(this).attr('id'));
                     }
@@ -108,7 +108,7 @@
                 items: {
                     {#"preview": {name: "Preview", icon: "fas fa-eye"},#}
                     "rename": {name: "Rename", icon: "fas fa-edit"},
-                    "copy": {name: "Copy", icon: "fas fa-copy"},
+                    {#"copy": {name: "Copy", icon: "fas fa-copy"},#}
                     "delete": {name: "Delete", icon: "fas fa-trash"},
                 }
             });

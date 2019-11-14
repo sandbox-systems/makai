@@ -183,7 +183,7 @@
                     <button id="commitButton" type="button" class="btn btn-primary"><i class="far fa-circle"></i>Commit
                     </button>
                     <button type="button" class="btn btn-primary"><i class="fas fa-cloud-upload-alt"></i>Push</button>
-                    <button type="button" class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i>Pull</button>
+                    <button type="button" class="btn btn-primary" onclick=""><i class="fas fa-cloud-download-alt"></i>Pull</button>
                 </div>
                 <div class="modal-footer">
                     {#            <button type="button" class="btn btn-primary">Done</button>#}
@@ -213,6 +213,9 @@
         };
     </script>
     <script>
+        function pull(){
+            //TODO
+        }
         function repoSearch() {
             var input, filter, ul, li, a, i, txtValue;
             input = document.getElementById("repoSearch");

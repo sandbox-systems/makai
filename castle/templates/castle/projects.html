@@ -21,7 +21,7 @@
             <a class="navbar-brand" href="{% url 'account:Sync' %}">Sync</a>
             <div class="btn-group mr-2">
                 <button class="btn" onClick="newRepo()" type="button"><i class="fas fa-book"></i> New Repo</button>
-                <button class="btn" onClick="uploadRepo()" type="button"><i class="fas fa-upload"></i> Upload Repo
+{#                <button class="btn" onClick="uploadRepo()" type="button"><i class="fas fa-upload"></i> Upload Repo#}
                 </button>
             </div>
             <div class="input-group" style="width: 17%">
@@ -61,7 +61,7 @@
                 },
                 items: {
                     "repo": {name: "New Repository", icon: "fas fa-book"},
-                    "upload": {name: "Upload", icon: "fas fa-upload"}
+                    {#"upload": {name: "Upload", icon: "fas fa-upload"}#}
                 }
             });
             $(".card-columns").contextMenu({
@@ -83,7 +83,7 @@
                     "preview": {name: "Preview", icon: "fas fa-eye"},
                     "rename": {name: "Rename", icon: "fas fa-edit"},
                     "description": {name: "Edit Description", icon: "fas fa-edit"},
-                    "share": {name: "Share", icon: "fas fa-share"},
+                    {#"share": {name: "Share", icon: "fas fa-share"},#}
                     "delete": {name: "Delete", icon: "fas fa-trash"},
                 }
             });

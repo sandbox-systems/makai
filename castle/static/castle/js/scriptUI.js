@@ -583,7 +583,7 @@ async function newBranch(host, repoOwner, repoName) {
         },
         error: function (request, status, error) {
             Swal.fire({
-                title: 'Error!',
+                title: 'Cancelled!',
                 type: 'error',
                 toast: true,
                 timer: 3000,
