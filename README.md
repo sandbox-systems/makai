@@ -6,7 +6,7 @@ Desired image type: SVG
 
 index is Landing
 file manager is Castle
-chat is Luau
+chat is Luau (No Longer Maintained)
 IDE is Sandbox
 home (4 tiles) is Home
 Castle, Luau, Sandbox, Notifications extend from navbar.html
